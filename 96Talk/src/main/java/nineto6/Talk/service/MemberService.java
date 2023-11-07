@@ -1,0 +1,76 @@
+package nineto6.Talk.service;
+
+import lombok.RequiredArgsConstructor;
+import nineto6.Talk.common.codes.ErrorCode;
+import nineto6.Talk.common.codes.Role;
+import nineto6.Talk.common.exception.BusinessExceptionHandler;
+import nineto6.Talk.domain.Authority;
+import nineto6.Talk.domain.Member;
+import nineto6.Talk.domain.MemberAuthority;
+import nineto6.Talk.model.member.MemberDto;
+import nineto6.Talk.model.member.MemberSaveRequest;
+import nineto6.Talk.repository.MemberRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ObjectUtils;
+
+import java.util.Optional;
+
+
+@Service
+@RequiredArgsConstructor
+public class MemberService {
+    private final MemberRepository memberRepository;
+    private final PasswordEncoder passwordEncoder;
+
+    @Transactional(readOnly = true)
+    public Optional<MemberDto> login(String memberEmail) {
+        MemberAuthority memberAuthority = memberRepository
+                .findMemberAndAuthByEmail(memberEmail)
+                .orElseThrow(() -> new BusinessExceptionHandler(ErrorCode.BUSINESS_EXCEPTION_ERROR));
+
+        return Optional.of(MemberDto.builder()
+                .memberId(memberAuthority.getMemberId())
+                .memberEmail(memberAuthority.getMemberEmail())
+                .memberPwd(memberAuthority.getMemberPwd())
+                .memberNm(memberAuthority.getMemberNm())
+                .memberRegdate(memberAuthority.getMemberRegdate())
+                .roleList(memberAuthority.getRoleList())
+                .build());
+    }
+
+    @Transactional
+    public void signUp(MemberSaveRequest memberSaveRequest) {
+        // 중복된 이메일이 있는지 확인
+        Member duplicateEmail = memberRepository.findByMemberEmail(memberSaveRequest.getMemberEmail())
+                .orElse(null);
+        if(!ObjectUtils.isEmpty(duplicateEmail)) {
+            throw new BusinessExceptionHandler(ErrorCode.DUPLICATE_ERROR);
+        }
+
+        // 중복된 닉네임이 있는지 확인
+        Member duplicateNm = memberRepository.findByMemberNm(memberSaveRequest.getMemberNm())
+                .orElse(null);
+        if(!ObjectUtils.isEmpty(duplicateNm)) {
+            throw new BusinessExceptionHandler(ErrorCode.DUPLICATE_ERROR);
+        }
+
+        Member member = Member.builder()
+                .memberEmail(memberSaveRequest.getMemberEmail())
+                .memberPwd(passwordEncoder.encode(memberSaveRequest.getMemberPwd())) // Password 인코딩
+                .memberNm(memberSaveRequest.getMemberNm())
+                .build();
+
+        // Member 저장
+        memberRepository.save(member);
+
+        // 권한 저장
+        Authority authority = Authority.builder()
+                .memberId(member.getMemberId())
+                .authorityRole(Role.USER.getAuth())
+                .build();
+
+        memberRepository.saveAuthority(authority);
+    }
+}
