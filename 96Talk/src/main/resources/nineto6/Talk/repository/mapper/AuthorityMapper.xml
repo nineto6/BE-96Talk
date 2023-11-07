@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="nineto6.Talk.repository.mapper.AuthorityMapper">
+    <sql id="authorityColumns">
+        AUTHORITY_ID, MEMBER_ID, AUTHORITY_ROLE
+    </sql>
+
+    <!-- 권한 한개 등록 -->
+    <insert id="saveAuthority" useGeneratedKeys="true" keyProperty="authorityId" parameterType="Authority">
+        INSERT INTO
+        MEMBER_AUTHORITY (MEMBER_ID, AUTHORITY_ROLE)
+        VALUES (#{memberId}, #{authorityRole})
+    </insert>
+
+    <!-- 권한 여러개 등록 -->
+    <insert id="saveAuthorityList" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="authorityId">
+        INSERT INTO
+        MEMBER_AUTHORITY ( MEMBER_ID, AUTHORITY_ROLE)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.memberId}, #{item.authorityRole})
+        </foreach>
+    </insert>
+
+</mapper>
