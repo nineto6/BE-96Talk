@@ -84,7 +84,8 @@ public class WebSecurityConfig {
                                         "/api/members/reissue",
                                         "/api-docs/**",
                                         "/swagger-ui/**",
-                                        "/swagger-ui.html"
+                                        "/swagger-ui.html",
+                                        "/api/members/duplicateCheck"
                 ).permitAll()
 
                 // USER 권한이 있을경우에만 접근 가능

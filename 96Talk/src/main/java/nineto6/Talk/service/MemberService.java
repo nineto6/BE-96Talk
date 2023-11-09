@@ -40,6 +40,10 @@ public class MemberService {
                 .build());
     }
 
+    /**
+     * 회원가입 용 서비스
+     * Exception throw : BusinessExceptionHandler
+     */
     @Transactional
     public void signUp(MemberSaveRequest memberSaveRequest) {
         // 중복된 이메일이 있는지 확인
@@ -72,5 +76,21 @@ public class MemberService {
                 .build();
 
         memberRepository.saveAuthority(authority);
+    }
+
+    /**
+     * 이메일 중복 체크 로직 (비어있으면 true 이미 있으면 false)
+     */
+    public boolean duplicateCheckEmail(String memberEmail) {
+        Optional<Member> findMember = memberRepository.findByMemberEmail(memberEmail);
+        return findMember.isEmpty();
+    }
+
+    /**
+     * 닉네임 중복 체크 로직 (비어있으면 true 이미 있으면 false)
+     */
+    public boolean duplicateCheckNickname(String memberNm) {
+        Optional<Member> findMember = memberRepository.findByMemberNm(memberNm);
+        return findMember.isEmpty();
     }
 }

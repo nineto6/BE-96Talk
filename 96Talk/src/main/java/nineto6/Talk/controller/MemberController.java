@@ -1,9 +1,6 @@
 package nineto6.Talk.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import nineto6.Talk.common.codes.AuthConstants;
@@ -36,7 +33,7 @@ import java.util.concurrent.TimeUnit;
 public class MemberController {
     private final RefreshRedisRepository refreshTokenRedisRepository;
     private final RedisTemplate<String, String> redisTemplate;
-    private final MemberService userService;
+    private final MemberService memberService;
 
     /**
      * 회원가입
@@ -45,7 +42,7 @@ public class MemberController {
     @PostMapping("/signup")
     public ResponseEntity<ApiResponse> signUp(@RequestBody MemberSaveRequest memberSaveRequest) {
 
-        userService.signUp(memberSaveRequest);
+        memberService.signUp(memberSaveRequest);
 
         ApiResponse success = ApiResponse.builder()
                 .result(SuccessCode.INSERT_SUCCESS.getCode())
@@ -81,7 +78,7 @@ public class MemberController {
                 if (refreshToken.getIp().equals(currentIpAddress)) {
 
                     // findByEmail 실행 후 userDto 값 가져오기
-                    MemberDto memberDto = userService.login(refreshToken.getMemberEmail())
+                    MemberDto memberDto = memberService.login(refreshToken.getMemberEmail())
                             .orElseThrow(() -> new BusinessExceptionHandler(ErrorCode.BADREQUEST_ERROR)); // 값이 없을 경우 잘못 된 요청
 
                     // 6. Redis 에 저장된 RefreshToken 정보를 기반으로 JWT Token 생성
@@ -159,4 +156,41 @@ public class MemberController {
                 .build();
         return new ResponseEntity<>(ar, HttpStatus.OK);
     }
+
+
+    /**
+     * 이메일 및 닉네임 중복 체크
+     */
+    @Operation(summary = "중복 체크", description = "중복 체크용 메서드입니다.")
+    @GetMapping("/duplicateCheck")
+    public ResponseEntity<ApiResponse> duplicateCheck(@RequestParam(value = "memberEmail", required = false) String memberEmail,
+                                                      @RequestParam(value = "memberNm", required = false) String memberNm) {
+        if(!ObjectUtils.isEmpty(memberEmail)) {
+            boolean isEmpty = memberService.duplicateCheckEmail(memberEmail);
+            ApiResponse ar = ApiResponse.builder()
+                    .result(isEmpty) // true , false
+                    .status(SuccessCode.SELECT_SUCCESS.getStatus())
+                    .message(SuccessCode.SELECT_SUCCESS.getMessage())
+                    .build();
+            return new ResponseEntity<>(ar, HttpStatus.OK);
+        }
+
+        if(!ObjectUtils.isEmpty(memberNm)) {
+            boolean isEmpty = memberService.duplicateCheckNickname(memberNm);
+            ApiResponse ar = ApiResponse.builder()
+                    .result(isEmpty) // true , false
+                    .status(SuccessCode.SELECT_SUCCESS.getStatus())
+                    .message(SuccessCode.SELECT_SUCCESS.getMessage())
+                    .build();
+            return new ResponseEntity<>(ar, HttpStatus.OK);
+        }
+
+        ApiResponse ar = ApiResponse.builder()
+                .result(ErrorCode.DUPLICATE_ERROR.getCode())
+                .status(ErrorCode.DUPLICATE_ERROR.getStatus())
+                .message(ErrorCode.DUPLICATE_ERROR.getMessage())
+                .build();
+        return new ResponseEntity<>(ar, HttpStatus.OK);
+    }
+
 }
