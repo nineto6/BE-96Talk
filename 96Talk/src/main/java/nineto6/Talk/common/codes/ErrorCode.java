@@ -21,16 +21,11 @@ public enum ErrorCode {
     /**
      * *********************************** custom Error CodeList ********************************************
      */
-    // Transaction Insert Error
+    
     INSERT_ERROR(200, "0001", "Insert Transaction Error Exception"),
-
-    // Transaction Update Error
-    UPDATE_ERROR(200, "0001", "Update Transaction Error Exception"),
-
-    // Transaction Delete Error
-    DELETE_ERROR(200, "0001", "Delete Transaction Error Exception"),
-
-    DUPLICATE_ERROR(200, "0002", "Duplicate Error Exception"),
+    UPDATE_ERROR(200, "0002", "Update Transaction Error Exception"),
+    DELETE_ERROR(200, "0003", "Delete Transaction Error Exception"),
+    DUPLICATE_ERROR(200, "0004", "Duplicate Error Exception"),
 
     ; // End
 

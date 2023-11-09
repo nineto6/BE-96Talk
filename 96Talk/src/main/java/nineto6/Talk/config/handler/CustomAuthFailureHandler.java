@@ -35,8 +35,8 @@ public class CustomAuthFailureHandler implements AuthenticationFailureHandler {
         log.debug("failMsg: {}", failMsg);
 
         HashMap<String, Object> resultMap = new HashMap<>();
+        resultMap.put("result", ErrorCode.BADREQUEST_ERROR.getCode());
         resultMap.put("status", ErrorCode.BADREQUEST_ERROR.getStatus());
-        resultMap.put("code", ErrorCode.BADREQUEST_ERROR.getCode());
         resultMap.put("message", ErrorCode.BADREQUEST_ERROR.getMessage());
 
         jsonObject = new JSONObject(resultMap);

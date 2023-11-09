@@ -35,8 +35,8 @@ public class JwtAccessDeniedHandler implements AccessDeniedHandler {
         log.error("403 Forbidden 에러");
 
         HashMap<String, Object> jsonMap = new HashMap<>();
+        jsonMap.put("result", ErrorCode.FORBIDDEN_ERROR.getCode());
         jsonMap.put("status", ErrorCode.FORBIDDEN_ERROR.getStatus());
-        jsonMap.put("code", ErrorCode.FORBIDDEN_ERROR.getCode());
         jsonMap.put("message", ErrorCode.FORBIDDEN_ERROR.getMessage());
         return new JSONObject(jsonMap);
     }
