@@ -13,19 +13,19 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public enum ErrorCode {
-    BUSINESS_EXCEPTION_ERROR(200, "AAAA", "Business Exception Error"),
+    BUSINESS_EXCEPTION_ERROR(400, "AAAA", "Business Exception Error"),
     UNAUTHORIZED_ERROR(401, "BBBB", "Unauthorized Error"),
     FORBIDDEN_ERROR(403, "CCCC", "Forbidden Error"),
-    BADREQUEST_ERROR(200, "DDDD", "BadRequest Error"),
+    BADREQUEST_ERROR(400, "DDDD", "BadRequest Error"),
 
     /**
      * *********************************** custom Error CodeList ********************************************
      */
     
-    INSERT_ERROR(200, "0001", "Insert Transaction Error Exception"),
-    UPDATE_ERROR(200, "0002", "Update Transaction Error Exception"),
-    DELETE_ERROR(200, "0003", "Delete Transaction Error Exception"),
-    DUPLICATE_ERROR(200, "0004", "Duplicate Error Exception"),
+    INSERT_ERROR(400, "0001", "Insert Transaction Error Exception"),
+    UPDATE_ERROR(400, "0002", "Update Transaction Error Exception"),
+    DELETE_ERROR(400, "0003", "Delete Transaction Error Exception"),
+    DUPLICATE_ERROR(400, "0004", "Duplicate Error Exception"),
 
     ; // End
 
