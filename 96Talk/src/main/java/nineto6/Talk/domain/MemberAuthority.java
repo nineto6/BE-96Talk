@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import nineto6.Talk.model.member.MemberDto;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -25,5 +26,16 @@ public class MemberAuthority {
         this.memberNm = memberNm;
         this.memberRegdate = memberRegdate;
         this.roleList = roleList;
+    }
+
+    public MemberDto toDto() {
+        return MemberDto.builder()
+                .memberId(this.memberId)
+                .memberEmail(this.memberEmail)
+                .memberPwd(this.memberPwd)
+                .memberNm(this.memberNm)
+                .memberRegdate(this.memberRegdate)
+                .roleList(this.roleList)
+                .build();
     }
 }

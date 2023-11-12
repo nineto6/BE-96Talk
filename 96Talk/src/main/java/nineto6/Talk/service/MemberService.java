@@ -30,14 +30,7 @@ public class MemberService {
                 .findMemberAndAuthByEmail(memberEmail)
                 .orElseThrow(() -> new BusinessExceptionHandler(ErrorCode.BUSINESS_EXCEPTION_ERROR));
 
-        return Optional.of(MemberDto.builder()
-                .memberId(memberAuthority.getMemberId())
-                .memberEmail(memberAuthority.getMemberEmail())
-                .memberPwd(memberAuthority.getMemberPwd())
-                .memberNm(memberAuthority.getMemberNm())
-                .memberRegdate(memberAuthority.getMemberRegdate())
-                .roleList(memberAuthority.getRoleList())
-                .build());
+        return Optional.of(memberAuthority.toDto());
     }
 
     /**
