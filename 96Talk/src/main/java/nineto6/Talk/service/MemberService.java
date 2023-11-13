@@ -10,6 +10,7 @@ import nineto6.Talk.domain.MemberAuthority;
 import nineto6.Talk.model.member.MemberDto;
 import nineto6.Talk.model.member.MemberSaveRequest;
 import nineto6.Talk.repository.MemberRepository;
+import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,7 +29,7 @@ public class MemberService {
     public Optional<MemberDto> login(String memberEmail) {
         MemberAuthority memberAuthority = memberRepository
                 .findMemberAndAuthByEmail(memberEmail)
-                .orElseThrow(() -> new BusinessExceptionHandler(ErrorCode.BUSINESS_EXCEPTION_ERROR));
+                .orElseThrow(() -> new AuthenticationServiceException(memberEmail));
 
         return Optional.of(memberAuthority.toDto());
     }
