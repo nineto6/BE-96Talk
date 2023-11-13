@@ -9,6 +9,7 @@ import nineto6.Talk.domain.Member;
 import nineto6.Talk.domain.MemberAuthority;
 import nineto6.Talk.model.member.MemberDto;
 import nineto6.Talk.model.member.MemberSaveRequest;
+import nineto6.Talk.repository.AuthorityRepository;
 import nineto6.Talk.repository.MemberRepository;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,6 +24,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class MemberService {
     private final MemberRepository memberRepository;
+    private  final AuthorityRepository authorityRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Transactional(readOnly = true)
@@ -69,7 +71,7 @@ public class MemberService {
                 .authorityRole(Role.USER.getAuth())
                 .build();
 
-        memberRepository.saveAuthority(authority);
+        authorityRepository.saveAuthority(authority);
     }
 
     /**

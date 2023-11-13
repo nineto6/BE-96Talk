@@ -16,21 +16,9 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class MemberRepositoryImpl implements MemberRepository {
     private final MemberMapper memberMapper;
-    private final AuthorityMapper authorityMapper;
-
     @Override
     public void save(Member member) {
         memberMapper.save(member);
-    }
-
-    @Override
-    public void saveAuthority(Authority authority) {
-        authorityMapper.saveAuthority(authority);
-    }
-
-    @Override
-    public void saveAuthorityList(List<Authority> authorityList) {
-        authorityMapper.saveAuthorityList(authorityList);
     }
 
     @Override
