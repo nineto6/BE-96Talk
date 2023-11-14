@@ -15,8 +15,11 @@ import nineto6.Talk.model.member.MemberDto;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.parameters.P;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
+import org.springframework.util.ObjectUtils;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -48,28 +51,49 @@ public class CustomAuthSuccessHandler extends SavedRequestAwareAuthenticationSuc
                         .registerModule(new JavaTimeModule())
                         .writeValueAsString(memberDto));
 
-        HashMap<String, Object> responseMap = new HashMap<>();
+        // Refresh-Token 쿠키 저장 (httpOnly)
+        JwtToken jwtToken = TokenUtils.generateJwtToken(memberDto);
+        ResponseCookie responseCookie = ResponseCookie.from("refreshToken", jwtToken.getRefreshToken())
+                .maxAge(3 * 24 * 60 * 60)
+                .path("/")
+                .secure(true)
+                .sameSite("None")
+                .httpOnly(true)
+                .build();
+        response.addHeader("Set-Cookie", responseCookie.toString());
 
-        JSONObject jsonObject;
+        // refreshToken 이 유효 하지만 사용자가 다시 로그인을 진행한 경우
+        RefreshToken refreshToken = refreshRedisRepository.findByMemberEmail(memberDto.getMemberEmail());
+        if(!ObjectUtils.isEmpty(refreshToken)) {
+            // Redis Refresh-Token id 로 정보 업데이트 (기존 정보 덮어쓰기)
+            refreshRedisRepository.save(RefreshToken.builder()
+                    .id(refreshToken.getId())
+                    .ip(refreshToken.getIp())
+                    .memberEmail(refreshToken.getMemberEmail())
+                    .refreshToken(jwtToken.getRefreshToken())
+                    .accessToken(jwtToken.getAccessToken())
+                    .build());
+        } else {
+            // 아닐경우 Redis Refresh-Token 정보 새로 저장
+            refreshRedisRepository.save(RefreshToken.builder()
+                    .id(null)
+                    .ip(NetUtils.getClientIp(request))
+                    .memberEmail(memberDto.getMemberEmail())
+                    .refreshToken(jwtToken.getRefreshToken())
+                    .accessToken(jwtToken.getAccessToken())
+                    .build());
+        }
 
         // 1. 데이터 세팅
-        responseMap.put("result", null);
+        HashMap<String, Object> responseMap = new HashMap<>();
+        HashMap<String, Object> accessToken = new HashMap<>();
+        JSONObject jsonObject;
+
+        accessToken.put("accessToken", jwtToken.getAccessToken());
+        responseMap.put("result", accessToken);
         responseMap.put("status", 200);
         responseMap.put("message", "login success");
         jsonObject = new JSONObject(responseMap);
-
-        // TODO: 추후 JWT 발급에 사용할 예정
-        JwtToken jwtToken = TokenUtils.generateJwtToken(memberDto);
-        response.addHeader(AuthConstants.AUTH_ACCESS, jwtToken.getAccessToken());
-        response.addHeader(AuthConstants.AUTH_REFRESH, jwtToken.getRefreshToken());
-
-        // Redis 정보 저장
-        refreshRedisRepository.save(RefreshToken.builder()
-                .id(null)
-                .ip(NetUtils.getClientIp(request))
-                .memberEmail(memberDto.getMemberEmail())
-                .refreshToken(jwtToken.getRefreshToken())
-                .build());
 
         log.debug("[로그인 성공]현재 요청된 IP : {}", NetUtils.getClientIp(request)); // 클라이언트 IP 확인 로그
 

@@ -24,4 +24,5 @@ public class RefreshToken {
 
     @Indexed // Secondary indexes(보조 인덱스) 적용
     private String refreshToken;
+    private String accessToken; // 단순히 찾기 용
 }
