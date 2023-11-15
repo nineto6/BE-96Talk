@@ -25,7 +25,6 @@ mybatis:
 # JWT Secret Key
 custom:
   jwt-access-secret-key: accessSecretKey
-  jwt-refresh-secret-key: refreshSecretKey
 
 # Swagger
 springdoc:

@@ -30,8 +30,11 @@ public class MemberService {
     @Transactional(readOnly = true)
     public Optional<MemberDto> login(String memberEmail) {
         MemberAuthority memberAuthority = memberRepository
-                .findMemberAndAuthByEmail(memberEmail)
-                .orElseThrow(() -> new AuthenticationServiceException(memberEmail));
+                .findMemberAndAuthByEmail(memberEmail).orElse(null);
+
+        if(ObjectUtils.isEmpty(memberAuthority)) {
+            return Optional.empty();
+        }
 
         return Optional.of(memberAuthority.toDto());
     }
