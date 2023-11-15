@@ -4,12 +4,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import nineto6.Talk.common.codes.AuthConstants;
+import nineto6.Talk.common.codes.SuccessCode;
 import nineto6.Talk.common.utils.NetUtils;
+import nineto6.Talk.common.utils.RefreshTokenUtils;
 import nineto6.Talk.common.utils.TokenUtils;
 import nineto6.Talk.config.refresh.RefreshRedisRepository;
 import nineto6.Talk.config.refresh.RefreshToken;
 import nineto6.Talk.model.member.MemberDetailsDto;
 import nineto6.Talk.model.member.MemberDto;
+import nineto6.Talk.model.response.ApiResponse;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 import org.springframework.context.annotation.Configuration;
@@ -46,14 +50,14 @@ public class CustomAuthSuccessHandler extends SavedRequestAwareAuthenticationSuc
         String accessToken = TokenUtils.generateJwtToken(memberDto);
         String refreshToken = UUID.randomUUID().toString();
 
-        ResponseCookie responseCookie = ResponseCookie.from("refreshToken", refreshToken)
+        ResponseCookie responseCookie = ResponseCookie.from(AuthConstants.REFRESH_TOKEN, refreshToken)
                 .maxAge(3 * 24 * 60 * 60)
-                .path("/")
+                .path("/api/auth")
                 .secure(true)
                 .sameSite("None")
                 .httpOnly(true)
                 .build();
-        response.addHeader("Set-Cookie", responseCookie.toString());
+        response.addHeader(AuthConstants.SET_COOKIE, responseCookie.toString());
 
         // refreshToken 이 유효 하지만 사용자가 다시 로그인을 진행한 경우
         RefreshToken refreshTokenObject = refreshRedisRepository.findByMemberEmail(memberDto.getMemberEmail())
@@ -81,21 +85,21 @@ public class CustomAuthSuccessHandler extends SavedRequestAwareAuthenticationSuc
         }
 
         // 1. 데이터 세팅
-        HashMap<String, Object> responseMap = new HashMap<>();
         HashMap<String, Object> accessTokenMap = new HashMap<>();
-        accessTokenMap.put("accessToken", accessToken);
+        accessTokenMap.put(AuthConstants.ACCESS_TOKEN, accessToken);
 
-        responseMap.put("result", accessTokenMap);
-        responseMap.put("status", 200);
-        responseMap.put("message", "login success");
-
-        JSONObject jsonObject = new JSONObject(responseMap);
+        ApiResponse apiResponse = ApiResponse.builder()
+                .result(accessTokenMap)
+                .status(SuccessCode.LOGIN_SUCCESS.getStatus())
+                .message(SuccessCode.LOGIN_SUCCESS.getMessage())
+                .build();
 
         // [STEP4] 구성한 응답 값을 전달합니다.
         response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json");
         PrintWriter printWriter = response.getWriter();
-        printWriter.print(jsonObject); // 최종 저장된 '사용자 정보', '사이트 정보' Front 전달
+        ObjectMapper objectMapper = new ObjectMapper();
+        printWriter.print(objectMapper.writeValueAsString(apiResponse)); // 최종 저장된 '사용자 정보', '사이트 정보' Front 전달
         printWriter.flush();
         printWriter.close();
     }

@@ -1,7 +1,9 @@
 package nineto6.Talk.config.handler;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import nineto6.Talk.common.codes.ErrorCode;
+import nineto6.Talk.model.response.ApiResponse;
 import org.json.simple.JSONObject;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
@@ -21,23 +23,19 @@ import java.util.HashMap;
 public class JwtAccessDeniedHandler implements AccessDeniedHandler {
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
+        log.error("[JwtAccessDeniedHandler] 403 Forbidden 에러");
+
+        ApiResponse ar = ApiResponse.builder()
+                .result(null)
+                .status(ErrorCode.FORBIDDEN_ERROR.getStatus())
+                .message(ErrorCode.FORBIDDEN_ERROR.getMessage())
+                .build();
+
         response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json");
         PrintWriter printWriter = response.getWriter();
-
-        JSONObject jsonObject = jsonResponseWrapper(accessDeniedException);
-
-        printWriter.print(jsonObject);
+        ObjectMapper objectMapper = new ObjectMapper();
+        printWriter.print(objectMapper.writeValueAsString(ar));
         printWriter.close();
-    }
-
-    private JSONObject jsonResponseWrapper (Exception e) {
-        log.error("403 Forbidden 에러");
-
-        HashMap<String, Object> jsonMap = new HashMap<>();
-        jsonMap.put("result", ErrorCode.FORBIDDEN_ERROR.getCode());
-        jsonMap.put("status", ErrorCode.FORBIDDEN_ERROR.getStatus());
-        jsonMap.put("message", ErrorCode.FORBIDDEN_ERROR.getMessage());
-        return new JSONObject(jsonMap);
     }
 }

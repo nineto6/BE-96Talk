@@ -13,19 +13,20 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public enum ErrorCode {
-    BUSINESS_EXCEPTION_ERROR(400, "AAAA", "Business Exception Error"),
-    UNAUTHORIZED_ERROR(401, "BBBB", "Unauthorized Error"),
-    FORBIDDEN_ERROR(403, "CCCC", "Forbidden Error"),
-    BADREQUEST_ERROR(400, "DDDD", "BadRequest Error"),
+    BAD_REQUEST_ERROR(400, "BAD REQUEST ERROR"),
+    UNAUTHORIZED_ERROR(401, "UNAUTHORIZED ERROR"),
+    FORBIDDEN_ERROR(403, "FORBIDDEN ERROR"),
 
     /**
      * *********************************** custom Error CodeList ********************************************
      */
     
-    INSERT_ERROR(400, "0001", "Insert Transaction Error Exception"),
-    UPDATE_ERROR(400, "0002", "Update Transaction Error Exception"),
-    DELETE_ERROR(400, "0003", "Delete Transaction Error Exception"),
-    DUPLICATE_ERROR(400, "0004", "Duplicate Error Exception"),
+    INSERT_ERROR(400, "INSERT TRANSACTION ERROR EXCEPTION"),
+    UPDATE_ERROR(400, "UPDATE TRANSACTION ERROR EXCEPTION"),
+    DELETE_ERROR(400, "DELETE TRANSACTION ERROR EXCEPTION"),
+
+    BUSINESS_EXCEPTION_ERROR(400, "BUSINESS EXCEPTION ERROR"),
+    DUPLICATE_ERROR(400, "DUPLICATE ERROR EXCEPTION"),
 
     ; // End
 
@@ -34,17 +35,12 @@ public enum ErrorCode {
      */
     // 에러 코드의 '코드 상태'을 반환한다.
     private int status;
-
-    // 에러 코드의 '코드간 구분 값'을 반환한다.
-    private String code;
-
     // 에러코드의 '코드 메시지'을 반환한다.
     private String message;
 
     // 생성자 구성
-    ErrorCode(final int status, final String code, final String message) {
+    ErrorCode(final int status, final String message) {
         this.status = status;
-        this.code = code;
         this.message = message;
     }
 }
