@@ -20,7 +20,7 @@ public class GlobalExceptionHandler {
         log.error("[exceptionHandler] ex", ex);
 
         ApiResponse ar = ApiResponse.builder()
-                .result(ex.getErrorCode().getCode())
+                .result(null)
                 .status(ex.getErrorCode().getStatus())
                 .message(ex.getErrorCode().getMessage())
                 .build();

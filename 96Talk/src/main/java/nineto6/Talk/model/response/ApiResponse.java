@@ -5,8 +5,9 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
+@Schema(title = "응답 데이터")
 public class ApiResponse {
-    @Schema(title = "결과 또는 비즈니스 에러 코드")
+    @Schema(title = "결과 또는 NULL 값")
     Object result;
     @Schema(title = "Http 상태코드")
     int status;

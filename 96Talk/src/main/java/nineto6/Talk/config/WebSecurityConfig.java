@@ -81,11 +81,11 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests()
                 // 모든 권한 접근 가능 (Anonymous 포함)
                 .antMatchers("/api/members/signup",
-                                        "/api/members/reissue",
+                                        "/api/members/duplicateCheck",
+                                        "/api/auth/reissue",
                                         "/api-docs/**",
                                         "/swagger-ui/**",
-                                        "/swagger-ui.html",
-                                        "/api/members/duplicateCheck"
+                                        "/swagger-ui.html"
                 ).permitAll()
 
                 // USER 권한이 있을경우에만 접근 가능
@@ -97,7 +97,7 @@ public class WebSecurityConfig {
                 // ).hasRole("ADMIN")
 
                 // USER 혹은 ADMIN 권한을 가진 사용자만 접근 가능
-                .antMatchers("/api/members/logout" // 로그아웃
+                .antMatchers("/api/auth/logout" // 로그아웃
                 ).hasAnyRole("ADMIN", "USER")
 
                 .anyRequest().authenticated() // 나머지 URL 은 인증이 되어야지 접근 가능(anonymous 포함 X)
@@ -158,7 +158,7 @@ public class WebSecurityConfig {
     @Bean
     public CustomAuthenticationFilter customAuthenticationFilter() {
         CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(authenticationManager());
-        customAuthenticationFilter.setFilterProcessesUrl("/api/members/login"); // 접근 URL
+        customAuthenticationFilter.setFilterProcessesUrl("/api/auth/login"); // 접근 URL
         customAuthenticationFilter.setAuthenticationSuccessHandler(customLoginSuccessHandler()); // '인증' 성공 시 해당 핸들러로 처리를 전가한다.
         customAuthenticationFilter.setAuthenticationFailureHandler(customLoginFailureHandler()); // '인증' 실패 시 해당 핸들러로 처리를 전가한다.
         customAuthenticationFilter.afterPropertiesSet();
