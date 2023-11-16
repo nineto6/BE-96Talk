@@ -1,21 +1,16 @@
 package nineto6.Talk.config.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import nineto6.Talk.common.codes.AuthConstants;
 import nineto6.Talk.common.codes.SuccessCode;
-import nineto6.Talk.common.utils.NetUtils;
-import nineto6.Talk.common.utils.RefreshTokenUtils;
 import nineto6.Talk.common.utils.TokenUtils;
 import nineto6.Talk.config.refresh.RefreshRedisRepository;
 import nineto6.Talk.config.refresh.RefreshToken;
 import nineto6.Talk.model.member.MemberDetailsDto;
 import nineto6.Talk.model.member.MemberDto;
 import nineto6.Talk.model.response.ApiResponse;
-import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.Authentication;
@@ -28,7 +23,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
-import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -45,11 +39,9 @@ public class CustomAuthSuccessHandler extends SavedRequestAwareAuthenticationSuc
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws ServletException, IOException {
         // 사용자와 관련된 정보를 모두 조회합니다.
         MemberDto memberDto = ((MemberDetailsDto) authentication.getPrincipal()).getMemberDto();
-
         // AccessToken, Refresh-Token 생성
         String accessToken = TokenUtils.generateJwtToken(memberDto);
         String refreshToken = UUID.randomUUID().toString();
-
         ResponseCookie responseCookie = ResponseCookie.from(AuthConstants.REFRESH_TOKEN, refreshToken)
                 .maxAge(3 * 24 * 60 * 60)
                 .path("/api/auth")
@@ -69,7 +61,6 @@ public class CustomAuthSuccessHandler extends SavedRequestAwareAuthenticationSuc
                     .id(refreshTokenObject.getId())
                     .accessToken(accessToken)
                     .refreshToken(refreshToken)
-                    .ip(NetUtils.getClientIp(request))
                     .memberEmail(refreshTokenObject.getMemberEmail())
                     .build());
             log.info("[CustomAuthSuccessHandler] RefreshToken 업데이트");
@@ -78,7 +69,6 @@ public class CustomAuthSuccessHandler extends SavedRequestAwareAuthenticationSuc
             refreshRedisRepository.save(RefreshToken.builder()
                     .refreshToken(refreshToken)
                     .accessToken(accessToken)
-                    .ip(NetUtils.getClientIp(request))
                     .memberEmail(memberDto.getMemberEmail())
                     .build());
             log.info("[CustomAuthSuccessHandler] RefreshToken 생성");

@@ -38,27 +38,18 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             // [STEP3-1] 추출한 엑세스 토큰이 유효한지 여부를 체크합니다.
             if (token != null && TokenUtils.isValidAccessToken(token)) {
 
-                // [STEP3-2] Redis 에 해당 Access-Token 로그아웃 확인
-                String isLogout = redisTemplate.opsForValue().get(token);
+                // [STEP4] 토큰을 기반으로 사용자 아이디를 반환 받는 메서드
+                String memberEmail = TokenUtils.getMemberEmailFormAccessToken(token);
 
-                // [STEP3-3]로그아웃이 되어 있지 않은 경우 해당 토큰은 정상적으로 작동
-                if (ObjectUtils.isEmpty(isLogout)) {
-                    // [STEP4] 토큰을 기반으로 사용자 아이디를 반환 받는 메서드
-                    String memberEmail = TokenUtils.getMemberEmailFormAccessToken(token);
+                // [STEP5] 사용자 아이디가 존재하는지 여부 체크 (null 값, 공백 값이 아닐 경우)
+                if (!ObjectUtils.isEmpty(memberEmail) && !memberEmail.equalsIgnoreCase("")) {
+                    // 인증에 성공하면 SecurityContextHolder 에 인증된 Authentication 객체를 집어 넣음으로써 인가한다.
+                    Authentication auth = TokenUtils.getAuthentication(token);
+                    SecurityContextHolder.getContext().setAuthentication(auth);
 
-                    // [STEP5] 사용자 아이디가 존재하는지 여부 체크 (null 값, 공백 값이 아닐 경우)
-                    if (!ObjectUtils.isEmpty(memberEmail) && !memberEmail.equalsIgnoreCase("")) {
-                        // 인증에 성공하면 SecurityContextHolder 에 인증된 Authentication 객체를 집어 넣음으로써 인가한다.
-                        Authentication auth = TokenUtils.getAuthentication(token);
-                        SecurityContextHolder.getContext().setAuthentication(auth);
-
-                        log.info("[JwtAuthorizationFilter] Jwt 토큰 허가, SecurityContextHolder 에 인증 등록!!");
-                        log.info("[JwtAuthorizationFilter] 현재 사용자의 이메일 : {}", auth.getName());
-                        log.info("[JwtAuthorizationFilter] 현재 사용자의 권한 : {}", auth.getAuthorities());
-                    }
-                } else {
-                    log.info("[JwtAuthorizationFilter] 로그아웃된 토큰");
-                    // TODO: 위험 감지가 가능하다. 메일로 알림을 줄 수 있다.
+                    log.info("[JwtAuthorizationFilter] Jwt 토큰 허가, SecurityContextHolder 에 인증 등록!!");
+                    log.info("[JwtAuthorizationFilter] 현재 사용자의 이메일 : {}", auth.getName());
+                    log.info("[JwtAuthorizationFilter] 현재 사용자의 권한 : {}", auth.getAuthorities());
                 }
             }
         }

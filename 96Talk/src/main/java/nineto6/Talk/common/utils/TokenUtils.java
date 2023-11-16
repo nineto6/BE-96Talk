@@ -39,7 +39,7 @@ public class TokenUtils {
         JwtBuilder accessBuilder = Jwts.builder()
                 .setHeader(createHeader())                                             // Header 구성
                 .setClaims(createAccessClaims(memberDto))                                // Payload - Claims 구성
-                .setSubject("AccessToken")                                             // Payload - Subject 구성
+                .setSubject("AT")                                             // Payload - Subject 구성
                 .signWith(SignatureAlgorithm.HS256, createSignature(accessSecretKey))  // Signature 구성
                 .setExpiration(createAccessTokenExpiredDate());                        // Expired Date 구성
 
@@ -113,7 +113,7 @@ public class TokenUtils {
      */
     private static Date createAccessTokenExpiredDate() {
         Calendar c = Calendar.getInstance();
-        c.add(Calendar.MINUTE, 30);   // 30분으로 설정
+        c.add(Calendar.MINUTE, 15);   // 15분으로 설정
         return c.getTime();
     }
 
@@ -134,8 +134,8 @@ public class TokenUtils {
     private static Map<String, Object> createAccessClaims(MemberDto memberDto) {
         Map<String, Object> claims = new HashMap<>();
 
-        claims.put("email", memberDto.getMemberEmail());
-        claims.put("nickname", memberDto.getMemberNm());
+        claims.put("eml", memberDto.getMemberEmail());
+        claims.put("mnm", memberDto.getMemberNm());
 
         StringBuilder authority = getRemoveRoleStrings(memberDto);
         claims.put("auth", authority);
@@ -181,17 +181,6 @@ public class TokenUtils {
      */
     public static String getMemberEmailFormAccessToken(String token) {
         Claims claims = getAccessTokenToClaimsFormToken(token);
-        return claims.get("email").toString();
-    }
-
-    /**
-     * 엑세스 토큰을 기반으로 만료 기간을 반환받는 메서드 (만료 시간 - 현재 시간 = 남은 시간(ms))
-     * @param token
-     * @return Long : Expiration
-     */
-    public static Long getExpirationFormAccessToken(String token) {
-        Claims claims = getAccessTokenToClaimsFormToken(token);
-        Date expiration = claims.getExpiration();
-        return expiration.getTime() - System.currentTimeMillis();
+        return claims.get("eml").toString();
     }
 }
