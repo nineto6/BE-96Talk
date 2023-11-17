@@ -1,42 +1,10 @@
 # ADD profile
 spring:
   profiles:
-    active: local
-  datasource:
-    url: jdbc:h2:tcp://localhost/~/96talk;
-    username: sa
-    password: 123123
-  redis:
-    host: localhost
-    port: 6379
-
-#Spring Log
-logging:
-  level:
-    nineto6:
-      Talk: trace
-
-#MyBatis
-mybatis:
-    type-aliases-package: nineto6.Talk.domain
-    configuration:
-      map-underscore-to-camel-case: true
-  
-# JWT Secret Key
-custom:
-  jwt-access-secret-key: accessSecretKey
-
-# Swagger
-springdoc:
-  api-docs:
-    path: /api-docs
-  default-consumes-media-type: application/json
-  default-produces-media-type: application/json
-  swagger-ui:
-    operations-sorter: alpha
-    tags-sorter: alpha
-    path: /swagger-ui.html
-    disable-swagger-default-url: true
-    doc-expansion: none
-  paths-to-match:
-    - /api/**
+    group:
+      dev:
+        - common
+        - dev
+      prod:
+        - common
+        - prod

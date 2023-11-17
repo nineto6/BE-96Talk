@@ -1,0 +1,33 @@
+spring:
+  config:
+    activate:
+      on-profile: common
+  logging:
+    level:
+      nineto6:
+        Talk: trace
+
+#MyBatis
+mybatis:
+  type-aliases-package: nineto6.Talk.domain
+  configuration:
+    map-underscore-to-camel-case: true
+
+# JWT Secret Key
+custom:
+  jwt-access-secret-key: accessSecretKey
+
+# Swagger
+springdoc:
+  api-docs:
+    path: /api-docs
+  default-consumes-media-type: application/json
+  default-produces-media-type: application/json
+  swagger-ui:
+    operations-sorter: alpha
+    tags-sorter: alpha
+    path: /swagger-ui.html
+    disable-swagger-default-url: true
+    doc-expansion: none
+  paths-to-match:
+    - /api/**
