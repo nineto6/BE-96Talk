@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="nineto6.Talk.repository.mapper.ProfileMapper">
+
+    <sql id="profileColumns">
+        PROFILE_ID, MEMBER_ID, PROFILE_STATE_MESSAGE, PROFILE_UPLOAD_FILE_NAME, PROFILE_STORE_FILE_NAME
+    </sql>
+
+    <!-- 프로필 등록  NULL 값이 들어가도 저장할 수 있게 jdbcType 설정-->
+    <insert id="saveDefault" useGeneratedKeys="true" keyProperty="profileId" parameterType="Profile">
+        INSERT INTO
+        PROFILE (MEMBER_ID)
+        VALUES (#{memberId})
+    </insert>
+
+    <update id="updateFileByMemberId" parameterType="Map">
+        UPDATE
+            PROFILE
+        SET
+            PROFILE_UPLOAD_FILE_NAME = #{profileUploadFileName},
+            PROFILE_STORE_FILE_NAME = #{profileStoreFileName}
+        WHERE
+            MEMBER_ID = #{memberId}
+    </update>
+
+    <update id="updateStateMessageByMemberId" parameterType="Map">
+        UPDATE
+            PROFILE
+        SET
+            PROFILE_STATE_MESSAGE = #{profileStateMessage}
+        WHERE
+            MEMBER_ID = #{memberId}
+    </update>
+
+    <select id="findByMemberId" parameterType="Long">
+        SELECT
+            <include refid="profileColumns"/>
+        FROM
+            PROFILE as p
+        WHERE
+            p.MEMBER_ID = #{memberId}
+    </select>
+
+</mapper>
