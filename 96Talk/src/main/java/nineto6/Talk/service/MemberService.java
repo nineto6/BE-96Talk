@@ -7,11 +7,12 @@ import nineto6.Talk.common.exception.BusinessExceptionHandler;
 import nineto6.Talk.domain.Authority;
 import nineto6.Talk.domain.Member;
 import nineto6.Talk.domain.MemberAuthority;
+import nineto6.Talk.domain.Profile;
 import nineto6.Talk.model.member.MemberDto;
 import nineto6.Talk.model.member.MemberSaveRequest;
 import nineto6.Talk.repository.AuthorityRepository;
 import nineto6.Talk.repository.MemberRepository;
-import org.springframework.security.authentication.AuthenticationServiceException;
+import nineto6.Talk.repository.ProfileRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,7 +25,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class MemberService {
     private final MemberRepository memberRepository;
-    private  final AuthorityRepository authorityRepository;
+    private final AuthorityRepository authorityRepository;
+    private final ProfileRepository profileRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Transactional(readOnly = true)
@@ -75,6 +77,13 @@ public class MemberService {
                 .build();
 
         authorityRepository.saveAuthority(authority);
+
+        // 기본 프로필 생성
+        Profile profile = Profile.builder()
+                .memberId(member.getMemberId())
+                .build();
+
+        profileRepository.saveDefault(profile);
     }
 
     /**
