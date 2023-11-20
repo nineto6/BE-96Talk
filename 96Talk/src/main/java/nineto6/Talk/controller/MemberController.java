@@ -24,7 +24,7 @@ public class MemberController implements MemberControllerDocs {
     /**
      * 회원가입
      */
-    @PostMapping("/signup")
+    @PostMapping()
     public ResponseEntity<ApiResponse> signUp(@RequestBody MemberSaveRequest memberSaveRequest) {
         memberService.signUp(memberSaveRequest);
 
@@ -39,7 +39,7 @@ public class MemberController implements MemberControllerDocs {
     /**
      * 이메일 및 닉네임 중복 체크
      */
-    @GetMapping("/duplicateCheck")
+    @GetMapping()
     public ResponseEntity<ApiResponse> duplicateCheck(@RequestParam(value = "memberEmail", required = false) String memberEmail,
                                                       @RequestParam(value = "memberNm", required = false) String memberNm) {
         if(!ObjectUtils.isEmpty(memberEmail)) {

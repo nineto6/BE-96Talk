@@ -13,16 +13,14 @@ import nineto6.Talk.config.refresh.RefreshToken;
 import nineto6.Talk.controller.swagger.AuthControllerDocs;
 import nineto6.Talk.model.member.MemberDetailsDto;
 import nineto6.Talk.model.member.MemberDto;
+import nineto6.Talk.model.member.MemberLoginRequest;
 import nineto6.Talk.model.response.ApiResponse;
 import nineto6.Talk.service.MemberService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -37,10 +35,15 @@ public class AuthController implements AuthControllerDocs {
     private final RefreshRedisRepository refreshTokenRedisRepository;
     private final MemberService memberService;
 
+    @Override
+    @PostMapping("/login")
+    public void login(MemberLoginRequest memberLoginRequest) {}
+
     /**
      *  Refresh-Token 으로 부터 토큰 재발급
      */
-    @GetMapping("/reissue")
+    @Override
+    @PutMapping()
     public ResponseEntity<ApiResponse> reissue(@RequestHeader(value="Cookie") String refreshToken,
                                                HttpServletRequest request,
                                                HttpServletResponse response) {
@@ -95,7 +98,8 @@ public class AuthController implements AuthControllerDocs {
     /**
      * Access-Token 으로부터 로그아웃
      */
-    @GetMapping("/logout")
+    @Override
+    @DeleteMapping()
     public ResponseEntity<ApiResponse> logout(@RequestHeader(value = AuthConstants.AUTH_HEADER) String authorization,
                                               @AuthenticationPrincipal MemberDetailsDto memberDetailsDto,
                                               HttpServletResponse response) {

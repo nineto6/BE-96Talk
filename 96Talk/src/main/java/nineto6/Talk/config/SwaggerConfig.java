@@ -20,10 +20,8 @@ public class SwaggerConfig {
     @Bean
     public OpenAPI springShopOpenAPI() {
         String title = "96Talk API 명세서";
-        String description = "POST:'/api/auth/login' (memberEmail(사용자 이메일), memberPwd(사용자 비밀번호)) 로그인 요청";
         Info info = new Info()
-                .title(title)
-                .description(description);
+                .title(title);
 
         // Security 스키마 설정
         SecurityScheme bearerAuth = new SecurityScheme()

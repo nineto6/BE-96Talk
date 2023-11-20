@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -80,13 +81,13 @@ public class WebSecurityConfig {
                 // [STEP2-2] JwtAuthorizationFilter 에서 사용자 인증 후 인가를 받은 권한에 대하여 접근 지정
                 .authorizeHttpRequests()
                 // 모든 권한 접근 가능 (Anonymous 포함)
-                .antMatchers("/api/members/signup",
-                                        "/api/members/duplicateCheck",
-                                        "/api/auth/reissue",
-                                        "/api-docs/**",
+                .antMatchers("/api-docs/**",
                                         "/swagger-ui/**",
                                         "/swagger-ui.html"
                 ).permitAll()
+                .antMatchers(HttpMethod.GET, "/api/members").permitAll() // 이메일, 닉네임 중복 확인
+                .antMatchers(HttpMethod.POST, "/api/members").permitAll() // 회원가입
+                .antMatchers(HttpMethod.PUT, "/api/auth").permitAll() // 재발급
 
                 // USER 권한이 있을경우에만 접근 가능
                 // .antMatchers(
@@ -97,8 +98,8 @@ public class WebSecurityConfig {
                 // ).hasRole("ADMIN")
 
                 // USER 혹은 ADMIN 권한을 가진 사용자만 접근 가능
-                .antMatchers("/api/auth/logout" // 로그아웃
-                ).hasAnyRole("ADMIN", "USER")
+                // .antMatchers(
+                // ).hasAnyRole("ADMIN", "USER")
 
                 .anyRequest().authenticated() // 나머지 URL 은 인증이 되어야지 접근 가능(anonymous 포함 X)
                 .and()
