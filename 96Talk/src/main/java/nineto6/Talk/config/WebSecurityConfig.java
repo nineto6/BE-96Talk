@@ -81,9 +81,9 @@ public class WebSecurityConfig {
                 // [STEP2-2] JwtAuthorizationFilter 에서 사용자 인증 후 인가를 받은 권한에 대하여 접근 지정
                 .authorizeHttpRequests()
                 // 모든 권한 접근 가능 (Anonymous 포함)
-                .antMatchers("/api-docs/**",
-                                        "/swagger-ui/**",
-                                        "/swagger-ui.html"
+                .antMatchers("/api/docs/**",
+                                        "/api/swagger-ui/**",
+                                        "/api/swagger-ui.html"
                 ).permitAll()
                 .antMatchers(HttpMethod.GET, "/api/members").permitAll() // 이메일, 닉네임 중복 확인
                 .antMatchers(HttpMethod.POST, "/api/members").permitAll() // 회원가입
