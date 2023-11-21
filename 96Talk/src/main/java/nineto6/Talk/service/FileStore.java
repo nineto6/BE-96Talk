@@ -1,8 +1,9 @@
-package nineto6.Talk.model;
+package nineto6.Talk.service;
 
 import lombok.extern.slf4j.Slf4j;
 import nineto6.Talk.common.codes.ImageCode;
 import nineto6.Talk.domain.Profile;
+import nineto6.Talk.model.UploadFile;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;

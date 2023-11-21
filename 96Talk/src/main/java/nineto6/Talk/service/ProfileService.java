@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import nineto6.Talk.common.codes.ErrorCode;
 import nineto6.Talk.common.exception.BusinessExceptionHandler;
 import nineto6.Talk.domain.Profile;
-import nineto6.Talk.model.FileStore;
 import nineto6.Talk.model.UploadFile;
 import nineto6.Talk.model.member.MemberDto;
 import nineto6.Talk.model.profile.ProfileResponse;
