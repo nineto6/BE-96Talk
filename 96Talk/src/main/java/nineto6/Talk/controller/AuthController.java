@@ -37,7 +37,7 @@ public class AuthController implements AuthControllerDocs {
 
     @Override
     @PostMapping("/login")
-    public void login(MemberLoginRequest memberLoginRequest) {}
+    public void login(@RequestBody MemberLoginRequest memberLoginRequest) {}
 
     /**
      *  Refresh-Token 으로 부터 토큰 재발급

@@ -17,8 +17,6 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(BusinessExceptionHandler.class)
     public ResponseEntity<ApiResponse> businessExHandler(BusinessExceptionHandler ex) {
-        log.error("[exceptionHandler] ex", ex);
-
         ApiResponse ar = ApiResponse.builder()
                 .result(null)
                 .status(ex.getErrorCode().getStatus())
