@@ -116,4 +116,106 @@ public class ProfileRepositoryTest {
         Assertions.assertThat(findProfile).isNotNull();
         Assertions.assertThat(findProfile.getMemberId()).isEqualTo(member.getMemberId());
     }
+
+    @Test
+    void findByMemberNm() {
+        // given
+        Member member = Member.builder()
+                .memberEmail("hello@naver.com")
+                .memberPwd("123123")
+                .memberNm("한국")
+                .build();
+        memberRepository.save(member);
+
+        Profile profile = Profile.builder()
+                .memberId(member.getMemberId())
+                .build();
+        profileRepository.saveDefault(profile);
+
+        // when
+        Optional<Profile> profileOptional = profileRepository.findByMemberNm(member.getMemberNm());
+
+        // then
+        Profile findProfile = profileOptional.orElse(null);
+        Assertions.assertThat(findProfile).isNotNull();
+        Assertions.assertThat(findProfile.getMemberId()).isEqualTo(member.getMemberId());
+    }
+
+    @Test
+    void findByStoreFileName() {
+        // given
+        Member member = Member.builder()
+                .memberEmail("hello@naver.com")
+                .memberPwd("123123")
+                .memberNm("한국")
+                .build();
+        memberRepository.save(member);
+
+        Profile profile = Profile.builder()
+                .memberId(member.getMemberId())
+                .build();
+        profileRepository.saveDefault(profile);
+        profileRepository.updateFileByMemberId(member.getMemberId(), "uploadFileName", "storeFileName");
+
+        // when
+        Optional<Profile> profileOptional = profileRepository.findByStoreFileName("storeFileName");
+
+        // then
+        Profile findProfile = profileOptional.orElse(null);
+        Assertions.assertThat(findProfile).isNotNull();
+        Assertions.assertThat(findProfile.getMemberId()).isEqualTo(member.getMemberId());
+    }
+
+    @Test
+    void updateFileToNull() {
+        // given
+        Member member = Member.builder()
+                .memberEmail("hello@naver.com")
+                .memberPwd("123123")
+                .memberNm("한국")
+                .build();
+        memberRepository.save(member);
+
+        Profile profile = Profile.builder()
+                .memberId(member.getMemberId())
+                .build();
+        profileRepository.saveDefault(profile);
+        profileRepository.updateFileByMemberId(member.getMemberId(), "uploadFileName", "storeFileName");
+
+        // when
+        profileRepository.updateFileToNull(member.getMemberId());
+
+        // then
+        Optional<Profile> profileOptional = profileRepository.findByMemberId(member.getMemberId());
+        Profile findProfile = profileOptional.orElse(null);
+        Assertions.assertThat(findProfile).isNotNull();
+        Assertions.assertThat(findProfile.getProfileUploadFileName()).isNull();
+        Assertions.assertThat(findProfile.getProfileStoreFileName()).isNull();
+    }
+
+    @Test
+    void updateStateMessageToNull() {
+        // given
+        Member member = Member.builder()
+                .memberEmail("hello@naver.com")
+                .memberPwd("123123")
+                .memberNm("한국")
+                .build();
+        memberRepository.save(member);
+
+        Profile profile = Profile.builder()
+                .memberId(member.getMemberId())
+                .build();
+        profileRepository.saveDefault(profile);
+        profileRepository.updateStateMessageByMemberId(member.getMemberId(), "프로필메세지");
+
+        // when
+        profileRepository.updateStateMessageToNull(member.getMemberId());
+
+        // then
+        Optional<Profile> profileOptional = profileRepository.findByMemberId(member.getMemberId());
+        Profile findProfile = profileOptional.orElse(null);
+        Assertions.assertThat(findProfile).isNotNull();
+        Assertions.assertThat(findProfile.getProfileStateMessage()).isNull();
+    }
 }

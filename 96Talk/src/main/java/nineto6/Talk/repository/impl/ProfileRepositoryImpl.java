@@ -32,4 +32,24 @@ public class ProfileRepositoryImpl implements ProfileRepository {
     public Optional<Profile> findByMemberId(Long memberId) {
         return profileMapper.findByMemberId(memberId);
     }
+
+    @Override
+    public Optional<Profile> findByMemberNm(String memberNm) {
+        return profileMapper.findByMemberNm(memberNm);
+    }
+
+    @Override
+    public Optional<Profile> findByStoreFileName(String profileStoreFileName) {
+        return profileMapper.findByStoreFileName(profileStoreFileName);
+    }
+
+    @Override
+    public void updateFileToNull(Long memberId) {
+        profileMapper.updateFileToNull(memberId);
+    }
+
+    @Override
+    public void updateStateMessageToNull(Long memberId) {
+        profileMapper.updateStateMessageToNull(memberId);
+    }
 }

@@ -6,12 +6,23 @@ spring:
     level:
       nineto6:
         Talk: trace
+  servlet:
+    multipart:
+      maxFileSize: 10MB
+      maxRequestSize: 10MB
 
 #MyBatis
 mybatis:
   type-aliases-package: nineto6.Talk.domain
   configuration:
     map-underscore-to-camel-case: true
+
+logging:
+  level:
+    nineto6:
+      Talk:
+        repository:
+          mapper: trace
 
 # JWT Secret Key
 custom:

@@ -7,15 +7,17 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public enum ImageCode {
-    JPG("image/jpeg"),
-    PNG("image/png"),
-    GIF("image/gif"),
+    JPG("image/jpeg", "jpg"),
+    PNG("image/png", "png"),
+    GIF("image/gif", "gif"),
 
     ; // End
 
     private String code;
+    private String name;
 
-    ImageCode(String code) {
+    ImageCode(String code, String name) {
         this.code = code;
+        this.name = name;
     }
 }

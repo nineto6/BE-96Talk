@@ -10,7 +10,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 import java.util.UUID;
 
 @Slf4j
@@ -20,23 +19,16 @@ public class FileStore {
     private String fileDir;
 
     /**
-     * 이미지 파일 .jpeg, .png, .gif 검사 / 파일을 등록하지 않았을 때 통과
+     * 이미지 파일 .jpeg, .png, 검사 / 파일을 등록하지 않았을 때 통과
      * @param multipartFiles
      * @return true = 이미지 파일, false = 이미지 파일 X
      */
-    public boolean isImageFiles(List<MultipartFile> multipartFiles) {
-        boolean visited = true;
-        if(!ObjectUtils.isEmpty(multipartFiles)) {
-            for (MultipartFile multipartFile : multipartFiles) {
-                if(multipartFile.isEmpty()) continue; // 파일을 등록하지 않았을 때 통과
-                if(!ObjectUtils.isEmpty(multipartFile.getContentType())) {
-                    String contentType = multipartFile.getContentType();
-                    if(contentType.contains(ImageCode.JPG.getCode())) continue;
-                    if(contentType.contains(ImageCode.PNG.getCode())) continue;
-                    if(contentType.contains(ImageCode.GIF.getCode())) continue;
-                }
-                visited = false;
-            }
+    public boolean isImageFile(MultipartFile multipartFile) {
+        boolean visited = false;
+        if(!ObjectUtils.isEmpty(multipartFile.getContentType())) {
+            String contentType = multipartFile.getContentType();
+            if(contentType.contains(ImageCode.JPG.getCode())) visited = true;
+            if(contentType.contains(ImageCode.PNG.getCode())) visited = true;
         }
         return visited;
     }
@@ -68,10 +60,6 @@ public class FileStore {
      * 멀티 파트 파일을 가지고 파일을 저장 후 UploadFile 로 만든 후 반환
      */
     public UploadFile storeFile(MultipartFile multipartFile) throws IOException {
-        if(ObjectUtils.isEmpty(multipartFile)) { // null 체크
-            return null;
-        }
-
         if(multipartFile.isEmpty()) { // empty 체크
             return null;
         }

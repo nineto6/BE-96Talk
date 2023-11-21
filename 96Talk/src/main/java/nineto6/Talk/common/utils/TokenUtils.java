@@ -38,6 +38,7 @@ public class TokenUtils {
         // 사용자 시퀀스를 기준으로 JWT 토큰을 발급하여 반환해줍니다.
         JwtBuilder accessBuilder = Jwts.builder()
                 .setHeader(createHeader())                                             // Header 구성
+                .setIssuer("nineto6.p-e.kr")
                 .setClaims(createAccessClaims(memberDto))                                // Payload - Claims 구성
                 .setSubject("AT")                                             // Payload - Subject 구성
                 .signWith(SignatureAlgorithm.HS256, createSignature(accessSecretKey))  // Signature 구성
@@ -62,7 +63,9 @@ public class TokenUtils {
         // UserDetails 객체를 만들어서 Authentication 리턴
         MemberDetailsDto principal = new MemberDetailsDto(MemberDto
                 .builder()
+                .memberId(Long.parseLong(claims.get("id").toString()))
                 .memberEmail(claims.get("email").toString())
+                .memberNm(claims.get("nickname").toString())
                 .roleList(auths)
                 .build());
 
@@ -133,9 +136,9 @@ public class TokenUtils {
      */
     private static Map<String, Object> createAccessClaims(MemberDto memberDto) {
         Map<String, Object> claims = new HashMap<>();
-
-        claims.put("eml", memberDto.getMemberEmail());
-        claims.put("mnm", memberDto.getMemberNm());
+        claims.put("id", memberDto.getMemberId());
+        claims.put("email", memberDto.getMemberEmail());
+        claims.put("nickname", memberDto.getMemberNm());
 
         StringBuilder authority = getRemoveRoleStrings(memberDto);
         claims.put("auth", authority);
@@ -181,6 +184,6 @@ public class TokenUtils {
      */
     public static String getMemberEmailFormAccessToken(String token) {
         Claims claims = getAccessTokenToClaimsFormToken(token);
-        return claims.get("eml").toString();
+        return claims.get("email").toString();
     }
 }
