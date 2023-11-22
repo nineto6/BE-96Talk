@@ -3,6 +3,7 @@ package nineto6.Talk.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import nineto6.Talk.common.codes.ErrorCode;
+import nineto6.Talk.common.codes.ImageCode;
 import nineto6.Talk.common.exception.BusinessExceptionHandler;
 import nineto6.Talk.domain.Profile;
 import nineto6.Talk.model.UploadFile;
@@ -32,10 +33,35 @@ public class ProfileService {
         Profile profile = profileRepository.findByMemberNm(memberNm)
                 .orElseThrow(() -> new BusinessExceptionHandler(ErrorCode.BUSINESS_EXCEPTION_ERROR));
 
+        if(ObjectUtils.isEmpty(profile.getProfileStoreFileName()) || ObjectUtils.isEmpty(profile.getProfileUploadFileName())) {
+            return ProfileResponse.builder()
+                    .profileStateMessage(profile.getProfileStateMessage())
+                    .build();
+        }
+
+        String storeName = profile.getProfileStoreFileName();
+        String[] split = storeName.split("\\.");
+        String uuid = split[0];
+        String ext = split[1];
+
         return ProfileResponse.builder()
                 .profileStateMessage(profile.getProfileStateMessage())
-                .imageResource(profile.getProfileStoreFileName())
+                .resourceName(uuid)
+                .type(getTypeByExt(ext))
                 .build();
+    }
+
+    /**
+     * 확장자에서 MIME Type 으로 가져오기
+     */
+    private String getTypeByExt(String ext) {
+        if(ext.equals(ImageCode.PNG.getExt())) {
+            return ImageCode.PNG.getMimeType();
+        }
+        if(ext.equals(ImageCode.JPG.getExt())) {
+            return ImageCode.JPG.getMimeType();
+        }
+        return null;
     }
 
     /**
@@ -54,7 +80,7 @@ public class ProfileService {
         }
 
         // 파일이 이미지 파일이 아닐 경우(jpg, png)
-        if(fileStore.isImageFile(uploadFile)) {
+        if(!fileStore.isImageFile(uploadFile)) {
             log.info("파일 확장자가 jpg, png 가 아닙니다.");
             throw new BusinessExceptionHandler(ErrorCode.FILE_EXCEPTION_ERROR);
         }
@@ -97,12 +123,16 @@ public class ProfileService {
     }
 
     /**
-     * 저장소에 저장된 파일 이름으로 된 프로필 있는지 확인
+     * 저장소에 저장된 이미지 파일이 프로필에 존재하는지 확인
      */
     @Transactional(readOnly = true)
     public void checkByStoreFileName(String profileStoreFileName) {
         Profile profile = profileRepository.findByStoreFileName(profileStoreFileName)
                 .orElseThrow(() -> new BusinessExceptionHandler(ErrorCode.BUSINESS_EXCEPTION_ERROR));
+
+        if(ObjectUtils.isEmpty(profile.getProfileStoreFileName()) || ObjectUtils.isEmpty(profile.getProfileUploadFileName())) {
+            throw new BusinessExceptionHandler(ErrorCode.BUSINESS_EXCEPTION_ERROR);
+        }
     }
 
     /**
@@ -121,7 +151,7 @@ public class ProfileService {
         // 이미지 파일 관련 값들을 NULL 로 업데이트
         profileRepository.updateFileToNull(memberDto.getMemberId());
 
-        // 저장소에서 이미지파일 삭제
+        // 저장소에서 이미지 파일 삭제
         if(!fileStore.removeFile(profile)) {
             log.info("파일 삭제 실패");
             throw new BusinessExceptionHandler(ErrorCode.FILE_EXCEPTION_ERROR);

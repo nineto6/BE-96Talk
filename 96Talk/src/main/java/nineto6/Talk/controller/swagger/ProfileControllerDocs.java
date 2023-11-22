@@ -28,6 +28,6 @@ public interface ProfileControllerDocs {
     @Operation(summary = "프로필 이미지 삭제", description = "토큰이 필요합니다.")
     ResponseEntity<ApiResponse> deleteProfileImage(@Schema(hidden = true) MemberDetailsDto memberDetailsDto);
     @Operation(summary = "프로필 이미지 리소스 단일 조회", description = "토큰이 필요합니다.")
-    Resource downloadImage(String fileName,
+    ResponseEntity<Resource> downloadImage(String fileName,
                            HttpServletRequest request) throws IOException;
 }

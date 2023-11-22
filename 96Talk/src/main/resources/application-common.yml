@@ -8,8 +8,8 @@ spring:
         Talk: trace
   servlet:
     multipart:
-      maxFileSize: 10MB
-      maxRequestSize: 10MB
+      maxFileSize: 3MB
+      maxRequestSize: 3MB
 
 #MyBatis
 mybatis:

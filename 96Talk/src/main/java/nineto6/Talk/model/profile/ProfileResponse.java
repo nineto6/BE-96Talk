@@ -7,11 +7,13 @@ import lombok.Setter;
 @Getter @Setter
 public class ProfileResponse {
     private String profileStateMessage;
-    private String imageResource;
+    private String resourceName;
+    private String type;
 
     @Builder
-    public ProfileResponse(String profileStateMessage,String imageResource) {
+    public ProfileResponse(String profileStateMessage, String resourceName, String type) {
         this.profileStateMessage = profileStateMessage;
-        this.imageResource = imageResource;
+        this.resourceName = resourceName;
+        this.type = type;
     }
 }

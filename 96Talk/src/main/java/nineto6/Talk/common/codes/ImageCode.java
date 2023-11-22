@@ -13,11 +13,11 @@ public enum ImageCode {
 
     ; // End
 
-    private String code;
-    private String name;
+    private String mimeType;
+    private String ext;
 
-    ImageCode(String code, String name) {
-        this.code = code;
-        this.name = name;
+    ImageCode(String mimeType, String ext) {
+        this.mimeType = mimeType;
+        this.ext = ext;
     }
 }

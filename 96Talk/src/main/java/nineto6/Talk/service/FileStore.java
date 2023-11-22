@@ -28,16 +28,16 @@ public class FileStore {
         boolean visited = false;
         if(!ObjectUtils.isEmpty(multipartFile.getContentType())) {
             String contentType = multipartFile.getContentType();
-            if(contentType.contains(ImageCode.JPG.getCode())) visited = true;
-            if(contentType.contains(ImageCode.PNG.getCode())) visited = true;
+            if(contentType.contains(ImageCode.JPG.getMimeType())) visited = true;
+            if(contentType.contains(ImageCode.PNG.getMimeType())) visited = true;
         }
         return visited;
     }
 
     /**
      * 파일 삭제
-     * 파일 삭제를 성공하였을 때 true
-     * 파일 삭제가 안되었을 때 false
+     * 파일 삭제를 성공할 때 true
+     * 파일 삭제를 성공하지 못할 때 false
      */
     public boolean removeFile(Profile profile) {
         if(ObjectUtils.isEmpty(profile.getProfileStoreFileName()) || ObjectUtils.isEmpty(profile.getProfileUploadFileName())) {

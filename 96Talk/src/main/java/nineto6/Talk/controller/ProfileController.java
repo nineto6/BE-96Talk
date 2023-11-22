@@ -6,10 +6,12 @@ import nineto6.Talk.common.codes.ErrorCode;
 import nineto6.Talk.common.codes.ImageCode;
 import nineto6.Talk.common.codes.SuccessCode;
 import nineto6.Talk.common.exception.BusinessExceptionHandler;
+import nineto6.Talk.common.exception.ResourceExceptionHandler;
 import nineto6.Talk.controller.swagger.ProfileControllerDocs;
 import nineto6.Talk.model.member.MemberDetailsDto;
 import nineto6.Talk.model.profile.ProfileResponse;
 import nineto6.Talk.model.response.ApiResponse;
+import nineto6.Talk.service.FileStore;
 import nineto6.Talk.service.ProfileService;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -30,6 +32,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class ProfileController implements ProfileControllerDocs {
     private final ProfileService profileService;
+    private final FileStore fileStore;
 
     /**
      * 프로필 조회
@@ -120,34 +123,40 @@ public class ProfileController implements ProfileControllerDocs {
     /**
      *  프로필 이미지 다운로드
      */
-    @GetMapping("/images/{fileName}")
-    public Resource downloadImage(@PathVariable("fileName") String fileName,
+    @GetMapping(value = "/images/{fileName}", produces = {MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
+    public ResponseEntity<Resource> downloadImage(@PathVariable("fileName") String fileName,
                                   HttpServletRequest request) throws IOException {
         String type = getFileTypeByRequest(request);
 
         if(ObjectUtils.isEmpty(type)) {
-            throw new BusinessExceptionHandler(ErrorCode.BUSINESS_EXCEPTION_ERROR);
+            throw new ResourceExceptionHandler(ErrorCode.RESOURCE_EXCEPTION_ERROR);
         }
 
         String storeFileName = fileName + "." + type;
 
         // DB 에 존재하는지 파일 찾기
-        profileService.checkByStoreFileName(storeFileName);
+        try{
+            profileService.checkByStoreFileName(storeFileName);
+        } catch (BusinessExceptionHandler ex) {
+            throw new ResourceExceptionHandler(ErrorCode.RESOURCE_EXCEPTION_ERROR);
+        }
 
         // 경로에 있는 파일에 접근해서 파일을 스트림으로 반환
-        return new UrlResource("file:" + storeFileName);
+        UrlResource resource = new UrlResource("file:" + fileStore.getFullPath(storeFileName));
+
+        return new ResponseEntity<>(resource, HttpStatus.OK);
     }
 
     /**
-     * request 를 받고 Accept 헤더에 image/jpeg, image/png 인지 확인 후 jpg 및 png 를 반환하는 메서드
+     * request 를 받고 Accept 헤더에 image/jpeg, image/png 인지 확인 후 확장자를 반환하는 메서드
      */
     private String getFileTypeByRequest(HttpServletRequest request) {
         String type = request.getHeader("Accept");
-        if(type.equals(ImageCode.JPG.getCode())) {
-            return ImageCode.JPG.getName();
+        if(type.equals(ImageCode.JPG.getMimeType())) {
+            return ImageCode.JPG.getExt();
         }
-        if(type.equals(ImageCode.PNG.getCode())) {
-            return ImageCode.PNG.getName();
+        if(type.equals(ImageCode.PNG.getMimeType())) {
+            return ImageCode.PNG.getExt();
         }
         return null;
     }
