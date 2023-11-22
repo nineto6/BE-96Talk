@@ -49,15 +49,8 @@ public class SwaggerConfig {
         return openApi -> {
             // 공통으로 사용되는 response 설정
             openApi.getPaths().values().forEach(pathItem -> pathItem.readOperations().forEach(operation -> {;
-                if(!ObjectUtils.isEmpty(operation.getDescription())) {
-                    if(operation.getDescription().contains("토큰")) {
-                        // operation 설명에 '토큰'이 들어가있으면 ApiResponse 생성
-                        ApiResponses apiResponses = operation.getResponses();
-                        apiResponses.addApiResponse("200", createApiResponse(apiResponses.get("200").getDescription(), apiResponses.get("200").getContent()));
-                        apiResponses.addApiResponse("401", createApiResponse(ErrorCode.UNAUTHORIZED_ERROR.getMessage().concat(" (승인되지 않은 사용자)"), null));
-                        apiResponses.addApiResponse("403", createApiResponse(ErrorCode.FORBIDDEN_ERROR.getMessage().concat(" (승인은 되었지만, 접근할 수 없는 권한)"), null));
-                    }
-                }
+                ApiResponses apiResponses = operation.getResponses();
+                apiResponses.addApiResponse("200", createApiResponse(apiResponses.get("200").getDescription(), apiResponses.get("200").getContent()));
             }));
         };
     }
