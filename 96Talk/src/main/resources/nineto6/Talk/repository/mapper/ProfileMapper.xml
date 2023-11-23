@@ -70,6 +70,10 @@
             MEMBER_ID = #{memberId}
     </update>
 
+    <resultMap id="memberNmMap" type="String">
+        <result column="member_nm"/>
+    </resultMap>
+
     <resultMap id="profileMap" type="Profile">
         <id property="profileId" column="profile_id"/>
         <result property="memberId" column="member_id"/>
@@ -78,14 +82,20 @@
         <result property="profileStoreFileName" column="profile_store_file_name"/>
     </resultMap>
 
-    <select id="findByMemberNm" parameterType="String" resultMap="profileMap">
+    <resultMap id="memberProfileMap" type="MemberProfile">
+        <association property="memberNm" resultMap="memberNmMap"/>
+        <association property="profile" resultMap="profileMap"/>
+    </resultMap>
+
+    <select id="findByMemberNm" parameterType="String" resultMap="memberProfileMap">
         SELECT
+            m.MEMBER_NM,
             p.PROFILE_ID, p.MEMBER_ID, p.PROFILE_STATE_MESSAGE, p.PROFILE_UPLOAD_FILE_NAME, p.PROFILE_STORE_FILE_NAME
         FROM
             MEMBER AS m
                 INNER JOIN
-                    PROFILE AS p
-                        on m.MEMBER_ID = p.MEMBER_ID
+            PROFILE AS p
+                ON m.MEMBER_ID = p.MEMBER_ID
         WHERE
             m.MEMBER_NM = #{memberNm}
     </select>

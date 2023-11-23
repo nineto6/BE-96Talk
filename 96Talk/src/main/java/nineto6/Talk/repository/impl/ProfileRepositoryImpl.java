@@ -1,6 +1,7 @@
 package nineto6.Talk.repository.impl;
 
 import lombok.RequiredArgsConstructor;
+import nineto6.Talk.domain.MemberProfile;
 import nineto6.Talk.domain.Profile;
 import nineto6.Talk.repository.ProfileRepository;
 import nineto6.Talk.repository.mapper.ProfileMapper;
@@ -34,7 +35,7 @@ public class ProfileRepositoryImpl implements ProfileRepository {
     }
 
     @Override
-    public Optional<Profile> findByMemberNm(String memberNm) {
+    public Optional<MemberProfile> findByMemberNm(String memberNm) {
         return profileMapper.findByMemberNm(memberNm);
     }
 

@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import nineto6.Talk.common.codes.ErrorCode;
 import nineto6.Talk.common.codes.ImageCode;
 import nineto6.Talk.common.exception.BusinessExceptionHandler;
+import nineto6.Talk.domain.MemberProfile;
 import nineto6.Talk.domain.Profile;
 import nineto6.Talk.model.UploadFile;
 import nineto6.Talk.model.member.MemberDto;
@@ -30,11 +31,17 @@ public class ProfileService {
      */
     @Transactional(readOnly = true)
     public ProfileResponse findByNickname(String memberNm) {
-        Profile profile = profileRepository.findByMemberNm(memberNm)
+        MemberProfile memberProfile = profileRepository.findByMemberNm(memberNm)
                 .orElseThrow(() -> new BusinessExceptionHandler(ErrorCode.BUSINESS_EXCEPTION_ERROR));
 
+        if(ObjectUtils.isEmpty(memberProfile.getProfile())) {
+            throw new BusinessExceptionHandler(ErrorCode.BUSINESS_EXCEPTION_ERROR);
+        }
+
+        Profile profile = memberProfile.getProfile();
         if(ObjectUtils.isEmpty(profile.getProfileStoreFileName()) || ObjectUtils.isEmpty(profile.getProfileUploadFileName())) {
             return ProfileResponse.builder()
+                    .memberNm(memberProfile.getMemberNm())
                     .profileStateMessage(profile.getProfileStateMessage())
                     .build();
         }
@@ -45,8 +52,9 @@ public class ProfileService {
         String ext = split[1];
 
         return ProfileResponse.builder()
+                .memberNm(memberProfile.getMemberNm())
                 .profileStateMessage(profile.getProfileStateMessage())
-                .resourceName(uuid)
+                .imageName(uuid)
                 .type(getTypeByExt(ext))
                 .build();
     }

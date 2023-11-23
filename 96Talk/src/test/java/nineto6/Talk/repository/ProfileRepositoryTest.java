@@ -2,6 +2,7 @@ package nineto6.Talk.repository;
 
 import lombok.extern.slf4j.Slf4j;
 import nineto6.Talk.domain.Member;
+import nineto6.Talk.domain.MemberProfile;
 import nineto6.Talk.domain.Profile;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -133,12 +134,13 @@ public class ProfileRepositoryTest {
         profileRepository.saveDefault(profile);
 
         // when
-        Optional<Profile> profileOptional = profileRepository.findByMemberNm(member.getMemberNm());
+        Optional<MemberProfile> memberProfileOptional = profileRepository.findByMemberNm(member.getMemberNm());
 
         // then
-        Profile findProfile = profileOptional.orElse(null);
-        Assertions.assertThat(findProfile).isNotNull();
-        Assertions.assertThat(findProfile.getMemberId()).isEqualTo(member.getMemberId());
+        MemberProfile findMemberProfile = memberProfileOptional.orElse(null);
+        Assertions.assertThat(findMemberProfile).isNotNull();
+        Assertions.assertThat(findMemberProfile.getProfile().getMemberId()).isEqualTo(member.getMemberId());
+        Assertions.assertThat(findMemberProfile.getMemberNm()).isEqualTo("한국");
     }
 
     @Test
