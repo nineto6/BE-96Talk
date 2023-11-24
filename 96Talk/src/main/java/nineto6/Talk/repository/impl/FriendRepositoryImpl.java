@@ -1,0 +1,29 @@
+package nineto6.Talk.repository.impl;
+
+import lombok.RequiredArgsConstructor;
+import nineto6.Talk.domain.Friend;
+import nineto6.Talk.repository.FriendRepository;
+import nineto6.Talk.repository.mapper.FriendMapper;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+@Repository
+@RequiredArgsConstructor
+public class FriendRepositoryImpl implements FriendRepository {
+    private final FriendMapper friendMapper;
+    @Override
+    public void save(Friend friend) {
+        friendMapper.save(friend);
+    }
+
+    @Override
+    public void deleteByMemberIdAndFriendMemberId(Long memberId, Long friendMemberId) {
+        friendMapper.deleteByMemberIdAndFriendMemberId(memberId, friendMemberId);
+    }
+
+    @Override
+    public List<Friend> findByMemberId(Long memberId) {
+        return friendMapper.findByMemberId(memberId);
+    }
+}
