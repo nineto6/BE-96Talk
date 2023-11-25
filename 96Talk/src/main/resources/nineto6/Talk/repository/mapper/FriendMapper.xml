@@ -24,12 +24,22 @@
     </delete>
 
     <!-- 친구 리스트 조회 -->
-    <select id="findByMemberId" parameterType="Long">
+    <select id="findByMemberId" parameterType="Long" resultType="Friend">
         SELECT
             <include refid="friendColumns"/>
         FROM
             FRIEND AS f
         WHERE
             f.MEMBER_ID = #{memberId}
+    </select>
+
+    <!-- 친구 조회 -->
+    <select id="findByMemberIdAndFriendMemberId" parameterType="Map" resultType="Friend">
+        SELECT
+            <include refid="friendColumns"/>
+        FROM
+            FRIEND AS f
+        WHERE
+            f.MEMBER_ID = #{memberId} AND f.FRIEND_MEMBER_ID = #{friendMemberId}
     </select>
 </mapper>

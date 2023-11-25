@@ -10,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @SpringBootTest
@@ -51,7 +52,35 @@ public class FriendRepositoryTest {
 
     @Test
     void findByMemberId() {
+        // given
+        Member member1 = Member.builder()
+                .memberEmail("hello1@naver.com")
+                .memberPwd("123123")
+                .memberNm("주인공")
+                .build();
+        memberRepository.save(member1);
 
+        Member member2 = Member.builder()
+                .memberEmail("hello2@naver.com")
+                .memberPwd("234324")
+                .memberNm("친구")
+                .build();
+        memberRepository.save(member2);
+
+        Friend friend = Friend.builder()
+                .memberId(member1.getMemberId())
+                .friendMemberId(member2.getMemberId())
+                .build();
+        friendRepository.save(friend);
+
+        // when
+        List<Friend> friendOptional = friendRepository.findByMemberId(member1.getMemberId());
+
+
+        // then
+        Assertions.assertThat(friendOptional.size()).isEqualTo(1);
+        Assertions.assertThat(friendOptional.get(0).getMemberId()).isEqualTo(member1.getMemberId());
+        Assertions.assertThat(friendOptional.get(0).getFriendMemberId()).isEqualTo(member2.getMemberId());
     }
 
     @Test
@@ -83,5 +112,39 @@ public class FriendRepositoryTest {
         // then
         List<Friend> friendList = friendRepository.findByMemberId(member1.getMemberId());
         Assertions.assertThat(friendList.size()).isEqualTo(0);
+    }
+
+    @Test
+    void findByMemberIdAndFriendMemberId() {
+        // given
+        Member member1 = Member.builder()
+                .memberEmail("hello1@naver.com")
+                .memberPwd("123123")
+                .memberNm("주인공")
+                .build();
+        memberRepository.save(member1);
+
+        Member member2 = Member.builder()
+                .memberEmail("hello2@naver.com")
+                .memberPwd("234324")
+                .memberNm("친구")
+                .build();
+        memberRepository.save(member2);
+
+        Friend friend = Friend.builder()
+                .memberId(member1.getMemberId())
+                .friendMemberId(member2.getMemberId())
+                .build();
+        friendRepository.save(friend);
+
+        // when
+        Optional<Friend> friendOptional = friendRepository.findByMemberIdAndFriendMemberId(member1.getMemberId(), member2.getMemberId());
+
+
+        // then
+        Friend findFriend = friendOptional.orElse(null);
+        Assertions.assertThat(findFriend).isNotNull();
+        Assertions.assertThat(findFriend.getMemberId()).isEqualTo(member1.getMemberId());
+        Assertions.assertThat(findFriend.getFriendMemberId()).isEqualTo(member2.getMemberId());
     }
 }

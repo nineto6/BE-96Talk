@@ -7,6 +7,7 @@ import nineto6.Talk.repository.mapper.FriendMapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -25,5 +26,10 @@ public class FriendRepositoryImpl implements FriendRepository {
     @Override
     public List<Friend> findByMemberId(Long memberId) {
         return friendMapper.findByMemberId(memberId);
+    }
+
+    @Override
+    public Optional<Friend> findByMemberIdAndFriendMemberId(Long memberId, Long friendMemberId) {
+        return friendMapper.findByMemberIdAndFriendMemberId(memberId, friendMemberId);
     }
 }
