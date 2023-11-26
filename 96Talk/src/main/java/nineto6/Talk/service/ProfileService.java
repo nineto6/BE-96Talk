@@ -17,7 +17,9 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -27,6 +29,39 @@ public class ProfileService {
     private final FileStore fileStore;
 
     /**
+     * 친구 프로필 전체 조회
+     */
+    @Transactional(readOnly = true)
+    public List<ProfileResponse> findFriendProfiles(MemberDto memberDto) {
+        List<MemberProfile> friendProfileList = profileRepository.findFriendProfileListByMemberId(memberDto.getMemberId());
+
+        // 친구 프로필 조회
+        return friendProfileList.stream()
+                .map((memberProfile) -> {
+                            Profile profile = memberProfile.getProfile();
+                            if (ObjectUtils.isEmpty(profile.getProfileStoreFileName()) || ObjectUtils.isEmpty(profile.getProfileUploadFileName())) {
+                                return ProfileResponse.builder()
+                                        .memberNm(memberProfile.getMemberNm())
+                                        .profileStateMessage(profile.getProfileStateMessage())
+                                        .build();
+                            }
+
+                            String storeName = profile.getProfileStoreFileName();
+                            String[] split = storeName.split("\\.");
+                            String uuid = split[0];
+                            String ext = split[1];
+
+                            return ProfileResponse.builder()
+                                    .memberNm(memberProfile.getMemberNm())
+                                    .profileStateMessage(profile.getProfileStateMessage())
+                                    .imageName(uuid)
+                                    .type(getTypeByExt(ext))
+                                    .build();
+                        }
+                ).collect(Collectors.toList());
+    }
+
+    /**
      * 프로필 조회
      */
     @Transactional(readOnly = true)
@@ -34,11 +69,13 @@ public class ProfileService {
         MemberProfile memberProfile = profileRepository.findByMemberNm(memberNm)
                 .orElseThrow(() -> new BusinessExceptionHandler(ErrorCode.BUSINESS_EXCEPTION_ERROR));
 
+        // 프로필이 존재하지 않을 경우 Exception
         if(ObjectUtils.isEmpty(memberProfile.getProfile())) {
             throw new BusinessExceptionHandler(ErrorCode.BUSINESS_EXCEPTION_ERROR);
         }
 
         Profile profile = memberProfile.getProfile();
+        // 이미지 파일이 존재하지 않을 경우
         if(ObjectUtils.isEmpty(profile.getProfileStoreFileName()) || ObjectUtils.isEmpty(profile.getProfileUploadFileName())) {
             return ProfileResponse.builder()
                     .memberNm(memberProfile.getMemberNm())

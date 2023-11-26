@@ -14,6 +14,8 @@ import java.io.IOException;
 
 @Tag(name = "프로필")
 public interface ProfileControllerDocs {
+    @Operation(summary = "자기 자신 포함 친구 프로필 전체 조회", description = "토큰이 필요합니다.")
+    ResponseEntity<ApiResponse> getFriendProfiles(@Schema(hidden = true) MemberDetailsDto memberDetailsDto);
     @Operation(summary = "프로필 단일 조회", description = "토큰이 필요합니다.")
 
     ResponseEntity<ApiResponse> getProfile(String memberNm);

@@ -25,6 +25,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -33,6 +35,27 @@ import java.io.IOException;
 public class ProfileController implements ProfileControllerDocs {
     private final ProfileService profileService;
     private final FileStore fileStore;
+
+    /**
+     * 자기 자신 및 친구 프로필 전체 조회
+     */
+    @GetMapping
+    public ResponseEntity<ApiResponse> getFriendProfiles(@AuthenticationPrincipal MemberDetailsDto memberDetailsDto) {
+        HashMap<String, Object> map = new HashMap<>();
+        ProfileResponse profile = profileService.findByNickname(memberDetailsDto.getMemberDto().getMemberNm());
+        List<ProfileResponse> friendProfiles = profileService.findFriendProfiles(memberDetailsDto.getMemberDto());
+
+        map.put("profile", profile);
+        map.put("friendProfiles", friendProfiles);
+
+        ApiResponse apiResponse = ApiResponse.builder()
+                .result(map)
+                .status(SuccessCode.SELECT_SUCCESS.getStatus())
+                .message(SuccessCode.SELECT_SUCCESS.getMessage())
+                .build();
+
+        return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+    }
 
     /**
      * 프로필 조회

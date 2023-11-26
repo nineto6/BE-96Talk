@@ -7,6 +7,7 @@ import nineto6.Talk.repository.ProfileRepository;
 import nineto6.Talk.repository.mapper.ProfileMapper;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -52,5 +53,10 @@ public class ProfileRepositoryImpl implements ProfileRepository {
     @Override
     public void updateStateMessageToNull(Long memberId) {
         profileMapper.updateStateMessageToNull(memberId);
+    }
+
+    @Override
+    public List<MemberProfile> findFriendProfileListByMemberId(Long memberId) {
+        return profileMapper.findFriendProfileListByMemberId(memberId);
     }
 }

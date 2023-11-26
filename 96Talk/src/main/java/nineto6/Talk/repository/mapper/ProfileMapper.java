@@ -5,6 +5,7 @@ import nineto6.Talk.domain.Profile;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
 import java.util.Optional;
 
 @Mapper
@@ -20,4 +21,5 @@ public interface ProfileMapper {
     Optional<Profile> findByStoreFileName(String profileStoreFileName);
     void updateFileToNull(Long memberId);
     void updateStateMessageToNull(Long memberId);
+    List<MemberProfile> findFriendProfileListByMemberId(Long memberId);
 }

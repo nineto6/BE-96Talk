@@ -1,6 +1,7 @@
 package nineto6.Talk.repository;
 
 import lombok.extern.slf4j.Slf4j;
+import nineto6.Talk.domain.Friend;
 import nineto6.Talk.domain.Member;
 import nineto6.Talk.domain.MemberProfile;
 import nineto6.Talk.domain.Profile;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -20,6 +22,8 @@ public class ProfileRepositoryTest {
     private ProfileRepository profileRepository;
     @Autowired
     private MemberRepository memberRepository;
+    @Autowired
+    private FriendRepository friendRepository;
     @Test
     void saveDefault() {
         // given
@@ -219,5 +223,47 @@ public class ProfileRepositoryTest {
         Profile findProfile = profileOptional.orElse(null);
         Assertions.assertThat(findProfile).isNotNull();
         Assertions.assertThat(findProfile.getProfileStateMessage()).isNull();
+    }
+
+    @Test
+    void findFriendProfileListByMemberId() {
+        // given
+        Member member1 = Member.builder()
+                .memberEmail("hello1@naver.com")
+                .memberPwd("123123")
+                .memberNm("주인공")
+                .build();
+        memberRepository.save(member1);
+
+        Profile profile1 = Profile.builder()
+                .memberId(member1.getMemberId())
+                .build();
+        profileRepository.saveDefault(profile1);
+
+        Member member2 = Member.builder()
+                .memberEmail("hello2@naver.com")
+                .memberPwd("asdasd")
+                .memberNm("친구")
+                .build();
+        memberRepository.save(member2);
+
+        Profile profile2 = Profile.builder()
+                .memberId(member2.getMemberId())
+                .build();
+        profileRepository.saveDefault(profile2);
+
+        Friend friend = Friend.builder()
+                .memberId(member1.getMemberId())
+                .friendMemberId(member2.getMemberId())
+                .build();
+        friendRepository.save(friend);
+
+        // when
+        List<MemberProfile> profileList = profileRepository.findFriendProfileListByMemberId(member1.getMemberId());
+
+        // then
+        MemberProfile memberProfile = profileList.get(0);
+        Assertions.assertThat(memberProfile.getMemberNm()).isEqualTo("친구");
+        Assertions.assertThat(profileList.size()).isEqualTo(1);
     }
 }

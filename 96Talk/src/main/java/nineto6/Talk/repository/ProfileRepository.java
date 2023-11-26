@@ -3,6 +3,7 @@ package nineto6.Talk.repository;
 import nineto6.Talk.domain.MemberProfile;
 import nineto6.Talk.domain.Profile;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface ProfileRepository {
@@ -14,4 +15,5 @@ public interface ProfileRepository {
     Optional<Profile> findByStoreFileName(String profileStoreFileName);
     void updateFileToNull(Long memberId);
     void updateStateMessageToNull(Long memberId);
+    List<MemberProfile> findFriendProfileListByMemberId(Long memberId);
 }
