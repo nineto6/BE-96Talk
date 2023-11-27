@@ -54,7 +54,7 @@ public class ProfileController implements ProfileControllerDocs {
                 .message(SuccessCode.SELECT_SUCCESS.getMessage())
                 .build();
 
-        return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+        return new ResponseEntity<>(apiResponse, SuccessCode.SELECT_SUCCESS.getHttpStatus());
     }
 
     /**
@@ -70,13 +70,13 @@ public class ProfileController implements ProfileControllerDocs {
                 .message(SuccessCode.SELECT_SUCCESS.getMessage())
                 .build();
 
-        return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+        return new ResponseEntity<>(apiResponse, SuccessCode.SELECT_SUCCESS.getHttpStatus());
     }
 
     /**
      * 프로필 상태 메세지 수정
      */
-    @PutMapping()
+    @PatchMapping()
     public ResponseEntity<ApiResponse> updateProfileStateMessage(@RequestParam("stateMessage") String stateMessage,
                                                                  @AuthenticationPrincipal MemberDetailsDto memberDetailsDto) {
 
@@ -88,7 +88,7 @@ public class ProfileController implements ProfileControllerDocs {
                 .message(SuccessCode.UPDATE_SUCCESS.getMessage())
                 .build();
 
-        return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+        return new ResponseEntity<>(apiResponse, SuccessCode.UPDATE_SUCCESS.getHttpStatus());
     }
 
     /**
@@ -105,13 +105,13 @@ public class ProfileController implements ProfileControllerDocs {
                 .message(SuccessCode.DELETE_SUCCESS.getMessage())
                 .build();
 
-        return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+        return new ResponseEntity<>(apiResponse, SuccessCode.DELETE_SUCCESS.getHttpStatus());
     }
 
     /**
      * 프로필 이미지 수정
      */
-    @PutMapping(value = "/images", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    @PatchMapping(value = "/images", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<ApiResponse> updateProfileImageFile(@RequestPart MultipartFile imageFile,
                                                               @AuthenticationPrincipal MemberDetailsDto memberDetailsDto) {
 
@@ -123,7 +123,7 @@ public class ProfileController implements ProfileControllerDocs {
                 .message(SuccessCode.UPDATE_SUCCESS.getMessage())
                 .build();
 
-        return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+        return new ResponseEntity<>(apiResponse, SuccessCode.UPDATE_SUCCESS.getHttpStatus());
     }
 
     /**
@@ -140,7 +140,7 @@ public class ProfileController implements ProfileControllerDocs {
                 .message(SuccessCode.DELETE_SUCCESS.getMessage())
                 .build();
 
-        return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+        return new ResponseEntity<>(apiResponse, SuccessCode.DELETE_SUCCESS.getHttpStatus());
     }
 
     /**

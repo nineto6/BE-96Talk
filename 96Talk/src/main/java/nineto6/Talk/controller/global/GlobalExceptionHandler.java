@@ -25,7 +25,7 @@ public class GlobalExceptionHandler {
                 .message(ex.getErrorCode().getMessage())
                 .build();
 
-        return new ResponseEntity<>(ar, HttpStatus.OK);
+        return new ResponseEntity<>(ar, ex.getErrorCode().getHttpStatus());
     }
 
     @ExceptionHandler(ResourceExceptionHandler.class)

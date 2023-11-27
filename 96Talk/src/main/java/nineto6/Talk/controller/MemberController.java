@@ -34,12 +34,12 @@ public class MemberController implements MemberControllerDocs {
                 .message(SuccessCode.INSERT_SUCCESS.getMessage())
                 .build();
 
-        return new ResponseEntity<>(success, HttpStatus.OK);
+        return new ResponseEntity<>(success, SuccessCode.INSERT_SUCCESS.getHttpStatus());
     }
     /**
      * 이메일 및 닉네임 중복 체크
      */
-    @GetMapping()
+    @GetMapping("/duplicate")
     public ResponseEntity<ApiResponse> duplicateCheck(@RequestParam(value = "memberEmail", required = false) String memberEmail,
                                                       @RequestParam(value = "memberNm", required = false) String memberNm) {
         if(!ObjectUtils.isEmpty(memberEmail)) {
@@ -49,7 +49,7 @@ public class MemberController implements MemberControllerDocs {
                     .status(SuccessCode.SELECT_SUCCESS.getStatus())
                     .message(SuccessCode.SELECT_SUCCESS.getMessage())
                     .build();
-            return new ResponseEntity<>(ar, HttpStatus.OK);
+            return new ResponseEntity<>(ar, SuccessCode.SELECT_SUCCESS.getHttpStatus());
         }
 
         if(!ObjectUtils.isEmpty(memberNm)) {
@@ -59,7 +59,7 @@ public class MemberController implements MemberControllerDocs {
                     .status(SuccessCode.SELECT_SUCCESS.getStatus())
                     .message(SuccessCode.SELECT_SUCCESS.getMessage())
                     .build();
-            return new ResponseEntity<>(ar, HttpStatus.OK);
+            return new ResponseEntity<>(ar, SuccessCode.SELECT_SUCCESS.getHttpStatus());
         }
 
         throw new BusinessExceptionHandler(ErrorCode.DUPLICATE_ERROR);

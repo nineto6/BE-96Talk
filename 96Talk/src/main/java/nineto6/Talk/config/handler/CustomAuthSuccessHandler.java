@@ -87,8 +87,11 @@ public class CustomAuthSuccessHandler extends SavedRequestAwareAuthenticationSuc
         // [STEP4] 구성한 응답 값을 전달합니다.
         response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json");
+        response.setStatus(SuccessCode.LOGIN_SUCCESS.getHttpStatus().value());
+
         PrintWriter printWriter = response.getWriter();
         ObjectMapper objectMapper = new ObjectMapper();
+
         printWriter.print(objectMapper.writeValueAsString(apiResponse)); // 최종 저장된 '사용자 정보', '사이트 정보' Front 전달
         printWriter.flush();
         printWriter.close();

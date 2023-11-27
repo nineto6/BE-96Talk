@@ -32,8 +32,11 @@ public class CustomAuthFailureHandler implements AuthenticationFailureHandler {
 
         response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json");
+        response.setStatus(ErrorCode.BAD_REQUEST_ERROR.getHttpStatus().value());
+
         PrintWriter printWriter = response.getWriter();
         ObjectMapper objectMapper = new ObjectMapper();
+
         printWriter.print(objectMapper.writeValueAsString(apiResponse));
         printWriter.flush();
         printWriter.close();

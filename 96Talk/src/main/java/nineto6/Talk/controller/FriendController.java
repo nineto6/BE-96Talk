@@ -20,6 +20,24 @@ import org.springframework.web.bind.annotation.*;
 public class FriendController implements FriendControllerDocs {
     private final FriendService friendService;
 
+    /**
+     * 친구 등록하기 위한 검색 조회
+     */
+    @GetMapping
+    public ResponseEntity<ApiResponse> findFriendList(@RequestParam("keyword") String keyword) {
+
+        ApiResponse success = ApiResponse.builder()
+                .result(null)
+                .status(SuccessCode.SELECT_SUCCESS.getStatus())
+                .message(SuccessCode.SELECT_SUCCESS.getMessage())
+                .build();
+
+        return new ResponseEntity<>(success, SuccessCode.SELECT_SUCCESS.getHttpStatus());
+    }
+
+    /**
+     * 친구 등록
+     */
     @PostMapping
     public ResponseEntity<ApiResponse> createFriend(@RequestBody FriendRequest friendRequest,
                                                     @AuthenticationPrincipal MemberDetailsDto memberDetailsDto) {
@@ -32,9 +50,12 @@ public class FriendController implements FriendControllerDocs {
                 .message(SuccessCode.INSERT_SUCCESS.getMessage())
                 .build();
 
-        return new ResponseEntity<>(success, HttpStatus.OK);
+        return new ResponseEntity<>(success, SuccessCode.INSERT_SUCCESS.getHttpStatus());
     }
 
+    /**
+     * 친구 삭제
+     */
     @DeleteMapping
     public ResponseEntity<ApiResponse> removeFriend(@RequestBody FriendRequest friendRequest,
                                                     @AuthenticationPrincipal MemberDetailsDto memberDetailsDto) {
@@ -47,6 +68,7 @@ public class FriendController implements FriendControllerDocs {
                 .message(SuccessCode.DELETE_SUCCESS.getMessage())
                 .build();
 
-        return new ResponseEntity<>(success, HttpStatus.OK);
+        return new ResponseEntity<>(success, SuccessCode.DELETE_SUCCESS.getHttpStatus());
     }
 }
+

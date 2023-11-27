@@ -3,6 +3,7 @@ package nineto6.Talk.common.codes;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.http.HttpStatus;
 
 /**
  * [공통 코드] API 통신에 대한 '에러 코드'를 Enum 형태로 관리를 한다.
@@ -13,22 +14,22 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public enum ErrorCode {
-    BAD_REQUEST_ERROR(400, "BAD REQUEST ERROR"),
-    UNAUTHORIZED_ERROR(401, "UNAUTHORIZED ERROR"),
-    FORBIDDEN_ERROR(403, "FORBIDDEN ERROR"),
+    BAD_REQUEST_ERROR(-1, HttpStatus.BAD_REQUEST, "BAD REQUEST ERROR"),
+    UNAUTHORIZED_ERROR(-2, HttpStatus.UNAUTHORIZED, "UNAUTHORIZED ERROR"),
+    FORBIDDEN_ERROR(-3, HttpStatus.FORBIDDEN, "FORBIDDEN ERROR"),
 
     /**
      * *********************************** custom Error CodeList ********************************************
      */
     
-    INSERT_ERROR(400, "INSERT TRANSACTION ERROR EXCEPTION"),
-    UPDATE_ERROR(400, "UPDATE TRANSACTION ERROR EXCEPTION"),
-    DELETE_ERROR(400, "DELETE TRANSACTION ERROR EXCEPTION"),
+    INSERT_ERROR(-4, HttpStatus.BAD_REQUEST, "INSERT TRANSACTION ERROR EXCEPTION"),
+    UPDATE_ERROR(-5, HttpStatus.BAD_REQUEST, "UPDATE TRANSACTION ERROR EXCEPTION"),
+    DELETE_ERROR(-6, HttpStatus.BAD_REQUEST, "DELETE TRANSACTION ERROR EXCEPTION"),
 
-    BUSINESS_EXCEPTION_ERROR(400, "BUSINESS EXCEPTION ERROR"),
-    DUPLICATE_ERROR(400, "DUPLICATE ERROR EXCEPTION"),
-    FILE_EXCEPTION_ERROR(400, "FILE EXCEPTION ERROR"),
-    RESOURCE_EXCEPTION_ERROR(400, "RESOURCE DOWNLOAD EXCEPTION ERROR"),
+    BUSINESS_EXCEPTION_ERROR(-7, HttpStatus.BAD_REQUEST, "BUSINESS EXCEPTION ERROR"),
+    DUPLICATE_ERROR(-8, HttpStatus.BAD_REQUEST, "DUPLICATE ERROR EXCEPTION"),
+    FILE_EXCEPTION_ERROR(-9, HttpStatus.BAD_REQUEST, "FILE EXCEPTION ERROR"),
+    RESOURCE_EXCEPTION_ERROR(-10, HttpStatus.BAD_REQUEST, "RESOURCE DOWNLOAD EXCEPTION ERROR"),
     ; // End
 
     /**
@@ -36,12 +37,14 @@ public enum ErrorCode {
      */
     // 에러 코드의 '코드 상태'을 반환한다.
     private int status;
+    private HttpStatus httpStatus;
     // 에러코드의 '코드 메시지'을 반환한다.
     private String message;
 
     // 생성자 구성
-    ErrorCode(final int status, final String message) {
+    ErrorCode(final int status, final HttpStatus httpStatus, final String message) {
         this.status = status;
+        this.httpStatus = httpStatus;
         this.message = message;
     }
 }

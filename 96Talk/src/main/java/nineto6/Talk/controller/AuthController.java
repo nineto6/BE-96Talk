@@ -92,7 +92,7 @@ public class AuthController implements AuthControllerDocs {
                 .message(SuccessCode.REISSUE_SUCCESS.getMessage())
                 .build();
 
-        return new ResponseEntity<>(ar, HttpStatus.OK);
+        return new ResponseEntity<>(ar, SuccessCode.REISSUE_SUCCESS.getHttpStatus());
     }
 
     /**
@@ -129,6 +129,6 @@ public class AuthController implements AuthControllerDocs {
                 .status(SuccessCode.LOGOUT_SUCCESS.getStatus())
                 .message(SuccessCode.LOGOUT_SUCCESS.getMessage())
                 .build();
-        return new ResponseEntity<>(ar, HttpStatus.OK);
+        return new ResponseEntity<>(ar, SuccessCode.LOGOUT_SUCCESS.getHttpStatus());
     }
 }
