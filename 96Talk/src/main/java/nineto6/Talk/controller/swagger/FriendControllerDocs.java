@@ -3,7 +3,7 @@ package nineto6.Talk.controller.swagger;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import nineto6.Talk.model.frined.FriendRequest;
+import nineto6.Talk.model.friend.FriendRequest;
 import nineto6.Talk.model.member.MemberDetailsDto;
 import nineto6.Talk.model.response.ApiResponse;
 import org.springframework.http.ResponseEntity;

@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import nineto6.Talk.common.codes.SuccessCode;
 import nineto6.Talk.controller.swagger.FriendControllerDocs;
-import nineto6.Talk.model.frined.FriendRequest;
+import nineto6.Talk.model.friend.FriendRequest;
 import nineto6.Talk.model.member.MemberDetailsDto;
 import nineto6.Talk.model.response.ApiResponse;
 import nineto6.Talk.service.FriendService;

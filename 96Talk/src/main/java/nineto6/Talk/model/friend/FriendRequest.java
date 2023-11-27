@@ -1,4 +1,4 @@
-package nineto6.Talk.model.frined;
+package nineto6.Talk.model.friend;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
