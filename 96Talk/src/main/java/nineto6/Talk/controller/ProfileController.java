@@ -27,7 +27,7 @@ import java.io.IOException;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/profiles")
+@RequestMapping("/profiles")
 @RequiredArgsConstructor
 public class ProfileController implements ProfileControllerDocs {
     private final ProfileService profileService;

@@ -11,6 +11,10 @@ spring:
       maxFileSize: 3MB
       maxRequestSize: 3MB
 
+server:
+  servlet:
+    context-path: /api
+
 #MyBatis
 mybatis:
   type-aliases-package: nineto6.Talk.domain
@@ -30,15 +34,16 @@ custom:
 
 # Swagger
 springdoc:
+  show-actuator: true
   api-docs:
-    path: /api/docs
+    path: /api-docs
   default-consumes-media-type: application/json
   default-produces-media-type: application/json
   swagger-ui:
     operations-sorter: alpha
     tags-sorter: alpha
-    path: /api/swagger-ui.html
+    path: /swagger-ui.html
     disable-swagger-default-url: true
     doc-expansion: none
   paths-to-match:
-    - /api/**
+    - /**

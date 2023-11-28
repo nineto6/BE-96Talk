@@ -18,7 +18,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/friends")
+@RequestMapping("/friends")
 @RequiredArgsConstructor
 public class FriendController implements FriendControllerDocs {
     private final FriendService friendService;

@@ -29,7 +29,7 @@ import java.util.UUID;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/auth")
+@RequestMapping("/auth")
 public class AuthController implements AuthControllerDocs {
     private final RefreshRedisRepository refreshTokenRedisRepository;
     private final MemberService memberService;
