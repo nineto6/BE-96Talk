@@ -29,7 +29,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(ResourceExceptionHandler.class)
-    public ResponseEntity<Resource> ResourceBusinessExHandler(ResourceExceptionHandler ex) {
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    public ResponseEntity<Resource> resourceBusinessExHandler(ResourceExceptionHandler ex) {
+        return new ResponseEntity<>(ex.getErrorCode().getHttpStatus());
     }
 }
