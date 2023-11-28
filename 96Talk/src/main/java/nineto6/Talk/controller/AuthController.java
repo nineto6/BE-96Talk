@@ -16,7 +16,6 @@ import nineto6.Talk.model.member.MemberDto;
 import nineto6.Talk.model.member.MemberLoginRequest;
 import nineto6.Talk.model.response.ApiResponse;
 import nineto6.Talk.service.MemberService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

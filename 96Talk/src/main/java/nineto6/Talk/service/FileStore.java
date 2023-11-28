@@ -19,10 +19,22 @@ public class FileStore {
     @Value("${file.dir}")
     private String fileDir;
 
+
+    /**
+     * 확장자 -> MIME TYPE
+     */
+    public String getTypeByExt(String ext) {
+        if(ext.equals(ImageCode.PNG.getExt())) {
+            return ImageCode.PNG.getMimeType();
+        }
+        if(ext.equals(ImageCode.JPG.getExt())) {
+            return ImageCode.JPG.getMimeType();
+        }
+        return null;
+    }
+
     /**
      * 이미지 파일 .jpeg, .png, 검사 / 파일을 등록하지 않았을 때 통과
-     * @param multipartFiles
-     * @return true = 이미지 파일, false = 이미지 파일 X
      */
     public boolean isImageFile(MultipartFile multipartFile) {
         boolean visited = false;

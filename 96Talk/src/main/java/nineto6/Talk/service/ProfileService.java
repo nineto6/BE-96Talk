@@ -3,8 +3,8 @@ package nineto6.Talk.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import nineto6.Talk.common.codes.ErrorCode;
-import nineto6.Talk.common.codes.ImageCode;
 import nineto6.Talk.common.exception.BusinessExceptionHandler;
+import nineto6.Talk.common.exception.ResourceExceptionHandler;
 import nineto6.Talk.domain.MemberProfile;
 import nineto6.Talk.domain.Profile;
 import nineto6.Talk.model.UploadFile;
@@ -55,7 +55,7 @@ public class ProfileService {
                                     .memberNm(memberProfile.getMemberNm())
                                     .profileStateMessage(profile.getProfileStateMessage())
                                     .imageName(uuid)
-                                    .type(getTypeByExt(ext))
+                                    .type(fileStore.getTypeByExt(ext))
                                     .build();
                         }
                 ).collect(Collectors.toList());
@@ -92,21 +92,8 @@ public class ProfileService {
                 .memberNm(memberProfile.getMemberNm())
                 .profileStateMessage(profile.getProfileStateMessage())
                 .imageName(uuid)
-                .type(getTypeByExt(ext))
+                .type(fileStore.getTypeByExt(ext))
                 .build();
-    }
-
-    /**
-     * 확장자에서 MIME Type 으로 가져오기
-     */
-    private String getTypeByExt(String ext) {
-        if(ext.equals(ImageCode.PNG.getExt())) {
-            return ImageCode.PNG.getMimeType();
-        }
-        if(ext.equals(ImageCode.JPG.getExt())) {
-            return ImageCode.JPG.getMimeType();
-        }
-        return null;
     }
 
     /**
@@ -114,13 +101,9 @@ public class ProfileService {
      */
     @Transactional
     public void updateImageFile(MemberDto memberDto, MultipartFile uploadFile) {
-        // 파일이 null 일 경우
-        if(ObjectUtils.isEmpty(uploadFile)) {
-            throw new BusinessExceptionHandler(ErrorCode.UPDATE_ERROR);
-        }
-
         // 업로드 파일 안에 값이 비어있을 경우
         if(uploadFile.isEmpty()) {
+            log.info("파일 안에 값이 없습니다.");
             throw new BusinessExceptionHandler(ErrorCode.UPDATE_ERROR);
         }
 
@@ -157,12 +140,8 @@ public class ProfileService {
     /**
      *  프로필 상태 메세지 수정
      */
+    @Transactional
     public void updateStateMessage(MemberDto memberDto, String stateMessage) {
-        // 상태 메세지가 null 이 아닐 경우
-        if(ObjectUtils.isEmpty(stateMessage)) {
-            throw new BusinessExceptionHandler(ErrorCode.UPDATE_ERROR);
-        }
-
         // 상태 메세지 업데이트
         profileRepository.updateStateMessageByMemberId(memberDto.getMemberId(), stateMessage);
     }
@@ -173,16 +152,17 @@ public class ProfileService {
     @Transactional(readOnly = true)
     public void checkByStoreFileName(String profileStoreFileName) {
         Profile profile = profileRepository.findByStoreFileName(profileStoreFileName)
-                .orElseThrow(() -> new BusinessExceptionHandler(ErrorCode.BUSINESS_EXCEPTION_ERROR));
+                .orElseThrow(() -> new ResourceExceptionHandler(ErrorCode.BUSINESS_EXCEPTION_ERROR));
 
         if(ObjectUtils.isEmpty(profile.getProfileStoreFileName()) || ObjectUtils.isEmpty(profile.getProfileUploadFileName())) {
-            throw new BusinessExceptionHandler(ErrorCode.BUSINESS_EXCEPTION_ERROR);
+            throw new ResourceExceptionHandler(ErrorCode.BUSINESS_EXCEPTION_ERROR);
         }
     }
 
     /**
      * 프로필 이미지의 값을 제거
      */
+
     public void updateImageToNull(MemberDto memberDto) {
         // 조회된 값이 없으면 Exception
         Profile profile = profileRepository.findByMemberId(memberDto.getMemberId())

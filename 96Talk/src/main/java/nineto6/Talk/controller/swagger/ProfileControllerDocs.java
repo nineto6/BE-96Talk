@@ -14,18 +14,16 @@ import java.io.IOException;
 
 @Tag(name = "프로필")
 public interface ProfileControllerDocs {
-    @Operation(summary = "자기 자신 포함 친구 프로필 전체 조회", description = "토큰이 필요합니다.")
-    ResponseEntity<ApiResponse> getFriendProfiles(@Schema(hidden = true) MemberDetailsDto memberDetailsDto);
+    @Operation(summary = "자기 프로필 조회", description = "토큰이 필요합니다.")
+    ResponseEntity<ApiResponse> getProfile(@Schema(hidden = true) MemberDetailsDto memberDetailsDto);
     @Operation(summary = "프로필 단일 조회", description = "토큰이 필요합니다.")
 
-    ResponseEntity<ApiResponse> getProfile(String memberNm);
-    @Operation(summary = "프로필 상태 메세지 수정", description = "토큰이 필요합니다.")
-    ResponseEntity<ApiResponse> updateProfileStateMessage(String stateMessage,
-                                                          @Schema(hidden = true) MemberDetailsDto memberDetailsDto);
+    ResponseEntity<ApiResponse> getProfileByMemberNm(String memberNm);
     @Operation(summary = "프로필 상태 메세지 삭제", description = "토큰이 필요합니다.")
     ResponseEntity<ApiResponse> deleteProfileStateMessage(@Schema(hidden = true) MemberDetailsDto memberDetailsDto);
-    @Operation(summary = "프로필 이미지 수정", description = "토큰이 필요합니다.")
-    ResponseEntity<ApiResponse> updateProfileImageFile(MultipartFile imageFile,
+    @Operation(summary = "프로필 이미지 및 상태메세지 수정", description = "토큰이 필요합니다.")
+    ResponseEntity<ApiResponse> updateProfileImageFileAndStateMessage(MultipartFile imageFile,
+                                                                      String profileStateMessage,
                                                        @Schema(hidden = true) MemberDetailsDto memberDetailsDto);
     @Operation(summary = "프로필 이미지 삭제", description = "토큰이 필요합니다.")
     ResponseEntity<ApiResponse> deleteProfileImage(@Schema(hidden = true) MemberDetailsDto memberDetailsDto);

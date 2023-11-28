@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import nineto6.Talk.common.codes.ErrorCode;
 import nineto6.Talk.common.codes.ImageCode;
 import nineto6.Talk.common.codes.SuccessCode;
-import nineto6.Talk.common.exception.BusinessExceptionHandler;
 import nineto6.Talk.common.exception.ResourceExceptionHandler;
 import nineto6.Talk.controller.swagger.ProfileControllerDocs;
 import nineto6.Talk.model.member.MemberDetailsDto;
@@ -25,8 +24,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
 
 @Slf4j
 @RestController
@@ -37,32 +34,11 @@ public class ProfileController implements ProfileControllerDocs {
     private final FileStore fileStore;
 
     /**
-     * 자기 자신 및 친구 프로필 전체 조회
+     * 자기 자신 프로필 조회
      */
     @GetMapping
-    public ResponseEntity<ApiResponse> getFriendProfiles(@AuthenticationPrincipal MemberDetailsDto memberDetailsDto) {
-        HashMap<String, Object> map = new HashMap<>();
-        ProfileResponse profile = profileService.findByNickname(memberDetailsDto.getMemberDto().getMemberNm());
-        List<ProfileResponse> friendProfiles = profileService.findFriendProfiles(memberDetailsDto.getMemberDto());
-
-        map.put("profile", profile);
-        map.put("friendProfiles", friendProfiles);
-
-        ApiResponse apiResponse = ApiResponse.builder()
-                .result(map)
-                .status(SuccessCode.SELECT_SUCCESS.getStatus())
-                .message(SuccessCode.SELECT_SUCCESS.getMessage())
-                .build();
-
-        return new ResponseEntity<>(apiResponse, SuccessCode.SELECT_SUCCESS.getHttpStatus());
-    }
-
-    /**
-     * 프로필 조회
-     */
-    @GetMapping("/{memberNm}")
-    public ResponseEntity<ApiResponse> getProfile(@PathVariable("memberNm") String memberNm) {
-        ProfileResponse profileResponse = profileService.findByNickname(memberNm);
+    public ResponseEntity<ApiResponse> getProfile(@AuthenticationPrincipal MemberDetailsDto memberDetailsDto) {
+        ProfileResponse profileResponse = profileService.findByNickname(memberDetailsDto.getMemberDto().getMemberNm());
 
         ApiResponse apiResponse = ApiResponse.builder()
                 .result(profileResponse)
@@ -74,22 +50,21 @@ public class ProfileController implements ProfileControllerDocs {
     }
 
     /**
-     * 프로필 상태 메세지 수정
+     * 프로필 조회
      */
-    @PatchMapping()
-    public ResponseEntity<ApiResponse> updateProfileStateMessage(@RequestParam("stateMessage") String stateMessage,
-                                                                 @AuthenticationPrincipal MemberDetailsDto memberDetailsDto) {
-
-        profileService.updateStateMessage(memberDetailsDto.getMemberDto(), stateMessage);
+    @GetMapping("/{memberNm}")
+    public ResponseEntity<ApiResponse> getProfileByMemberNm(@PathVariable("memberNm") String memberNm) {
+        ProfileResponse profileResponse = profileService.findByNickname(memberNm);
 
         ApiResponse apiResponse = ApiResponse.builder()
-                .result(null)
-                .status(SuccessCode.UPDATE_SUCCESS.getStatus())
-                .message(SuccessCode.UPDATE_SUCCESS.getMessage())
+                .result(profileResponse)
+                .status(SuccessCode.SELECT_SUCCESS.getStatus())
+                .message(SuccessCode.SELECT_SUCCESS.getMessage())
                 .build();
 
-        return new ResponseEntity<>(apiResponse, SuccessCode.UPDATE_SUCCESS.getHttpStatus());
+        return new ResponseEntity<>(apiResponse, SuccessCode.SELECT_SUCCESS.getHttpStatus());
     }
+
 
     /**
      * 프로필 상태 메세지 삭제
@@ -109,13 +84,20 @@ public class ProfileController implements ProfileControllerDocs {
     }
 
     /**
-     * 프로필 이미지 수정
+     * 프로필 이미지, 상태 메세지 수정
      */
-    @PatchMapping(value = "/images", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<ApiResponse> updateProfileImageFile(@RequestPart MultipartFile imageFile,
+    @PatchMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<ApiResponse> updateProfileImageFileAndStateMessage(@RequestPart(required = false) MultipartFile imageFile,
+                                                              @RequestPart(required = false) String profileStateMessage,
                                                               @AuthenticationPrincipal MemberDetailsDto memberDetailsDto) {
 
-        profileService.updateImageFile(memberDetailsDto.getMemberDto(), imageFile);
+        if(!ObjectUtils.isEmpty(imageFile)) {
+            profileService.updateImageFile(memberDetailsDto.getMemberDto(), imageFile);
+        }
+
+        if(!ObjectUtils.isEmpty(profileStateMessage)) {
+            profileService.updateStateMessage(memberDetailsDto.getMemberDto(), profileStateMessage);
+        }
 
         ApiResponse apiResponse = ApiResponse.builder()
                 .result(null)
@@ -146,8 +128,8 @@ public class ProfileController implements ProfileControllerDocs {
     /**
      *  프로필 이미지 다운로드
      */
-    @GetMapping(value = "/images/{fileName}", produces = {MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
-    public ResponseEntity<Resource> downloadImage(@PathVariable("fileName") String fileName,
+    @GetMapping(value = "/images/{imageName}", produces = {MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
+    public ResponseEntity<Resource> downloadImage(@PathVariable("imageName") String imageName,
                                   HttpServletRequest request) throws IOException {
         String type = getFileTypeByRequest(request);
 
@@ -155,14 +137,10 @@ public class ProfileController implements ProfileControllerDocs {
             throw new ResourceExceptionHandler(ErrorCode.RESOURCE_EXCEPTION_ERROR);
         }
 
-        String storeFileName = fileName + "." + type;
+        String storeFileName = imageName + "." + type;
 
         // DB 에 존재하는지 파일 찾기
-        try{
-            profileService.checkByStoreFileName(storeFileName);
-        } catch (BusinessExceptionHandler ex) {
-            throw new ResourceExceptionHandler(ErrorCode.RESOURCE_EXCEPTION_ERROR);
-        }
+        profileService.checkByStoreFileName(storeFileName);
 
         // 경로에 있는 파일에 접근해서 파일을 스트림으로 반환
         UrlResource resource = new UrlResource("file:" + fileStore.getFullPath(storeFileName));
