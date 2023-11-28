@@ -81,13 +81,16 @@ public class WebSecurityConfig {
                 // [STEP2-2] JwtAuthorizationFilter 에서 사용자 인증 후 인가를 받은 권한에 대하여 접근 지정
                 .authorizeHttpRequests()
                 // 모든 권한 접근 가능 (Anonymous 포함)
-                .antMatchers("/api/docs/**",
-                                        "/api/swagger-ui/**",
-                                        "/api/swagger-ui.html"
+                .antMatchers("/api-docs/**",
+                                        "/swagger-ui/**",
+                                        "/swagger-ui.html",
+                                        "/configuration/ui",
+                                        "/configuration/security",
+                                        "/webjars/**"
                 ).permitAll()
-                .antMatchers(HttpMethod.GET, "/api/members").permitAll() // 이메일, 닉네임 중복 확인
-                .antMatchers(HttpMethod.POST, "/api/members").permitAll() // 회원가입
-                .antMatchers(HttpMethod.PUT, "/api/auth").permitAll() // 재발급
+                .antMatchers(HttpMethod.GET, "/members").permitAll() // 이메일, 닉네임 중복 확인
+                .antMatchers(HttpMethod.POST, "/members").permitAll() // 회원가입
+                .antMatchers(HttpMethod.PUT, "/auth").permitAll() // 재발급
 
                 // USER 권한이 있을경우에만 접근 가능
                 // .antMatchers(
@@ -159,7 +162,7 @@ public class WebSecurityConfig {
     @Bean
     public CustomAuthenticationFilter customAuthenticationFilter() {
         CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(authenticationManager());
-        customAuthenticationFilter.setFilterProcessesUrl("/api/auth/login"); // 접근 URL
+        customAuthenticationFilter.setFilterProcessesUrl("/auth/login"); // 접근 URL
         customAuthenticationFilter.setAuthenticationSuccessHandler(customLoginSuccessHandler()); // '인증' 성공 시 해당 핸들러로 처리를 전가한다.
         customAuthenticationFilter.setAuthenticationFailureHandler(customLoginFailureHandler()); // '인증' 실패 시 해당 핸들러로 처리를 전가한다.
         customAuthenticationFilter.afterPropertiesSet();
