@@ -7,8 +7,10 @@ import nineto6.Talk.common.codes.ImageCode;
 import nineto6.Talk.common.codes.SuccessCode;
 import nineto6.Talk.common.exception.ResourceExceptionHandler;
 import nineto6.Talk.controller.swagger.ProfileControllerDocs;
+import nineto6.Talk.model.PagingResponseDto;
 import nineto6.Talk.model.member.MemberDetailsDto;
 import nineto6.Talk.model.profile.ProfileResponse;
+import nineto6.Talk.model.profile.ProfileSearchDto;
 import nineto6.Talk.model.response.ApiResponse;
 import nineto6.Talk.service.FileStore;
 import nineto6.Talk.service.ProfileService;
@@ -58,6 +60,38 @@ public class ProfileController implements ProfileControllerDocs {
 
         ApiResponse apiResponse = ApiResponse.builder()
                 .result(profileResponse)
+                .status(SuccessCode.SELECT_SUCCESS.getStatus())
+                .message(SuccessCode.SELECT_SUCCESS.getMessage())
+                .build();
+
+        return new ResponseEntity<>(apiResponse, SuccessCode.SELECT_SUCCESS.getHttpStatus());
+    }
+
+    /**
+     * 프로필 검색
+     * 1. 닉네임으로 검색
+     */
+    @GetMapping("/search")
+    public ResponseEntity<ApiResponse> getSearchProfile(
+            @RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
+            @RequestParam(value = "page", required = false) Integer page,
+            @RequestParam(value = "recordSize", required = false) Integer recordSize,
+            @RequestParam(value = "pageSize", required = false) Integer pageSize) {
+
+        ProfileSearchDto profileSearchDto = new ProfileSearchDto();
+        profileSearchDto.setKeyword(keyword);
+
+        if(!ObjectUtils.isEmpty(page) && !ObjectUtils.isEmpty(recordSize) && !ObjectUtils.isEmpty(pageSize)) {
+            profileSearchDto.setPage(page);
+            profileSearchDto.setRecordSize(recordSize);
+            profileSearchDto.setPageSize(pageSize);
+        }
+
+        PagingResponseDto<ProfileResponse> searchProfile = profileService.getSearchProfile(profileSearchDto);
+
+
+        ApiResponse apiResponse = ApiResponse.builder()
+                .result(searchProfile)
                 .status(SuccessCode.SELECT_SUCCESS.getStatus())
                 .message(SuccessCode.SELECT_SUCCESS.getMessage())
                 .build();

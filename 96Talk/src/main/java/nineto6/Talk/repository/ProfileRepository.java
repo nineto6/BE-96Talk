@@ -2,6 +2,7 @@ package nineto6.Talk.repository;
 
 import nineto6.Talk.domain.MemberProfile;
 import nineto6.Talk.domain.Profile;
+import nineto6.Talk.model.profile.ProfileSearchDto;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,4 +17,6 @@ public interface ProfileRepository {
     void updateFileToNull(Long memberId);
     void updateStateMessageToNull(Long memberId);
     List<MemberProfile> findFriendProfileListByMemberId(Long memberId);
+    List<MemberProfile> findSearchProfileByKeyword(ProfileSearchDto search);
+    Integer getMaxCount(ProfileSearchDto search);
 }

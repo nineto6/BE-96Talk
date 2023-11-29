@@ -2,6 +2,7 @@ package nineto6.Talk.repository.mapper;
 
 import nineto6.Talk.domain.MemberProfile;
 import nineto6.Talk.domain.Profile;
+import nineto6.Talk.model.profile.ProfileSearchDto;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -22,4 +23,6 @@ public interface ProfileMapper {
     void updateFileToNull(Long memberId);
     void updateStateMessageToNull(Long memberId);
     List<MemberProfile> findFriendProfileListByMemberId(Long memberId);
+    List<MemberProfile> findSearchProfileByKeyword(ProfileSearchDto search);
+    Integer getMaxCount(ProfileSearchDto search);
 }

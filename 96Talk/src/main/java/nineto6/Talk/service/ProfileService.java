@@ -7,9 +7,12 @@ import nineto6.Talk.common.exception.BusinessExceptionHandler;
 import nineto6.Talk.common.exception.ResourceExceptionHandler;
 import nineto6.Talk.domain.MemberProfile;
 import nineto6.Talk.domain.Profile;
+import nineto6.Talk.model.Pagination;
+import nineto6.Talk.model.PagingResponseDto;
 import nineto6.Talk.model.UploadFile;
 import nineto6.Talk.model.member.MemberDto;
 import nineto6.Talk.model.profile.ProfileResponse;
+import nineto6.Talk.model.profile.ProfileSearchDto;
 import nineto6.Talk.repository.ProfileRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +20,7 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -28,6 +32,33 @@ public class ProfileService {
     private final ProfileRepository profileRepository;
     private final FileStore fileStore;
 
+
+    /**
+     * 프로필 검색 조회
+     */
+    @Transactional(readOnly = true)
+    public PagingResponseDto<ProfileResponse> getSearchProfile(ProfileSearchDto params) {
+        Integer count = profileRepository.getMaxCount(params);
+
+        if (count < 1) {
+            // 조건에 해달하는 데이터가 없는 경우, 응답 데이터에 비어있는 리스트와 null 을 담아 반호나
+            return new PagingResponseDto<>(Collections.emptyList(), null);
+        }
+
+        // Pagination 객체를 생성해서 페이지 정보 계산 후 SearchDto 타입의 객체인 params 에 계산된 페이지 정보 저장
+        Pagination pagination = new Pagination(count, params);
+        params.setPagination(pagination);
+
+        // 계산된 페이지 정보의 일부(limitStart, recordSize)를 기준으로 리스트 데이터 조회 후 응답 데이터 반환
+        List<MemberProfile> findMemberProfile = profileRepository.findSearchProfileByKeyword(params);
+
+        List<ProfileResponse> profileResponseList = findMemberProfile.stream()
+                .map((memberProfile) -> getProfileResponse(memberProfile))
+                .collect(Collectors.toList());
+
+        return new PagingResponseDto<>(profileResponseList, pagination);
+    }
+
     /**
      * 친구 프로필 전체 조회
      */
@@ -37,46 +68,16 @@ public class ProfileService {
 
         // 친구 프로필 조회
         return friendProfileList.stream()
-                .map((memberProfile) -> {
-                            Profile profile = memberProfile.getProfile();
-                            if (ObjectUtils.isEmpty(profile.getProfileStoreFileName()) || ObjectUtils.isEmpty(profile.getProfileUploadFileName())) {
-                                return ProfileResponse.builder()
-                                        .memberNm(memberProfile.getMemberNm())
-                                        .profileStateMessage(profile.getProfileStateMessage())
-                                        .build();
-                            }
-
-                            String storeName = profile.getProfileStoreFileName();
-                            String[] split = storeName.split("\\.");
-                            String uuid = split[0];
-                            String ext = split[1];
-
-                            return ProfileResponse.builder()
-                                    .memberNm(memberProfile.getMemberNm())
-                                    .profileStateMessage(profile.getProfileStateMessage())
-                                    .imageName(uuid)
-                                    .type(fileStore.getTypeByExt(ext))
-                                    .build();
-                        }
-                ).collect(Collectors.toList());
+                .map((memberProfile) -> getProfileResponse(memberProfile))
+                .collect(Collectors.toList());
     }
 
     /**
-     * 프로필 조회
+     * MemberProfile -> ProfileResponse 변환 메서드
      */
-    @Transactional(readOnly = true)
-    public ProfileResponse findByNickname(String memberNm) {
-        MemberProfile memberProfile = profileRepository.findByMemberNm(memberNm)
-                .orElseThrow(() -> new BusinessExceptionHandler(ErrorCode.BUSINESS_EXCEPTION_ERROR));
-
-        // 프로필이 존재하지 않을 경우 Exception
-        if(ObjectUtils.isEmpty(memberProfile.getProfile())) {
-            throw new BusinessExceptionHandler(ErrorCode.BUSINESS_EXCEPTION_ERROR);
-        }
-
+    private ProfileResponse getProfileResponse(MemberProfile memberProfile) {
         Profile profile = memberProfile.getProfile();
-        // 이미지 파일이 존재하지 않을 경우
-        if(ObjectUtils.isEmpty(profile.getProfileStoreFileName()) || ObjectUtils.isEmpty(profile.getProfileUploadFileName())) {
+        if (ObjectUtils.isEmpty(profile.getProfileStoreFileName()) || ObjectUtils.isEmpty(profile.getProfileUploadFileName())) {
             return ProfileResponse.builder()
                     .memberNm(memberProfile.getMemberNm())
                     .profileStateMessage(profile.getProfileStateMessage())
@@ -94,6 +95,22 @@ public class ProfileService {
                 .imageName(uuid)
                 .type(fileStore.getTypeByExt(ext))
                 .build();
+    }
+
+    /**
+     * 프로필 조회
+     */
+    @Transactional(readOnly = true)
+    public ProfileResponse findByNickname(String memberNm) {
+        MemberProfile memberProfile = profileRepository.findByMemberNm(memberNm)
+                .orElseThrow(() -> new BusinessExceptionHandler(ErrorCode.BUSINESS_EXCEPTION_ERROR));
+
+        // 프로필이 존재하지 않을 경우 Exception
+        if(ObjectUtils.isEmpty(memberProfile.getProfile())) {
+            throw new BusinessExceptionHandler(ErrorCode.BUSINESS_EXCEPTION_ERROR);
+        }
+
+        return getProfileResponse(memberProfile);
     }
 
     /**

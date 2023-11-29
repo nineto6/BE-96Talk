@@ -3,6 +3,7 @@ package nineto6.Talk.repository.impl;
 import lombok.RequiredArgsConstructor;
 import nineto6.Talk.domain.MemberProfile;
 import nineto6.Talk.domain.Profile;
+import nineto6.Talk.model.profile.ProfileSearchDto;
 import nineto6.Talk.repository.ProfileRepository;
 import nineto6.Talk.repository.mapper.ProfileMapper;
 import org.springframework.stereotype.Repository;
@@ -58,5 +59,15 @@ public class ProfileRepositoryImpl implements ProfileRepository {
     @Override
     public List<MemberProfile> findFriendProfileListByMemberId(Long memberId) {
         return profileMapper.findFriendProfileListByMemberId(memberId);
+    }
+
+    @Override
+    public List<MemberProfile> findSearchProfileByKeyword(ProfileSearchDto search) {
+        return profileMapper.findSearchProfileByKeyword(search);
+    }
+
+    @Override
+    public Integer getMaxCount(ProfileSearchDto search) {
+        return profileMapper.getMaxCount(search);
     }
 }

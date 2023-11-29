@@ -107,4 +107,27 @@
         WHERE
             f.MEMBER_ID = #{memberId};
     </select>
+
+    <!-- 페이지네이션 -->
+    <!-- 키워드로 검색하기, 닉네임 정렬 -->
+    <select id="findSearchProfileByKeyword" parameterType="nineto6.Talk.model.profile.ProfileSearchDto" resultType="List" resultMap="memberProfileMap">
+        SELECT
+            m.MEMBER_NM,
+            p.PROFILE_ID, p.MEMBER_ID, p.PROFILE_STATE_MESSAGE, p.PROFILE_UPLOAD_FILE_NAME, p.PROFILE_STORE_FILE_NAME
+        FROM
+            MEMBER AS m INNER JOIN PROFILE AS p ON m.MEMBER_ID = p.MEMBER_ID
+        WHERE
+            m.MEMBER_NM LIKE CONCAT('%', #{keyword}, '%')
+        ORDER BY
+            m.MEMBER_NM ASC LIMIT #{pagination.limitStart}, #{recordSize}
+    </select>
+
+    <select id="getMaxCount" parameterType="nineto6.Talk.model.profile.ProfileSearchDto" resultType="Integer">
+        SELECT
+            COUNT(m.*)
+        FROM
+            MEMBER AS m
+        WHERE
+            m.MEMBER_NM LIKE CONCAT('%', #{keyword}, '%')
+    </select>
 </mapper>

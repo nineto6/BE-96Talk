@@ -5,6 +5,8 @@ import nineto6.Talk.domain.Friend;
 import nineto6.Talk.domain.Member;
 import nineto6.Talk.domain.MemberProfile;
 import nineto6.Talk.domain.Profile;
+import nineto6.Talk.model.Pagination;
+import nineto6.Talk.model.profile.ProfileSearchDto;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -265,5 +267,55 @@ public class ProfileRepositoryTest {
         MemberProfile memberProfile = profileList.get(0);
         Assertions.assertThat(memberProfile.getMemberNm()).isEqualTo("친구");
         Assertions.assertThat(profileList.size()).isEqualTo(1);
+    }
+
+    @Test
+    void findSearchProfileByKeyword() {
+        // given
+        for (int i = 0; i < 10; i++) {
+            Member member = Member.builder()
+                    .memberEmail("hello1" + i + "@naver.com")
+                    .memberPwd("123123")
+                    .memberNm("주인공" + i)
+                    .build();
+            memberRepository.save(member);
+
+            Profile profile = Profile.builder()
+                    .memberId(member.getMemberId())
+                    .build();
+            profileRepository.saveDefault(profile);
+        }
+
+        ProfileSearchDto search = new ProfileSearchDto();
+        search.setKeyword("");
+        Pagination pagination = new Pagination(profileRepository.getMaxCount(search), search);
+        search.setPagination(pagination);
+
+        // when
+        List<MemberProfile> searchProfile = profileRepository.findSearchProfileByKeyword(search);
+
+        // then
+        Assertions.assertThat(searchProfile.size()).isEqualTo(5);
+    }
+
+    @Test
+    void getMaxCount() {
+        // given
+        for (int i = 0; i < 10; i++) {
+            Member member = Member.builder()
+                    .memberEmail("hello1" + i + "@naver.com")
+                    .memberPwd("123123")
+                    .memberNm("주인공" + i)
+                    .build();
+            memberRepository.save(member);
+        }
+
+        ProfileSearchDto search = new ProfileSearchDto();
+
+        // when
+        Integer maxCount = profileRepository.getMaxCount(search);
+
+        // then
+        Assertions.assertThat(maxCount).isEqualTo(10);
     }
 }
