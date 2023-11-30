@@ -55,7 +55,7 @@ public class MemberService {
         }
 
         // 중복된 닉네임이 있는지 확인
-        Member duplicateNm = memberRepository.findByMemberNm(memberSaveRequest.getMemberNm())
+        Member duplicateNm = memberRepository.findByMemberNickname(memberSaveRequest.getMemberNickname())
                 .orElse(null);
         if(!ObjectUtils.isEmpty(duplicateNm)) {
             throw new BusinessExceptionHandler(ErrorCode.DUPLICATE_ERROR);
@@ -64,7 +64,7 @@ public class MemberService {
         Member member = Member.builder()
                 .memberEmail(memberSaveRequest.getMemberEmail())
                 .memberPwd(passwordEncoder.encode(memberSaveRequest.getMemberPwd())) // Password 인코딩
-                .memberNm(memberSaveRequest.getMemberNm())
+                .memberNickname(memberSaveRequest.getMemberNickname())
                 .build();
 
         // Member 저장
@@ -98,7 +98,7 @@ public class MemberService {
      * 닉네임 중복 체크 로직 (비어있으면 true 이미 있으면 false)
      */
     public boolean duplicateCheckNickname(String memberNm) {
-        Optional<Member> findMember = memberRepository.findByMemberNm(memberNm);
+        Optional<Member> findMember = memberRepository.findByMemberNickname(memberNm);
         return findMember.isEmpty();
     }
 }

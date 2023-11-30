@@ -10,6 +10,6 @@ import java.util.Optional;
 public interface MemberMapper {
     void save(Member member);
     Optional<Member> findByMemberEmail(String memberEmail);
-    Optional<Member> findByMemberNm(String memberNm);
+    Optional<Member> findByMemberNickname(String memberNickname);
     Optional<MemberAuthority> findMemberAndAuthByEmail(String memberEmail);
 }

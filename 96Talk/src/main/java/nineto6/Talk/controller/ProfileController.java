@@ -40,7 +40,7 @@ public class ProfileController implements ProfileControllerDocs {
      */
     @GetMapping
     public ResponseEntity<ApiResponse> getProfile(@AuthenticationPrincipal MemberDetailsDto memberDetailsDto) {
-        ProfileResponse profileResponse = profileService.findByNickname(memberDetailsDto.getMemberDto().getMemberNm());
+        ProfileResponse profileResponse = profileService.findByNickname(memberDetailsDto.getMemberDto().getMemberNickname());
 
         ApiResponse apiResponse = ApiResponse.builder()
                 .result(profileResponse)
@@ -54,9 +54,9 @@ public class ProfileController implements ProfileControllerDocs {
     /**
      * 프로필 조회
      */
-    @GetMapping("/{memberNm}")
-    public ResponseEntity<ApiResponse> getProfileByMemberNm(@PathVariable("memberNm") String memberNm) {
-        ProfileResponse profileResponse = profileService.findByNickname(memberNm);
+    @GetMapping("/{memberNickname}")
+    public ResponseEntity<ApiResponse> getProfileByMemberNickname(@PathVariable("memberNickname") String memberNickname) {
+        ProfileResponse profileResponse = profileService.findByNickname(memberNickname);
 
         ApiResponse apiResponse = ApiResponse.builder()
                 .result(profileResponse)

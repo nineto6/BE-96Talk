@@ -65,7 +65,7 @@ public class TokenUtils {
                 .builder()
                 .memberId(Long.parseLong(claims.get("id").toString()))
                 .memberEmail(claims.get("email").toString())
-                .memberNm(claims.get("nickname").toString())
+                .memberNickname(claims.get("nickname").toString())
                 .roleList(auths)
                 .build());
 
@@ -96,7 +96,7 @@ public class TokenUtils {
 
             log.info("[JwtUtils] expireTime : {}", claims.getExpiration());
             log.info("[JwtUtils] userId : {}", claims.get("email"));
-            log.info("[JwtUtils] userNm : {}", claims.get("nickname"));
+            log.info("[JwtUtils] userNickname : {}", claims.get("nickname"));
 
             return true;
         } catch (JwtException | NullPointerException exception) {
@@ -138,7 +138,7 @@ public class TokenUtils {
         Map<String, Object> claims = new HashMap<>();
         claims.put("id", memberDto.getMemberId());
         claims.put("email", memberDto.getMemberEmail());
-        claims.put("nickname", memberDto.getMemberNm());
+        claims.put("nickname", memberDto.getMemberNickname());
 
         StringBuilder authority = getRemoveRoleStrings(memberDto);
         claims.put("auth", authority);

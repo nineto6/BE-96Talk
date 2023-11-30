@@ -79,7 +79,7 @@ public class ProfileService {
         Profile profile = memberProfile.getProfile();
         if (ObjectUtils.isEmpty(profile.getProfileStoreFileName()) || ObjectUtils.isEmpty(profile.getProfileUploadFileName())) {
             return ProfileResponse.builder()
-                    .memberNm(memberProfile.getMemberNm())
+                    .memberNickname(memberProfile.getMemberNickname())
                     .profileStateMessage(profile.getProfileStateMessage())
                     .build();
         }
@@ -90,7 +90,7 @@ public class ProfileService {
         String ext = split[1];
 
         return ProfileResponse.builder()
-                .memberNm(memberProfile.getMemberNm())
+                .memberNickname(memberProfile.getMemberNickname())
                 .profileStateMessage(profile.getProfileStateMessage())
                 .imageName(uuid)
                 .type(fileStore.getTypeByExt(ext))
@@ -102,7 +102,7 @@ public class ProfileService {
      */
     @Transactional(readOnly = true)
     public ProfileResponse findByNickname(String memberNm) {
-        MemberProfile memberProfile = profileRepository.findByMemberNm(memberNm)
+        MemberProfile memberProfile = profileRepository.findByMemberNickname(memberNm)
                 .orElseThrow(() -> new BusinessExceptionHandler(ErrorCode.BUSINESS_EXCEPTION_ERROR));
 
         // 프로필이 존재하지 않을 경우 Exception

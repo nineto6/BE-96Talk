@@ -24,7 +24,7 @@ public class FriendService {
     @Transactional
     public void createFriend(MemberDto memberDto, FriendRequest friendRequest) {
         // 이름으로 된 친구가 등록되어 있는지 확인
-        Member friendMember = memberRepository.findByMemberNm(friendRequest.getFriendNickname())
+        Member friendMember = memberRepository.findByMemberNickname(friendRequest.getFriendNickname())
                 .orElseThrow(() -> new BusinessExceptionHandler(ErrorCode.BUSINESS_EXCEPTION_ERROR));
 
         // 이미 등록되어 있는 친구인지 확인
@@ -46,7 +46,7 @@ public class FriendService {
     @Transactional
     public void removeFriend(MemberDto memberDto, FriendRequest friendRequest) {
         // 이름으로 된 친구가 등록되어 있는지 확인
-        Member friendMember = memberRepository.findByMemberNm(friendRequest.getFriendNickname())
+        Member friendMember = memberRepository.findByMemberNickname(friendRequest.getFriendNickname())
                 .orElseThrow(() -> new BusinessExceptionHandler(ErrorCode.BUSINESS_EXCEPTION_ERROR));
 
         // 이미 등록되어 있는 친구인지 확인

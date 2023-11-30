@@ -1,6 +1,5 @@
 package nineto6.Talk.controller;
 
-import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import nineto6.Talk.common.codes.ErrorCode;
@@ -10,7 +9,6 @@ import nineto6.Talk.controller.swagger.MemberControllerDocs;
 import nineto6.Talk.model.member.MemberSaveRequest;
 import nineto6.Talk.model.response.ApiResponse;
 import nineto6.Talk.service.MemberService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
@@ -41,7 +39,7 @@ public class MemberController implements MemberControllerDocs {
      */
     @GetMapping("/duplicate")
     public ResponseEntity<ApiResponse> duplicateCheck(@RequestParam(value = "memberEmail", required = false) String memberEmail,
-                                                      @RequestParam(value = "memberNm", required = false) String memberNm) {
+                                                      @RequestParam(value = "memberNickname", required = false) String memberNickname) {
         if(!ObjectUtils.isEmpty(memberEmail)) {
             boolean isEmpty = memberService.duplicateCheckEmail(memberEmail);
             ApiResponse ar = ApiResponse.builder()
@@ -52,8 +50,8 @@ public class MemberController implements MemberControllerDocs {
             return new ResponseEntity<>(ar, SuccessCode.SELECT_SUCCESS.getHttpStatus());
         }
 
-        if(!ObjectUtils.isEmpty(memberNm)) {
-            boolean isEmpty = memberService.duplicateCheckNickname(memberNm);
+        if(!ObjectUtils.isEmpty(memberNickname)) {
+            boolean isEmpty = memberService.duplicateCheckNickname(memberNickname);
             ApiResponse ar = ApiResponse.builder()
                     .result(isEmpty) // true , false
                     .status(SuccessCode.SELECT_SUCCESS.getStatus())

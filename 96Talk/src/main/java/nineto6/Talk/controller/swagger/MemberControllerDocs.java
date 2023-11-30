@@ -13,5 +13,5 @@ public interface MemberControllerDocs {
     ResponseEntity<ApiResponse> signUp(@RequestBody MemberSaveRequest memberSaveRequest);
     @Operation(summary = "중복 체크", description = "중복 체크용 메서드입니다.")
     ResponseEntity<ApiResponse> duplicateCheck(String memberEmail,
-                                               String memberNm);
+                                               String memberNickname);
 }

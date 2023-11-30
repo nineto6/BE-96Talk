@@ -5,7 +5,6 @@ import nineto6.Talk.common.codes.Role;
 import nineto6.Talk.domain.Authority;
 import nineto6.Talk.domain.Member;
 import nineto6.Talk.domain.MemberAuthority;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +33,7 @@ public class MemberRepositoryTest {
         Member member = Member.builder()
                 .memberEmail("hello@naver.com")
                 .memberPwd("123123")
-                .memberNm("한국")
+                .memberNickname("한국")
                 .build();
 
         // when
@@ -50,7 +49,7 @@ public class MemberRepositoryTest {
         Member member = Member.builder()
                 .memberEmail("hello@naver.com")
                 .memberPwd("123123")
-                .memberNm("한국")
+                .memberNickname("한국")
                 .build();
         memberRepository.save(member);
 
@@ -64,22 +63,22 @@ public class MemberRepositoryTest {
     }
 
     @Test
-    void  findByMemberNm() {
+    void  findByMemberNickname() {
         // given
         Member member = Member.builder()
                 .memberEmail("hello@naver.com")
                 .memberPwd("123123")
-                .memberNm("한국")
+                .memberNickname("한국")
                 .build();
         memberRepository.save(member);
 
         // when
-        Optional<Member> findMemberOptional = memberRepository.findByMemberNm(member.getMemberNm());
+        Optional<Member> findMemberOptional = memberRepository.findByMemberNickname(member.getMemberNickname());
 
         // then
         Member findMember = findMemberOptional.orElse(null);
         assertThat(findMember).isNotNull();
-        assertThat(findMember.getMemberNm()).isEqualTo("한국");
+        assertThat(findMember.getMemberNickname()).isEqualTo("한국");
     }
 
     @Test
@@ -89,7 +88,7 @@ public class MemberRepositoryTest {
         Member member = Member.builder()
                 .memberEmail("hello@naver.com")
                 .memberPwd("123123")
-                .memberNm("한국")
+                .memberNickname("한국")
                 .build();
 
         memberRepository.save(member);

@@ -70,8 +70,8 @@
             MEMBER_ID = #{memberId}
     </update>
 
-    <resultMap id="memberNmMap" type="String">
-        <result column="member_nm"/>
+    <resultMap id="memberNicknameMap" type="String">
+        <result column="member_nickname"/>
     </resultMap>
 
     <resultMap id="profileMap" type="Profile">
@@ -83,23 +83,23 @@
     </resultMap>
 
     <resultMap id="memberProfileMap" type="MemberProfile">
-        <association property="memberNm" resultMap="memberNmMap"/>
+        <association property="memberNickname" resultMap="memberNicknameMap"/>
         <association property="profile" resultMap="profileMap"/>
     </resultMap>
 
-    <select id="findByMemberNm" parameterType="String" resultMap="memberProfileMap">
+    <select id="findByMemberNickname" parameterType="String" resultMap="memberProfileMap">
         SELECT
-            m.MEMBER_NM,
+            m.MEMBER_NICKNAME,
             p.PROFILE_ID, p.MEMBER_ID, p.PROFILE_STATE_MESSAGE, p.PROFILE_UPLOAD_FILE_NAME, p.PROFILE_STORE_FILE_NAME
         FROM
             MEMBER AS m INNER JOIN PROFILE AS p ON m.MEMBER_ID = p.MEMBER_ID
         WHERE
-            m.MEMBER_NM = #{memberNm}
+            m.MEMBER_NICKNAME = #{memberNickname}
     </select>
 
     <select id="findFriendProfileListByMemberId" parameterType="Long" resultType="List" resultMap="memberProfileMap">
         SELECT
-            m.MEMBER_NM,
+            m.MEMBER_NICKNAME,
             p.PROFILE_ID, p.MEMBER_ID, p.PROFILE_STATE_MESSAGE, p.PROFILE_UPLOAD_FILE_NAME, p.PROFILE_STORE_FILE_NAME
         FROM
             FRIEND AS f INNER JOIN MEMBER AS m ON f.FRIEND_MEMBER_ID = m.MEMBER_ID
@@ -112,14 +112,14 @@
     <!-- 키워드로 검색하기, 닉네임 정렬 -->
     <select id="findSearchProfileByKeyword" parameterType="nineto6.Talk.model.profile.ProfileSearchDto" resultType="List" resultMap="memberProfileMap">
         SELECT
-            m.MEMBER_NM,
+            m.MEMBER_NICKNAME,
             p.PROFILE_ID, p.MEMBER_ID, p.PROFILE_STATE_MESSAGE, p.PROFILE_UPLOAD_FILE_NAME, p.PROFILE_STORE_FILE_NAME
         FROM
             MEMBER AS m INNER JOIN PROFILE AS p ON m.MEMBER_ID = p.MEMBER_ID
         WHERE
-            m.MEMBER_NM LIKE CONCAT('%', #{keyword}, '%')
+            m.MEMBER_NICKNAME LIKE CONCAT('%', #{keyword}, '%')
         ORDER BY
-            m.MEMBER_NM ASC LIMIT #{pagination.limitStart}, #{recordSize}
+            m.MEMBER_NICKNAME ASC LIMIT #{pagination.limitStart}, #{recordSize}
     </select>
 
     <select id="getMaxCount" parameterType="nineto6.Talk.model.profile.ProfileSearchDto" resultType="Integer">
@@ -128,6 +128,6 @@
         FROM
             MEMBER AS m
         WHERE
-            m.MEMBER_NM LIKE CONCAT('%', #{keyword}, '%')
+            m.MEMBER_NICKNAME LIKE CONCAT('%', #{keyword}, '%')
     </select>
 </mapper>

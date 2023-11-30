@@ -8,12 +8,12 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MemberProfile {
-    private String memberNm;
+    private String memberNickname;
     private Profile profile;
 
     @Builder
-    public MemberProfile(String memberNm, Profile profile) {
-        this.memberNm = memberNm;
+    public MemberProfile(String memberNickname, Profile profile) {
+        this.memberNickname = memberNickname;
         this.profile = profile;
     }
 }

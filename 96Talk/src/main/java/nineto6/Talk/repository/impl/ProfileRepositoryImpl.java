@@ -37,8 +37,8 @@ public class ProfileRepositoryImpl implements ProfileRepository {
     }
 
     @Override
-    public Optional<MemberProfile> findByMemberNm(String memberNm) {
-        return profileMapper.findByMemberNm(memberNm);
+    public Optional<MemberProfile> findByMemberNickname(String memberNickname) {
+        return profileMapper.findByMemberNickname(memberNickname);
     }
 
     @Override

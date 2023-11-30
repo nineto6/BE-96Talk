@@ -4,14 +4,14 @@
 <mapper namespace="nineto6.Talk.repository.mapper.MemberMapper">
 
     <sql id="memberColumns">
-        MEMBER_ID, MEMBER_EMAIL, MEMBER_PWD, MEMBER_NM, MEMBER_REGDATE
+        MEMBER_ID, MEMBER_EMAIL, MEMBER_PWD, MEMBER_NICKNAME, MEMBER_REGDATE
     </sql>
 
     <!-- 멤버 등록 -->
     <insert id="save" useGeneratedKeys="true" keyProperty="memberId">
         INSERT INTO
-        MEMBER (MEMBER_EMAIL, MEMBER_PWD, MEMBER_NM, MEMBER_REGDATE)
-        VALUES (#{memberEmail}, #{memberPwd}, #{memberNm}, now())
+        MEMBER (MEMBER_EMAIL, MEMBER_PWD, MEMBER_NICKNAME, MEMBER_REGDATE)
+        VALUES (#{memberEmail}, #{memberPwd}, #{memberNickname}, now())
     </insert>
 
     <select id="findByMemberEmail" parameterType="String" resultType="Member">
@@ -23,13 +23,13 @@
             m.MEMBER_EMAIL = #{memberEmail}
     </select>
 
-    <select id="findByMemberNm" parameterType="String" resultType="Member">
+    <select id="findByMemberNickname" parameterType="String" resultType="Member">
         SELECT
             <include refid="memberColumns"/>
         FROM
             MEMBER as m
         WHERE
-            m.MEMBER_NM = #{memberNm}
+            m.MEMBER_NICKNAME = #{memberNickname}
     </select>
 
     <!-- Authority Map -->
@@ -42,7 +42,7 @@
         <id column="member_id" property="memberId"/>
         <result column="member_email" property="memberEmail"/>
         <result column="member_pwd" property="memberPwd"/>
-        <result column="member_nm" property="memberNm"/>
+        <result column="member_nickname" property="memberNickname"/>
         <result column="member_regdate" property="memberRegdate"/>
         <collection property="roleList" resultMap="authorityMap"/>
     </resultMap>
@@ -50,7 +50,7 @@
     <!-- Member, Authority Join 조회 -->
     <select id="findMemberAndAuthByEmail" parameterType="String" resultMap="memberAndAuthorityMap">
         SELECT
-            m.MEMBER_ID, m.MEMBER_EMAIL, m.MEMBER_PWD, m.MEMBER_NM, m.MEMBER_REGDATE,
+            m.MEMBER_ID, m.MEMBER_EMAIL, m.MEMBER_PWD, m.MEMBER_NICKNAME, m.MEMBER_REGDATE,
             a.AUTHORITY_ROLE
         FROM
             MEMBER AS m

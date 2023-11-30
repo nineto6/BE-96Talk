@@ -1,7 +1,6 @@
 package nineto6.Talk.model.member;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,11 +13,11 @@ public class MemberSaveRequest {
     @Schema(title = "사용자 비밀번호")
     private String memberPwd;
     @Schema(title = "사용자 닉네임")
-    private String memberNm;
+    private String memberNickname;
     @Builder
-    public MemberSaveRequest(String memberEmail, String memberPwd, String memberNm) {
+    public MemberSaveRequest(String memberEmail, String memberPwd, String memberNickname) {
         this.memberEmail = memberEmail;
         this.memberPwd = memberPwd;
-        this.memberNm = memberNm;
+        this.memberNickname = memberNickname;
     }
 }

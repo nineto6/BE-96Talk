@@ -13,14 +13,14 @@ public class Member {
     private Long memberId;
     private String memberEmail;
     private String memberPwd;
-    private String memberNm;
+    private String memberNickname;
     private LocalDateTime memberRegdate;
     @Builder
-    public Member(Long memberId, String memberEmail, String memberPwd, String memberNm, LocalDateTime memberRegdate) {
+    public Member(Long memberId, String memberEmail, String memberPwd, String memberNickname, LocalDateTime memberRegdate) {
         this.memberId = memberId;
         this.memberEmail = memberEmail;
         this.memberPwd = memberPwd;
-        this.memberNm = memberNm;
+        this.memberNickname = memberNickname;
         this.memberRegdate = memberRegdate;
     }
 }

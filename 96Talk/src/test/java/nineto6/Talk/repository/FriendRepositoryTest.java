@@ -27,14 +27,14 @@ public class FriendRepositoryTest {
         Member member1 = Member.builder()
                 .memberEmail("hello1@naver.com")
                 .memberPwd("123123")
-                .memberNm("주인공")
+                .memberNickname("주인공")
                 .build();
         memberRepository.save(member1);
 
         Member member2 = Member.builder()
                 .memberEmail("hello2@naver.com")
                 .memberPwd("234324")
-                .memberNm("친구")
+                .memberNickname("친구")
                 .build();
         memberRepository.save(member2);
 
@@ -56,14 +56,14 @@ public class FriendRepositoryTest {
         Member member1 = Member.builder()
                 .memberEmail("hello1@naver.com")
                 .memberPwd("123123")
-                .memberNm("주인공")
+                .memberNickname("주인공")
                 .build();
         memberRepository.save(member1);
 
         Member member2 = Member.builder()
                 .memberEmail("hello2@naver.com")
                 .memberPwd("234324")
-                .memberNm("친구")
+                .memberNickname("친구")
                 .build();
         memberRepository.save(member2);
 
@@ -89,14 +89,14 @@ public class FriendRepositoryTest {
         Member member1 = Member.builder()
                 .memberEmail("hello1@naver.com")
                 .memberPwd("123123")
-                .memberNm("주인공")
+                .memberNickname("주인공")
                 .build();
         memberRepository.save(member1);
 
         Member member2 = Member.builder()
                 .memberEmail("hello2@naver.com")
                 .memberPwd("234324")
-                .memberNm("친구")
+                .memberNickname("친구")
                 .build();
         memberRepository.save(member2);
 
@@ -120,14 +120,14 @@ public class FriendRepositoryTest {
         Member member1 = Member.builder()
                 .memberEmail("hello1@naver.com")
                 .memberPwd("123123")
-                .memberNm("주인공")
+                .memberNickname("주인공")
                 .build();
         memberRepository.save(member1);
 
         Member member2 = Member.builder()
                 .memberEmail("hello2@naver.com")
                 .memberPwd("234324")
-                .memberNm("친구")
+                .memberNickname("친구")
                 .build();
         memberRepository.save(member2);
 

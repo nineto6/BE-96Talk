@@ -15,15 +15,15 @@ public class MemberAuthority {
     private Long memberId;
     private String memberEmail;
     private String memberPwd;
-    private String memberNm;
+    private String memberNickname;
     private LocalDateTime memberRegdate;
     private List<String> roleList;
     @Builder
-    public MemberAuthority(Long memberId, String memberEmail, String memberPwd, String memberNm, LocalDateTime memberRegdate, List<String> roleList) {
+    public MemberAuthority(Long memberId, String memberEmail, String memberPwd, String memberNickname, LocalDateTime memberRegdate, List<String> roleList) {
         this.memberId = memberId;
         this.memberEmail = memberEmail;
         this.memberPwd = memberPwd;
-        this.memberNm = memberNm;
+        this.memberNickname = memberNickname;
         this.memberRegdate = memberRegdate;
         this.roleList = roleList;
     }
@@ -33,7 +33,7 @@ public class MemberAuthority {
                 .memberId(this.memberId)
                 .memberEmail(this.memberEmail)
                 .memberPwd(this.memberPwd)
-                .memberNm(this.memberNm)
+                .memberNickname(this.memberNickname)
                 .memberRegdate(this.memberRegdate)
                 .roleList(this.roleList)
                 .build();

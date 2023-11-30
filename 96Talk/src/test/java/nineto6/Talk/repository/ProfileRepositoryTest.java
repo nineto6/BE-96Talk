@@ -32,7 +32,7 @@ public class ProfileRepositoryTest {
         Member member = Member.builder()
                 .memberEmail("hello@naver.com")
                 .memberPwd("123123")
-                .memberNm("한국")
+                .memberNickname("한국")
                 .build();
         memberRepository.save(member);
         Profile profile = Profile.builder()
@@ -55,7 +55,7 @@ public class ProfileRepositoryTest {
         Member member = Member.builder()
                 .memberEmail("hello@naver.com")
                 .memberPwd("123123")
-                .memberNm("한국")
+                .memberNickname("한국")
                 .build();
         memberRepository.save(member);
 
@@ -81,7 +81,7 @@ public class ProfileRepositoryTest {
         Member member = Member.builder()
                 .memberEmail("hello@naver.com")
                 .memberPwd("123123")
-                .memberNm("한국")
+                .memberNickname("한국")
                 .build();
         memberRepository.save(member);
 
@@ -106,7 +106,7 @@ public class ProfileRepositoryTest {
         Member member = Member.builder()
                 .memberEmail("hello@naver.com")
                 .memberPwd("123123")
-                .memberNm("한국")
+                .memberNickname("한국")
                 .build();
         memberRepository.save(member);
 
@@ -125,12 +125,12 @@ public class ProfileRepositoryTest {
     }
 
     @Test
-    void findByMemberNm() {
+    void findByMemberNickname() {
         // given
         Member member = Member.builder()
                 .memberEmail("hello@naver.com")
                 .memberPwd("123123")
-                .memberNm("한국")
+                .memberNickname("한국")
                 .build();
         memberRepository.save(member);
 
@@ -140,13 +140,13 @@ public class ProfileRepositoryTest {
         profileRepository.saveDefault(profile);
 
         // when
-        Optional<MemberProfile> memberProfileOptional = profileRepository.findByMemberNm(member.getMemberNm());
+        Optional<MemberProfile> memberProfileOptional = profileRepository.findByMemberNickname(member.getMemberNickname());
 
         // then
         MemberProfile findMemberProfile = memberProfileOptional.orElse(null);
         Assertions.assertThat(findMemberProfile).isNotNull();
         Assertions.assertThat(findMemberProfile.getProfile().getMemberId()).isEqualTo(member.getMemberId());
-        Assertions.assertThat(findMemberProfile.getMemberNm()).isEqualTo("한국");
+        Assertions.assertThat(findMemberProfile.getMemberNickname()).isEqualTo("한국");
     }
 
     @Test
@@ -155,7 +155,7 @@ public class ProfileRepositoryTest {
         Member member = Member.builder()
                 .memberEmail("hello@naver.com")
                 .memberPwd("123123")
-                .memberNm("한국")
+                .memberNickname("한국")
                 .build();
         memberRepository.save(member);
 
@@ -180,7 +180,7 @@ public class ProfileRepositoryTest {
         Member member = Member.builder()
                 .memberEmail("hello@naver.com")
                 .memberPwd("123123")
-                .memberNm("한국")
+                .memberNickname("한국")
                 .build();
         memberRepository.save(member);
 
@@ -207,7 +207,7 @@ public class ProfileRepositoryTest {
         Member member = Member.builder()
                 .memberEmail("hello@naver.com")
                 .memberPwd("123123")
-                .memberNm("한국")
+                .memberNickname("한국")
                 .build();
         memberRepository.save(member);
 
@@ -233,7 +233,7 @@ public class ProfileRepositoryTest {
         Member member1 = Member.builder()
                 .memberEmail("hello1@naver.com")
                 .memberPwd("123123")
-                .memberNm("주인공")
+                .memberNickname("주인공")
                 .build();
         memberRepository.save(member1);
 
@@ -245,7 +245,7 @@ public class ProfileRepositoryTest {
         Member member2 = Member.builder()
                 .memberEmail("hello2@naver.com")
                 .memberPwd("asdasd")
-                .memberNm("친구")
+                .memberNickname("친구")
                 .build();
         memberRepository.save(member2);
 
@@ -265,7 +265,7 @@ public class ProfileRepositoryTest {
 
         // then
         MemberProfile memberProfile = profileList.get(0);
-        Assertions.assertThat(memberProfile.getMemberNm()).isEqualTo("친구");
+        Assertions.assertThat(memberProfile.getMemberNickname()).isEqualTo("친구");
         Assertions.assertThat(profileList.size()).isEqualTo(1);
     }
 
@@ -276,7 +276,7 @@ public class ProfileRepositoryTest {
             Member member = Member.builder()
                     .memberEmail("hello1" + i + "@naver.com")
                     .memberPwd("123123")
-                    .memberNm("주인공" + i)
+                    .memberNickname("주인공" + i)
                     .build();
             memberRepository.save(member);
 
@@ -305,7 +305,7 @@ public class ProfileRepositoryTest {
             Member member = Member.builder()
                     .memberEmail("hello1" + i + "@naver.com")
                     .memberPwd("123123")
-                    .memberNm("주인공" + i)
+                    .memberNickname("주인공" + i)
                     .build();
             memberRepository.save(member);
         }

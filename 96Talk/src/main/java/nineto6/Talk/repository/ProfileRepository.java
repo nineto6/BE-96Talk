@@ -12,7 +12,7 @@ public interface ProfileRepository {
     void updateFileByMemberId(Long memberId, String profileUploadFileName, String profileStoreFileName);
     void updateStateMessageByMemberId(Long memberId, String profileStateMessage);
     Optional<Profile> findByMemberId(Long memberId);
-    Optional<MemberProfile> findByMemberNm(String memberNm);
+    Optional<MemberProfile> findByMemberNickname(String memberNickname);
     Optional<Profile> findByStoreFileName(String profileStoreFileName);
     void updateFileToNull(Long memberId);
     void updateStateMessageToNull(Long memberId);

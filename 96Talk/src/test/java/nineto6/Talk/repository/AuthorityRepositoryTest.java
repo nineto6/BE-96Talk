@@ -32,7 +32,7 @@ public class AuthorityRepositoryTest {
         Member member = Member.builder()
                 .memberEmail("hello@naver.com")
                 .memberPwd("123123")
-                .memberNm("한국")
+                .memberNickname("한국")
                 .build();
 
         memberRepository.save(member);
@@ -56,7 +56,7 @@ public class AuthorityRepositoryTest {
         Member member = Member.builder()
                 .memberEmail("hello@naver.com")
                 .memberPwd("123123")
-                .memberNm("한국")
+                .memberNickname("한국")
                 .build();
 
         memberRepository.save(member);

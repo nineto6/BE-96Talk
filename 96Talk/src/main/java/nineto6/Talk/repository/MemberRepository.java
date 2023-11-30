@@ -9,5 +9,5 @@ public interface MemberRepository {
     void save(Member member);
     Optional<MemberAuthority> findMemberAndAuthByEmail(String memberId);
     Optional<Member> findByMemberEmail(String memberEmail);
-    Optional<Member> findByMemberNm(String memberNm);
+    Optional<Member> findByMemberNickname(String memberNm);
 }
