@@ -124,7 +124,7 @@
 
     <select id="getMaxCount" parameterType="nineto6.Talk.model.profile.ProfileSearchDto" resultType="Integer">
         SELECT
-            COUNT(m.*)
+            COUNT(m.MEMBER_ID)
         FROM
             MEMBER AS m
         WHERE
