@@ -14,7 +14,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -29,10 +31,13 @@ public class FriendController implements FriendControllerDocs {
      */
     @GetMapping
     public ResponseEntity<ApiResponse> getFriendProfiles(@AuthenticationPrincipal MemberDetailsDto memberDetailsDto) {
-        List<ProfileResponse> friendProfiles = profileService.findFriendProfiles(memberDetailsDto.getMemberDto());
+        List<ProfileResponse> friendProfileList = profileService.findFriendProfiles(memberDetailsDto.getMemberDto());
+        Map<String, Object> map = new HashMap<>();
+        map.put("friendProfileList", friendProfileList);
+        map.put("friendProfileSize", friendProfileList.size());
 
         ApiResponse apiResponse = ApiResponse.builder()
-                .result(friendProfiles)
+                .result(map)
                 .status(SuccessCode.SELECT_SUCCESS.getStatus())
                 .message(SuccessCode.SELECT_SUCCESS.getMessage())
                 .build();
