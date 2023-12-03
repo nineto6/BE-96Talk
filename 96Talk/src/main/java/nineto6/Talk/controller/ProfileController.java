@@ -16,7 +16,7 @@ import nineto6.Talk.service.FileStore;
 import nineto6.Talk.service.ProfileService;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.CacheControl;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -179,7 +179,9 @@ public class ProfileController implements ProfileControllerDocs {
         // 경로에 있는 파일에 접근해서 파일을 스트림으로 반환
         UrlResource resource = new UrlResource("file:" + fileStore.getFullPath(storeFileName));
 
-        return new ResponseEntity<>(resource, HttpStatus.OK);
+        return ResponseEntity.ok()
+                .cacheControl(CacheControl.noCache())
+                .body(resource);
     }
 
     /**
