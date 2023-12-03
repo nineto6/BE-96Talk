@@ -26,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @RestController
@@ -180,7 +181,8 @@ public class ProfileController implements ProfileControllerDocs {
         UrlResource resource = new UrlResource("file:" + fileStore.getFullPath(storeFileName));
 
         return ResponseEntity.ok()
-                .cacheControl(CacheControl.noCache())
+                // 365 일 디스크 캐시 사용
+                .cacheControl(CacheControl.maxAge(365, TimeUnit.DAYS))
                 .body(resource);
     }
 
