@@ -1,4 +1,4 @@
-package nineto6.Talk.repository;
+package nineto6.Talk.domain.member.authority.repository;
 
 import lombok.extern.slf4j.Slf4j;
 import nineto6.Talk.domain.member.authority.code.Role;
