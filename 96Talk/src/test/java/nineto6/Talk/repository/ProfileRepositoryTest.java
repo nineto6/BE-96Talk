@@ -1,12 +1,15 @@
 package nineto6.Talk.repository;
 
 import lombok.extern.slf4j.Slf4j;
-import nineto6.Talk.domain.Friend;
-import nineto6.Talk.domain.Member;
-import nineto6.Talk.domain.MemberProfile;
-import nineto6.Talk.domain.Profile;
-import nineto6.Talk.model.Pagination;
-import nineto6.Talk.model.profile.ProfileSearchDto;
+import nineto6.Talk.domain.friend.repository.FriendRepository;
+import nineto6.Talk.domain.member.repository.MemberRepository;
+import nineto6.Talk.domain.profile.repository.ProfileRepository;
+import nineto6.Talk.domain.friend.domain.Friend;
+import nineto6.Talk.domain.member.domain.Member;
+import nineto6.Talk.domain.profile.domain.ProfileMember;
+import nineto6.Talk.domain.profile.domain.Profile;
+import nineto6.Talk.global.common.pagination.Pagination;
+import nineto6.Talk.domain.profile.dto.ProfileSearchDto;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -140,13 +143,13 @@ public class ProfileRepositoryTest {
         profileRepository.saveDefault(profile);
 
         // when
-        Optional<MemberProfile> memberProfileOptional = profileRepository.findByMemberNickname(member.getMemberNickname());
+        Optional<ProfileMember> memberProfileOptional = profileRepository.findByMemberNickname(member.getMemberNickname());
 
         // then
-        MemberProfile findMemberProfile = memberProfileOptional.orElse(null);
-        Assertions.assertThat(findMemberProfile).isNotNull();
-        Assertions.assertThat(findMemberProfile.getProfile().getMemberId()).isEqualTo(member.getMemberId());
-        Assertions.assertThat(findMemberProfile.getMemberNickname()).isEqualTo("한국");
+        ProfileMember findProfileMember = memberProfileOptional.orElse(null);
+        Assertions.assertThat(findProfileMember).isNotNull();
+        Assertions.assertThat(findProfileMember.getProfile().getMemberId()).isEqualTo(member.getMemberId());
+        Assertions.assertThat(findProfileMember.getMemberNickname()).isEqualTo("한국");
     }
 
     @Test
@@ -261,11 +264,11 @@ public class ProfileRepositoryTest {
         friendRepository.save(friend);
 
         // when
-        List<MemberProfile> profileList = profileRepository.findFriendProfileListByMemberId(member1.getMemberId());
+        List<ProfileMember> profileList = profileRepository.findFriendProfileListByMemberId(member1.getMemberId());
 
         // then
-        MemberProfile memberProfile = profileList.get(0);
-        Assertions.assertThat(memberProfile.getMemberNickname()).isEqualTo("친구");
+        ProfileMember profileMember = profileList.get(0);
+        Assertions.assertThat(profileMember.getMemberNickname()).isEqualTo("친구");
         Assertions.assertThat(profileList.size()).isEqualTo(1);
     }
 
@@ -292,7 +295,7 @@ public class ProfileRepositoryTest {
         search.setPagination(pagination);
 
         // when
-        List<MemberProfile> searchProfile = profileRepository.findSearchProfileByKeyword(search);
+        List<ProfileMember> searchProfile = profileRepository.findSearchProfileByKeyword(search);
 
         // then
         Assertions.assertThat(searchProfile.size()).isEqualTo(5);

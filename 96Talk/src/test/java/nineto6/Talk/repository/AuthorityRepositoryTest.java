@@ -1,10 +1,12 @@
 package nineto6.Talk.repository;
 
 import lombok.extern.slf4j.Slf4j;
-import nineto6.Talk.common.codes.Role;
-import nineto6.Talk.domain.Authority;
-import nineto6.Talk.domain.Member;
-import nineto6.Talk.domain.MemberAuthority;
+import nineto6.Talk.domain.member.authority.code.Role;
+import nineto6.Talk.domain.member.authority.repository.AuthorityRepository;
+import nineto6.Talk.domain.member.repository.MemberRepository;
+import nineto6.Talk.domain.member.authority.domain.Authority;
+import nineto6.Talk.domain.member.domain.Member;
+import nineto6.Talk.domain.member.domain.MemberAuthority;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,8 +1,10 @@
 package nineto6.Talk.repository;
 
 import lombok.extern.slf4j.Slf4j;
-import nineto6.Talk.domain.Friend;
-import nineto6.Talk.domain.Member;
+import nineto6.Talk.domain.friend.repository.FriendRepository;
+import nineto6.Talk.domain.member.repository.MemberRepository;
+import nineto6.Talk.domain.friend.domain.Friend;
+import nineto6.Talk.domain.member.domain.Member;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
