@@ -10,7 +10,6 @@ import nineto6.Talk.config.refresh.RefreshRedisRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
@@ -39,7 +38,6 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @RequiredArgsConstructor
 public class WebSecurityConfig {
     private final RefreshRedisRepository refreshRedisRepository;
-    private final RedisTemplate<String, String> redisTemplate;
 
     /**
      * 1. 정적 자원(Resource)에 대해서 인증된 사용자가 정적 자원의 접근에 대해 ‘인가’에 대한 설정을 담당하는 메서드이다.
@@ -212,7 +210,7 @@ public class WebSecurityConfig {
      */
     @Bean
     public JwtAuthorizationFilter jwtAuthorizationFilter() {
-        return new JwtAuthorizationFilter(redisTemplate);
+        return new JwtAuthorizationFilter();
     }
 
     /**

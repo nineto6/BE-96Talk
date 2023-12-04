@@ -1,10 +1,8 @@
 package nineto6.Talk.config.filter;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import nineto6.Talk.common.codes.AuthConstants;
 import nineto6.Talk.common.utils.TokenUtils;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.ObjectUtils;
@@ -20,9 +18,7 @@ import java.io.IOException;
  * JWT 유효성 검증을 수행하며 직접적인 사용자 '인증'을 확인 후 '인가'를 합니다.
  */
 @Slf4j
-@RequiredArgsConstructor
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
-    private final RedisTemplate<String, String> redisTemplate;
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         // [STEP1] Client 에서 API 를 요청할 때 Header 를 확인합니다.
