@@ -12,7 +12,7 @@ import nineto6.Talk.model.member.MemberDetailsDto;
 import nineto6.Talk.model.profile.ProfileResponse;
 import nineto6.Talk.model.profile.ProfileSearchDto;
 import nineto6.Talk.model.response.ApiResponse;
-import nineto6.Talk.service.FileStore;
+import nineto6.Talk.service.FileService;
 import nineto6.Talk.service.ProfileService;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -34,7 +34,7 @@ import java.util.concurrent.TimeUnit;
 @RequiredArgsConstructor
 public class ProfileController implements ProfileControllerDocs {
     private final ProfileService profileService;
-    private final FileStore fileStore;
+    private final FileService fileService;
 
     /**
      * 자기 자신 프로필 조회
@@ -178,7 +178,7 @@ public class ProfileController implements ProfileControllerDocs {
         profileService.checkByStoreFileName(storeFileName);
 
         // 경로에 있는 파일에 접근해서 파일을 스트림으로 반환
-        UrlResource resource = new UrlResource("file:" + fileStore.getFullPath(storeFileName));
+        UrlResource resource = new UrlResource("file:" + fileService.getFullPath(storeFileName));
 
         return ResponseEntity.ok()
                 // 365 일 디스크 캐시 사용

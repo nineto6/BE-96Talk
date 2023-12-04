@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ProfileService {
     private final ProfileRepository profileRepository;
-    private final FileStore fileStore;
+    private final FileService fileService;
 
 
     /**
@@ -93,7 +93,7 @@ public class ProfileService {
                 .memberNickname(memberProfile.getMemberNickname())
                 .profileStateMessage(profile.getProfileStateMessage())
                 .imageName(uuid)
-                .type(fileStore.getTypeByExt(ext))
+                .type(fileService.getTypeByExt(ext))
                 .build();
     }
 
@@ -125,7 +125,7 @@ public class ProfileService {
         }
 
         // 파일이 이미지 파일이 아닐 경우(jpg, png)
-        if(!fileStore.isImageFile(uploadFile)) {
+        if(!fileService.isImageFile(uploadFile)) {
             log.info("파일 확장자가 jpg, png 가 아닙니다.");
             throw new BusinessExceptionHandler(ErrorCode.FILE_EXCEPTION_ERROR);
         }
@@ -135,7 +135,7 @@ public class ProfileService {
 
         // 파일 저장 및 DB 업데이트
         try {
-            UploadFile file = fileStore.storeFile(uploadFile);
+            UploadFile file = fileService.storeFile(uploadFile);
             profileRepository.updateFileByMemberId(memberDto.getMemberId(), file.getUploadFileName(), file.getStoreFileName());
         } catch(IOException e) {
             throw new BusinessExceptionHandler(ErrorCode.FILE_EXCEPTION_ERROR);
@@ -146,7 +146,7 @@ public class ProfileService {
             Profile profile = profileOptional.get();
             // storeFileName 과 uploadFileName 이 존재할 경우
             if(!ObjectUtils.isEmpty(profile.getProfileStoreFileName()) && !ObjectUtils.isEmpty(profile.getProfileUploadFileName())) {
-                if(!fileStore.removeFile(profile)) {
+                if(!fileService.removeFile(profile)) {
                     log.info("파일 삭제 실패");
                     throw new BusinessExceptionHandler(ErrorCode.FILE_EXCEPTION_ERROR);
                 }
@@ -194,7 +194,7 @@ public class ProfileService {
         profileRepository.updateFileToNull(memberDto.getMemberId());
 
         // 저장소에서 이미지 파일 삭제
-        if(!fileStore.removeFile(profile)) {
+        if(!fileService.removeFile(profile)) {
             log.info("파일 삭제 실패");
             throw new BusinessExceptionHandler(ErrorCode.FILE_EXCEPTION_ERROR);
         }
