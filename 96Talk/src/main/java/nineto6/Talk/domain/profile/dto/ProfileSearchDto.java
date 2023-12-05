@@ -12,7 +12,7 @@ public class ProfileSearchDto extends Search {
     // 하단에 출력할 페이지 개수를 10으로 초기화 합니다.
     public ProfileSearchDto() {
         this.setPage(1);
-        this.setRecordSize(5);
+        this.setRecordSize(4);
         this.setPageSize(5);
     }
 }

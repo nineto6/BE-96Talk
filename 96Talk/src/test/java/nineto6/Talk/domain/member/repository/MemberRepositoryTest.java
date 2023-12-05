@@ -7,6 +7,7 @@ import nineto6.Talk.domain.member.repository.MemberRepository;
 import nineto6.Talk.domain.member.authority.domain.Authority;
 import nineto6.Talk.domain.member.domain.Member;
 import nineto6.Talk.domain.member.domain.MemberAuthority;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,15 +29,21 @@ public class MemberRepositoryTest {
     @Autowired
     private AuthorityRepository authorityRepository;
 
-    @Test
-    @DisplayName("멤버 저장 테스트")
-    void save() {
-        // given
-        Member member = Member.builder()
+    private static Member member;
+
+    @BeforeEach
+    void setup() {
+        member = Member.builder()
                 .memberEmail("hello@naver.com")
                 .memberPwd("123123")
                 .memberNickname("한국")
                 .build();
+    }
+
+    @Test
+    @DisplayName("멤버 저장 테스트")
+    void save() {
+        // given
 
         // when
         memberRepository.save(member);
@@ -48,11 +55,6 @@ public class MemberRepositoryTest {
     @Test
     void findByMemberEmail() {
         // given
-        Member member = Member.builder()
-                .memberEmail("hello@naver.com")
-                .memberPwd("123123")
-                .memberNickname("한국")
-                .build();
         memberRepository.save(member);
 
         // when
@@ -67,11 +69,6 @@ public class MemberRepositoryTest {
     @Test
     void  findByMemberNickname() {
         // given
-        Member member = Member.builder()
-                .memberEmail("hello@naver.com")
-                .memberPwd("123123")
-                .memberNickname("한국")
-                .build();
         memberRepository.save(member);
 
         // when
@@ -87,12 +84,6 @@ public class MemberRepositoryTest {
     @DisplayName("멤버와 권한(List) Join 조회 테스트")
     void findMemberAndAuthByEmail() {
         // given
-        Member member = Member.builder()
-                .memberEmail("hello@naver.com")
-                .memberPwd("123123")
-                .memberNickname("한국")
-                .build();
-
         memberRepository.save(member);
 
         List<Authority> authorityList = new ArrayList<>();

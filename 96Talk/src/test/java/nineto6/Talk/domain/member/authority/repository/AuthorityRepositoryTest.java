@@ -7,6 +7,7 @@ import nineto6.Talk.domain.member.repository.MemberRepository;
 import nineto6.Talk.domain.member.authority.domain.Authority;
 import nineto6.Talk.domain.member.domain.Member;
 import nineto6.Talk.domain.member.domain.MemberAuthority;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,11 +28,11 @@ public class AuthorityRepositoryTest {
     @Autowired
     private AuthorityRepository authorityRepository;
 
-    @Test
-    @DisplayName("권한 1개 저장 테스트")
-    void saveAuthorityList_1() {
-        // given
-        Member member = Member.builder()
+    private static Member member;
+    private static Authority authority;
+    @BeforeEach
+    void setup() {
+        member = Member.builder()
                 .memberEmail("hello@naver.com")
                 .memberPwd("123123")
                 .memberNickname("한국")
@@ -39,10 +40,17 @@ public class AuthorityRepositoryTest {
 
         memberRepository.save(member);
 
-        Authority authority = Authority.builder()
+        authority = Authority.builder()
                 .memberId(member.getMemberId())
                 .authorityRole(Role.USER.getAuth())
                 .build();
+    }
+
+    @Test
+    @DisplayName("권한 1개 저장 테스트")
+    void saveAuthorityList_1() {
+        // given
+
         // when
         authorityRepository.saveAuthority(authority);
 
@@ -51,18 +59,11 @@ public class AuthorityRepositoryTest {
         assertThat(findMember).isNotNull();
         assertThat(findMember.getRoleList().size()).isEqualTo(1);
     }
+
     @Test
     @DisplayName("권한 2개 저장 테스트")
     void saveAuthorityList_2() {
         // given
-        Member member = Member.builder()
-                .memberEmail("hello@naver.com")
-                .memberPwd("123123")
-                .memberNickname("한국")
-                .build();
-
-        memberRepository.save(member);
-
         List<Authority> authorityList = new ArrayList<>();
         authorityList.add(Authority.builder()
                 .memberId(member.getMemberId())

@@ -11,6 +11,7 @@ import nineto6.Talk.domain.profile.domain.Profile;
 import nineto6.Talk.global.common.pagination.Pagination;
 import nineto6.Talk.domain.profile.dto.ProfileSearchDto;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -29,18 +30,25 @@ public class ProfileRepositoryTest {
     private MemberRepository memberRepository;
     @Autowired
     private FriendRepository friendRepository;
-    @Test
-    void saveDefault() {
-        // given
-        Member member = Member.builder()
+    private static Member member;
+    private static Profile profile;
+    @BeforeEach
+    void setup() {
+        member = Member.builder()
                 .memberEmail("hello@naver.com")
                 .memberPwd("123123")
                 .memberNickname("한국")
                 .build();
         memberRepository.save(member);
-        Profile profile = Profile.builder()
+
+        profile = Profile.builder()
                 .memberId(member.getMemberId())
                 .build();
+    }
+
+    @Test
+    void saveDefault() {
+        // given
 
         // when
         profileRepository.saveDefault(profile);
@@ -55,16 +63,6 @@ public class ProfileRepositoryTest {
     @Test
     void updateFileByMemberId() {
         // given
-        Member member = Member.builder()
-                .memberEmail("hello@naver.com")
-                .memberPwd("123123")
-                .memberNickname("한국")
-                .build();
-        memberRepository.save(member);
-
-        Profile profile = Profile.builder()
-                .memberId(member.getMemberId())
-                .build();
         profileRepository.saveDefault(profile);
 
         // when
@@ -81,16 +79,6 @@ public class ProfileRepositoryTest {
     @Test
     void updateStateMessageByMemberId() {
         // given
-        Member member = Member.builder()
-                .memberEmail("hello@naver.com")
-                .memberPwd("123123")
-                .memberNickname("한국")
-                .build();
-        memberRepository.save(member);
-
-        Profile profile = Profile.builder()
-                .memberId(member.getMemberId())
-                .build();
         profileRepository.saveDefault(profile);
 
         // when
@@ -106,16 +94,6 @@ public class ProfileRepositoryTest {
     @Test
     void findByMemberId() {
         // given
-        Member member = Member.builder()
-                .memberEmail("hello@naver.com")
-                .memberPwd("123123")
-                .memberNickname("한국")
-                .build();
-        memberRepository.save(member);
-
-        Profile profile = Profile.builder()
-                .memberId(member.getMemberId())
-                .build();
         profileRepository.saveDefault(profile);
 
         // when
@@ -130,16 +108,6 @@ public class ProfileRepositoryTest {
     @Test
     void findByMemberNickname() {
         // given
-        Member member = Member.builder()
-                .memberEmail("hello@naver.com")
-                .memberPwd("123123")
-                .memberNickname("한국")
-                .build();
-        memberRepository.save(member);
-
-        Profile profile = Profile.builder()
-                .memberId(member.getMemberId())
-                .build();
         profileRepository.saveDefault(profile);
 
         // when
@@ -155,16 +123,6 @@ public class ProfileRepositoryTest {
     @Test
     void findByStoreFileName() {
         // given
-        Member member = Member.builder()
-                .memberEmail("hello@naver.com")
-                .memberPwd("123123")
-                .memberNickname("한국")
-                .build();
-        memberRepository.save(member);
-
-        Profile profile = Profile.builder()
-                .memberId(member.getMemberId())
-                .build();
         profileRepository.saveDefault(profile);
         profileRepository.updateFileByMemberId(member.getMemberId(), "uploadFileName", "storeFileName");
 
@@ -180,16 +138,6 @@ public class ProfileRepositoryTest {
     @Test
     void updateFileToNull() {
         // given
-        Member member = Member.builder()
-                .memberEmail("hello@naver.com")
-                .memberPwd("123123")
-                .memberNickname("한국")
-                .build();
-        memberRepository.save(member);
-
-        Profile profile = Profile.builder()
-                .memberId(member.getMemberId())
-                .build();
         profileRepository.saveDefault(profile);
         profileRepository.updateFileByMemberId(member.getMemberId(), "uploadFileName", "storeFileName");
 
@@ -207,16 +155,6 @@ public class ProfileRepositoryTest {
     @Test
     void updateStateMessageToNull() {
         // given
-        Member member = Member.builder()
-                .memberEmail("hello@naver.com")
-                .memberPwd("123123")
-                .memberNickname("한국")
-                .build();
-        memberRepository.save(member);
-
-        Profile profile = Profile.builder()
-                .memberId(member.getMemberId())
-                .build();
         profileRepository.saveDefault(profile);
         profileRepository.updateStateMessageByMemberId(member.getMemberId(), "프로필메세지");
 
@@ -298,7 +236,7 @@ public class ProfileRepositoryTest {
         List<ProfileMember> searchProfile = profileRepository.findSearchProfileByKeyword(search);
 
         // then
-        Assertions.assertThat(searchProfile.size()).isEqualTo(5);
+        Assertions.assertThat(searchProfile.size()).isEqualTo(4);
     }
 
     @Test
@@ -314,11 +252,14 @@ public class ProfileRepositoryTest {
         }
 
         ProfileSearchDto search = new ProfileSearchDto();
+        search.setKeyword("");
+        Pagination pagination = new Pagination(profileRepository.getMaxCount(search), search);
+        search.setPagination(pagination);
 
         // when
         Integer maxCount = profileRepository.getMaxCount(search);
 
         // then
-        Assertions.assertThat(maxCount).isEqualTo(10);
+        Assertions.assertThat(maxCount).isEqualTo(10 + 1);
     }
 }

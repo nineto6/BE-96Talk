@@ -6,6 +6,7 @@ import nineto6.Talk.domain.member.repository.MemberRepository;
 import nineto6.Talk.domain.friend.domain.Friend;
 import nineto6.Talk.domain.member.domain.Member;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -23,27 +24,34 @@ public class FriendRepositoryTest {
     @Autowired
     private FriendRepository friendRepository;
 
-    @Test
-    void save() {
-        // given
-        Member member1 = Member.builder()
+    private static Member member1;
+    private static Member member2;
+    private static Friend friend;
+    @BeforeEach
+    void setup() {
+        member1 = Member.builder()
                 .memberEmail("hello1@naver.com")
                 .memberPwd("123123")
                 .memberNickname("주인공")
                 .build();
         memberRepository.save(member1);
 
-        Member member2 = Member.builder()
+        member2 = Member.builder()
                 .memberEmail("hello2@naver.com")
                 .memberPwd("234324")
                 .memberNickname("친구")
                 .build();
         memberRepository.save(member2);
 
-        Friend friend = Friend.builder()
+        friend = Friend.builder()
                 .memberId(member1.getMemberId())
                 .friendMemberId(member2.getMemberId())
                 .build();
+    }
+
+    @Test
+    void save() {
+        // given
 
         // when
         friendRepository.save(friend);
@@ -55,24 +63,6 @@ public class FriendRepositoryTest {
     @Test
     void findByMemberId() {
         // given
-        Member member1 = Member.builder()
-                .memberEmail("hello1@naver.com")
-                .memberPwd("123123")
-                .memberNickname("주인공")
-                .build();
-        memberRepository.save(member1);
-
-        Member member2 = Member.builder()
-                .memberEmail("hello2@naver.com")
-                .memberPwd("234324")
-                .memberNickname("친구")
-                .build();
-        memberRepository.save(member2);
-
-        Friend friend = Friend.builder()
-                .memberId(member1.getMemberId())
-                .friendMemberId(member2.getMemberId())
-                .build();
         friendRepository.save(friend);
 
         // when
@@ -88,24 +78,6 @@ public class FriendRepositoryTest {
     @Test
     void deleteByMemberIdAndFriendMemberId() {
         // given
-        Member member1 = Member.builder()
-                .memberEmail("hello1@naver.com")
-                .memberPwd("123123")
-                .memberNickname("주인공")
-                .build();
-        memberRepository.save(member1);
-
-        Member member2 = Member.builder()
-                .memberEmail("hello2@naver.com")
-                .memberPwd("234324")
-                .memberNickname("친구")
-                .build();
-        memberRepository.save(member2);
-
-        Friend friend = Friend.builder()
-                .memberId(member1.getMemberId())
-                .friendMemberId(member2.getMemberId())
-                .build();
         friendRepository.save(friend);
 
         // when
@@ -119,24 +91,6 @@ public class FriendRepositoryTest {
     @Test
     void findByMemberIdAndFriendMemberId() {
         // given
-        Member member1 = Member.builder()
-                .memberEmail("hello1@naver.com")
-                .memberPwd("123123")
-                .memberNickname("주인공")
-                .build();
-        memberRepository.save(member1);
-
-        Member member2 = Member.builder()
-                .memberEmail("hello2@naver.com")
-                .memberPwd("234324")
-                .memberNickname("친구")
-                .build();
-        memberRepository.save(member2);
-
-        Friend friend = Friend.builder()
-                .memberId(member1.getMemberId())
-                .friendMemberId(member2.getMemberId())
-                .build();
         friendRepository.save(friend);
 
         // when
