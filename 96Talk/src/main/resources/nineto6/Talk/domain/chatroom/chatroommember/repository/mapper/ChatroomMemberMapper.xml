@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="nineto6.Talk.domain.chatroom.chatroommember.repository.mapper.ChatroomMemberMapper">
+
+    <!-- 저장 -->
+    <insert id="save" useGeneratedKeys="true" keyProperty="chatroomMemberId">
+        INSERT INTO
+        CHATROOM_MEMBER (MEMBER_ID, CHATROOM_ID)
+        VALUES (#{memberId}, #{chatroomId})
+    </insert>
+
+    <!-- chatroomId, memberId 로 삭제 -->
+    <delete id="deleteByChatroomIdAndMemberId">
+        DELETE FROM
+            CHATROOM_MEMBER AS cm
+        WHERE
+            cm.CHATROOM_ID = #{chatroomId} AND cm.MEMBER_ID = #{memberId}
+    </delete>
+
+    <sql id="chatroomMemberColumns">
+        CHATROOM_MEMBER_ID, CHATROOM_ID, MEMBER_ID
+    </sql>
+
+    <select id="findById" parameterType="Long">
+        SELECT
+            <include refid="chatroomMemberColumns"/>
+        FROM
+            CHATROOM_MEMBER AS cm
+        WHERE
+            cm.CHATROOM_MEMBER_ID = #{chatroomMemberId}
+    </select>
+</mapper>
