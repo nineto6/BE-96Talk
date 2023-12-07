@@ -25,12 +25,7 @@ logging:
   level:
     nineto6:
       Talk:
-        repository:
-          mapper: trace
-
-# JWT Secret Key
-custom:
-  jwt-access-secret-key: accessSecretKey
+        domain: trace
 
 # Swagger
 springdoc:

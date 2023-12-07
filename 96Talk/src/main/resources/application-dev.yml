@@ -10,6 +10,10 @@ spring:
     host: localhost
     port: 6379
 
+# JWT Secret Key
+custom:
+  jwt-access-secret-key: accessSecretKey
+
 # file
 file:
   dir: F:/test-file/
