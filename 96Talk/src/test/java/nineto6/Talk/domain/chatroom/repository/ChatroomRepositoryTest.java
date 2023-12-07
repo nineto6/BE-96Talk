@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import nineto6.Talk.domain.chatroom.chatroommember.domain.ChatroomMember;
 import nineto6.Talk.domain.chatroom.chatroommember.repository.ChatroomMemberRepository;
 import nineto6.Talk.domain.chatroom.domain.Chatroom;
+import nineto6.Talk.domain.chatroom.domain.ChatroomProfile;
 import nineto6.Talk.domain.member.domain.Member;
 import nineto6.Talk.domain.member.repository.MemberRepository;
 import nineto6.Talk.domain.profile.domain.Profile;
@@ -33,7 +34,7 @@ public class ChatroomRepositoryTest {
     private ChatroomMemberRepository chatroomMemberRepository;
     @Autowired
     private ProfileRepository profileRepository;
-    private static Chatroom chatroom;
+    private Chatroom chatroom;
     @BeforeEach
     void setup() {
         chatroom = Chatroom.builder()
@@ -95,29 +96,92 @@ public class ChatroomRepositoryTest {
     }
 
     @Test
-    void findChatroomByMemberId() {
+    void findChannelIdAndProfileListByMemberId() {
         // given
         chatroomRepository.save(chatroom);
-
+        log.info("chatroom 등록 : {}", chatroom.getChatroomId());
+        // 자신 데이터 등록
         Member member = Member.builder()
                 .memberEmail("test@naver.com")
                 .memberPwd("123123")
                 .memberNickname("한국")
                 .build();
         memberRepository.save(member);
+        log.info("자신 데이터 등록 : {}", member.getMemberId());
+        profileRepository.saveDefault(Profile.builder()
+                .memberId(member.getMemberId())
+                .build());
 
-        ChatroomMember chatroomMember = ChatroomMember.builder()
+        chatroomMemberRepository.save(ChatroomMember.builder()
                 .chatroomId(chatroom.getChatroomId())
                 .memberId(member.getMemberId())
+                .build());
+
+        log.info("처음 setup 된 채팅방에 멤버 리스트 등록");
+        // 처음 setup 된 채팅방에 멤버 리스트 등록
+        for (int i = 0; i < 2; i++) {
+            Member forMember = Member.builder()
+                    .memberEmail("test1" + i + "@naver.com")
+                    .memberPwd("123123")
+                    .memberNickname("한국1" + i)
+                    .build();
+            memberRepository.save(forMember);
+            log.info("멤버 등록 : {}", forMember.getMemberId());
+
+            profileRepository.saveDefault(Profile.builder()
+                    .memberId(forMember.getMemberId())
+                    .build());
+
+            chatroomMemberRepository.save(ChatroomMember.builder()
+                    .chatroomId(chatroom.getChatroomId())
+                    .memberId(forMember.getMemberId())
+                    .build());
+        }
+        log.info("2번째 채팅방 생성");
+        // 2번째 채팅방 생성
+        Chatroom chatroom2 = Chatroom.builder()
+                .chatroomChannelId(UUID.randomUUID().toString())
+                .chatroomWriterNickname("한국")
                 .build();
-        chatroomMemberRepository.save(chatroomMember);
+        chatroomRepository.save(chatroom2);
+
+        log.info("2번째 채팅방에 멤버 등록");
+        // 2번째 채팅방에 멤버 등록
+        chatroomMemberRepository.save(ChatroomMember.builder()
+                .chatroomId(chatroom2.getChatroomId())
+                .memberId(member.getMemberId())
+                .build());
+
+        log.info("2번째 채팅방에 멤버 리스트 등록");
+        // 2번째 채팅방에 멤버 등록
+        for (int i = 0; i < 2; i++) {
+            Member forMember = Member.builder()
+                    .memberEmail("test2" + i + "@naver.com")
+                    .memberPwd("123123")
+                    .memberNickname("한국2" + i)
+                    .build();
+            memberRepository.save(forMember);
+            log.info("멤버 등록 : {}", forMember.getMemberId());
+
+            profileRepository.saveDefault(Profile.builder()
+                    .memberId(forMember.getMemberId())
+                    .build());
+
+            chatroomMemberRepository.save(ChatroomMember.builder()
+                    .chatroomId(chatroom2.getChatroomId())
+                    .memberId(forMember.getMemberId())
+                    .build());
+        }
 
         // when
-        List<Chatroom> chatroomList = chatroomRepository.findChatroomByMemberId(member.getMemberId());
+        List<ChatroomProfile> chatroomProfileList = chatroomRepository.findChannelIdAndProfileListByMemberId(member.getMemberId());
 
         // then
-        assertThat(chatroomList.size()).isEqualTo(1);
-        assertThat(chatroomList.get(0).getChatroomChannelId()).isEqualTo(chatroom.getChatroomChannelId());
+        // 채팅방은 2개가 되어야 한다.
+        assertThat(chatroomProfileList.size()).isEqualTo(2);
+        // 각각 채팅방안에 프로필은 자신을 뺀 나머지 2명 조회가 되어야 한다.
+        assertThat(chatroomProfileList.get(0).getMemberProfileList().size()).isEqualTo(2);
+        assertThat(chatroomProfileList.get(1).getMemberProfileList().size()).isEqualTo(2);
     }
 
     @Test

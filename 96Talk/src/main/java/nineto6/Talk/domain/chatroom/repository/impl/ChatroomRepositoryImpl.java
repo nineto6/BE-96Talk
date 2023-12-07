@@ -1,6 +1,7 @@
 package nineto6.Talk.domain.chatroom.repository.impl;
 
 import lombok.RequiredArgsConstructor;
+import nineto6.Talk.domain.chatroom.domain.ChatroomProfile;
 import nineto6.Talk.domain.chatroom.repository.ChatroomRepository;
 import nineto6.Talk.domain.chatroom.domain.Chatroom;
 import nineto6.Talk.domain.chatroom.repository.mapper.ChatroomMapper;
@@ -36,8 +37,8 @@ public class ChatroomRepositoryImpl implements ChatroomRepository {
     }
 
     @Override
-    public List<Chatroom> findChatroomByMemberId(Long memberId) {
-        return chatroomMapper.findChatroomByMemberId(memberId);
+    public List<ChatroomProfile> findChannelIdAndProfileListByMemberId(Long memberId) {
+        return chatroomMapper.findChannelIdAndProfileListByMemberId(memberId);
     }
 
     @Override
