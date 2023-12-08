@@ -5,7 +5,6 @@ import nineto6.Talk.domain.chatroom.domain.ChatroomProfile;
 import nineto6.Talk.domain.chatroom.repository.ChatroomRepository;
 import nineto6.Talk.domain.chatroom.domain.Chatroom;
 import nineto6.Talk.domain.chatroom.repository.mapper.ChatroomMapper;
-import nineto6.Talk.domain.member.domain.Member;
 import nineto6.Talk.domain.profile.domain.ProfileMember;
 import org.springframework.stereotype.Repository;
 
@@ -44,5 +43,10 @@ public class ChatroomRepositoryImpl implements ChatroomRepository {
     @Override
     public List<ProfileMember> findMemberProfileByChatroomChannelId(String chatroomChannelId){
         return chatroomMapper.findMemberProfileByChatroomChannelId(chatroomChannelId);
+    }
+
+    @Override
+    public Optional<Chatroom> findChatroomByMemberIdAndFriendId(Long memberId, Long friendId) {
+        return chatroomMapper.findChatroomByMemberIdAndFriendId(memberId, friendId);
     }
 }

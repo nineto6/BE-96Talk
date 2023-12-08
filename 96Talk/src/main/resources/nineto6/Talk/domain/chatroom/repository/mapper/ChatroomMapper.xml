@@ -88,4 +88,15 @@
             c.CHATROOM_CHANNEL_ID = #{chatroomChannelId}
     </select>
 
+    <!-- 자신과 친구의 단일 채팅방 조회-->
+    <select id="findChatroomByMemberIdAndFriendId" resultType="Chatroom" parameterType="Map">
+        SELECT
+            c.CHATROOM_ID, c.CHATROOM_CHANNEL_ID, c.CHATROOM_WRITER_NICKNAME, c.CHATROOM_TITLE, c.CHATROOM_IS_GROUP, c.CHATROOM_REGDATE
+        FROM
+            CHATROOM_MEMBER AS cm1 INNER JOIN CHATROOM_MEMBER AS cm2 ON (cm1.CHATROOM_ID = cm2.CHATROOM_ID AND cm2.MEMBER_ID = #{friendId})
+                                   INNER JOIN CHATROOM AS c ON (cm2.CHATROOM_ID = c.CHATROOM_ID AND c.CHATROOM_IS_GROUP = FALSE)
+        WHERE
+            cm1.MEMBER_ID = #{memberId}
+    </select>
+
 </mapper>

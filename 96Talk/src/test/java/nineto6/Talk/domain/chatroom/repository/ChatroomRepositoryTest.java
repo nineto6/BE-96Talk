@@ -221,4 +221,55 @@ public class ChatroomRepositoryTest {
         assertThat(profileMemberList.get(0).getMemberNickname()).isEqualTo("한국");
         assertThat(profileMemberList.get(0).getProfile().getProfileStateMessage()).isEqualTo("상태메세지");
     }
+
+    @Test
+    void findChatroomByMemberIdAndFriendId() {
+        // given
+        chatroomRepository.save(chatroom);
+
+        // 자신 등록
+        Member member = Member.builder()
+                .memberEmail("test@naver.com")
+                .memberPwd("123123")
+                .memberNickname("한국")
+                .build();
+        memberRepository.save(member);
+
+        Profile profile = Profile.builder()
+                .memberId(member.getMemberId())
+                .build();
+        profileRepository.saveDefault(profile);
+
+        ChatroomMember chatroomMember = ChatroomMember.builder()
+                .chatroomId(chatroom.getChatroomId())
+                .memberId(member.getMemberId())
+                .build();
+        chatroomMemberRepository.save(chatroomMember);
+
+        // 친구 등록
+        Member friend = Member.builder()
+                .memberEmail("test@naver.com")
+                .memberPwd("123123")
+                .memberNickname("한국")
+                .build();
+        memberRepository.save(friend);
+
+        Profile friendProfile = Profile.builder()
+                .memberId(friend.getMemberId())
+                .build();
+        profileRepository.saveDefault(friendProfile);
+
+        ChatroomMember friendChatroomMember = ChatroomMember.builder()
+                .chatroomId(chatroom.getChatroomId())
+                .memberId(friend.getMemberId())
+                .build();
+        chatroomMemberRepository.save(friendChatroomMember);
+
+        // when
+        Optional<Chatroom> chatroomOptional = chatroomRepository.findChatroomByMemberIdAndFriendId(member.getMemberId(), friend.getMemberId());
+
+        // then
+        assertThat(chatroomOptional.orElse(null)).isNotNull();
+        assertThat(chatroomOptional.get().getChatroomChannelId()).isEqualTo(chatroom.getChatroomChannelId());
+    }
 }
