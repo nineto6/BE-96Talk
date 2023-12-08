@@ -76,7 +76,7 @@ public class ProfileService {
     /**
      * MemberProfile -> ProfileResponse 변환 메서드
      */
-    private ProfileResponse getProfileResponse(ProfileMember profileMember) {
+    public ProfileResponse getProfileResponse(ProfileMember profileMember) {
         Profile profile = profileMember.getProfile();
         if (ObjectUtils.isEmpty(profile.getProfileStoreFileName()) || ObjectUtils.isEmpty(profile.getProfileUploadFileName())) {
             return ProfileResponse.builder()
