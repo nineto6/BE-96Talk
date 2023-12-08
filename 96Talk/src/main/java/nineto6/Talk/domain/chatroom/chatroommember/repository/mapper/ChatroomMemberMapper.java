@@ -11,4 +11,5 @@ public interface ChatroomMemberMapper {
     void save(ChatroomMember chatroomMember);
     void deleteByChatroomIdAndMemberId(@Param("chatroomId") Long chatroomId, @Param("memberId") Long memberId);
     Optional<ChatroomMember> findById(Long chatroomMemberId);
+    Optional<ChatroomMember> findByChatroomIdAndMemberId(@Param("chatroomId") Long chatroomId, @Param("memberId") Long memberId);
 }

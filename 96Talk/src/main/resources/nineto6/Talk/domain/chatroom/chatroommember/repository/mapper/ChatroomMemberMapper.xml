@@ -30,4 +30,13 @@
         WHERE
             cm.CHATROOM_MEMBER_ID = #{chatroomMemberId}
     </select>
+
+    <select id="findByChatroomIdAndMemberId">
+        SELECT
+            <include refid="chatroomMemberColumns"/>
+        FROM
+            CHATROOM_MEMBER AS cm
+        WHERE
+            cm.CHATROOM_ID = #{chatroomId} AND cm.MEMBER_ID = #{memberId}
+    </select>
 </mapper>

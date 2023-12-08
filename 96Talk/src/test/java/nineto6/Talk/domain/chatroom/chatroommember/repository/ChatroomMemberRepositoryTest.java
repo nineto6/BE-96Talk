@@ -82,4 +82,18 @@ public class ChatroomMemberRepositoryTest {
         Optional<ChatroomMember> chatroomMemberOptional = chatroomMemberRepository.findById(chatroomMember.getChatroomMemberId());
         assertThat(chatroomMemberOptional.orElse(null)).isNull();
     }
+
+    @Test
+    void findByChatroomIdAndMemberId() {
+        // given
+        chatroomMemberRepository.save(chatroomMember);
+
+        // when
+        Optional<ChatroomMember> chatroomOptional = chatroomMemberRepository.findByChatroomIdAndMemberId(chatroom.getChatroomId(), member.getMemberId());
+
+        // then
+        assertThat(chatroomOptional.orElse(null)).isNotNull();
+        assertThat(chatroomOptional.get().getMemberId()).isEqualTo(member.getMemberId());
+        assertThat(chatroomOptional.get().getChatroomId()).isEqualTo(chatroom.getChatroomId());
+    }
 }

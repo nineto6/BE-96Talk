@@ -26,4 +26,9 @@ public class ChatroomMemberRepositoryImpl implements ChatroomMemberRepository {
     public Optional<ChatroomMember> findById(Long chatroomMemberId) {
         return chatroomMemberMapper.findById(chatroomMemberId);
     }
+
+    @Override
+    public Optional<ChatroomMember> findByChatroomIdAndMemberId(Long chatroomId, Long memberId) {
+        return chatroomMemberMapper.findByChatroomIdAndMemberId(chatroomId, memberId);
+    }
 }
