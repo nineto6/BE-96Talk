@@ -14,14 +14,16 @@ public class Chatroom {
     private String chatroomChannelId;
     private String chatroomWriterNickname;
     private String chatroomTitle;
+    private Boolean chatroomIsGroup;
     private LocalDateTime chatroomRegdate;
 
     @Builder
-    public Chatroom(Long chatroomId, String chatroomChannelId, String chatroomWriterNickname, String chatroomTitle, LocalDateTime chatroomRegdate) {
+    public Chatroom(Long chatroomId, String chatroomChannelId, String chatroomWriterNickname, String chatroomTitle, Boolean chatroomIsGroup, LocalDateTime chatroomRegdate) {
         this.chatroomId = chatroomId;
         this.chatroomChannelId = chatroomChannelId;
         this.chatroomWriterNickname = chatroomWriterNickname;
         this.chatroomTitle = chatroomTitle;
+        this.chatroomIsGroup = chatroomIsGroup;
         this.chatroomRegdate = chatroomRegdate;
     }
 }

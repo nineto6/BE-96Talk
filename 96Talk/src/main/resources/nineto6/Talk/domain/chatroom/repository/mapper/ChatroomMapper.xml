@@ -3,32 +3,32 @@
 
 <mapper namespace="nineto6.Talk.domain.chatroom.repository.mapper.ChatroomMapper">
     <sql id="chatroomColumns">
-        CHATROOM_ID, CHATROOM_CHANNEL_ID, CHATROOM_WRITER_NICKNAME, CHATROOM_TITLE, CHATROOM_REGDATE
+        CHATROOM_ID, CHATROOM_CHANNEL_ID, CHATROOM_WRITER_NICKNAME, CHATROOM_TITLE, CHATROOM_IS_GROUP, CHATROOM_REGDATE
     </sql>
 
     <!-- 저장 -->
     <insert id="save" useGeneratedKeys="true" keyProperty="chatroomId">
         INSERT INTO
-        CHATROOM (CHATROOM_CHANNEL_ID, CHATROOM_WRITER_NICKNAME, CHATROOM_REGDATE)
-        VALUES (#{chatroomChannelId}, #{chatroomWriterNickname}, NOW())
+        CHATROOM (CHATROOM_CHANNEL_ID, CHATROOM_WRITER_NICKNAME, CHATROOM_IS_GROUP, CHATROOM_REGDATE)
+        VALUES (#{chatroomChannelId}, #{chatroomWriterNickname}, #{chatroomIsGroup}, NOW())
     </insert>
 
     <!-- 채널 아이디로 삭제 -->
     <delete id="deleteByChannelId">
         DELETE FROM
-        CHATROOM AS c
+            CHATROOM AS c
         WHERE
-        c.CHATROOM_CHANNEL_ID = #{chatroomChannelId}
+            c.CHATROOM_CHANNEL_ID = #{chatroomChannelId}
     </delete>
 
     <!-- ID 로 조회 -->
     <select id="findById">
         SELECT
-        <include refid="chatroomColumns"/>
+            <include refid="chatroomColumns"/>
         FROM
-        CHATROOM AS c
+            CHATROOM AS c
         WHERE
-        c.CHATROOM_ID = #{chatroomId}
+            c.CHATROOM_ID = #{chatroomId}
     </select>
 
     <!-- 채널 아이디로 조회-->

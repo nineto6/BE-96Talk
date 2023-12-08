@@ -40,6 +40,7 @@ public class ChatroomRepositoryTest {
         chatroom = Chatroom.builder()
                 .chatroomChannelId(UUID.randomUUID().toString())
                 .chatroomWriterNickname("한국")
+                .chatroomIsGroup(false)
                 .build();
     }
 
@@ -145,6 +146,7 @@ public class ChatroomRepositoryTest {
         Chatroom chatroom2 = Chatroom.builder()
                 .chatroomChannelId(UUID.randomUUID().toString())
                 .chatroomWriterNickname("한국")
+                .chatroomIsGroup(false)
                 .build();
         chatroomRepository.save(chatroom2);
 

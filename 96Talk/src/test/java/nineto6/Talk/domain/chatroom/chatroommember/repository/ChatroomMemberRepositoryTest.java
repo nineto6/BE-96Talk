@@ -45,6 +45,7 @@ public class ChatroomMemberRepositoryTest {
         chatroom = Chatroom.builder()
                 .chatroomChannelId(UUID.randomUUID().toString())
                 .chatroomWriterNickname(member.getMemberNickname())
+                .chatroomIsGroup(false)
                 .build();
 
         chatroomRepository.save(chatroom);
