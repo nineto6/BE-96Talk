@@ -100,6 +100,7 @@ public class ChatroomRepositoryTest {
         // given
         chatroomRepository.save(chatroom);
         log.info("chatroom 등록 : {}", chatroom.getChatroomId());
+
         // 자신 데이터 등록
         Member member = Member.builder()
                 .memberEmail("test@naver.com")
@@ -108,6 +109,7 @@ public class ChatroomRepositoryTest {
                 .build();
         memberRepository.save(member);
         log.info("자신 데이터 등록 : {}", member.getMemberId());
+
         profileRepository.saveDefault(Profile.builder()
                 .memberId(member.getMemberId())
                 .build());
@@ -137,6 +139,7 @@ public class ChatroomRepositoryTest {
                     .memberId(forMember.getMemberId())
                     .build());
         }
+
         log.info("2번째 채팅방 생성");
         // 2번째 채팅방 생성
         Chatroom chatroom2 = Chatroom.builder()
@@ -174,7 +177,7 @@ public class ChatroomRepositoryTest {
         }
 
         // when
-        List<ChatroomProfile> chatroomProfileList = chatroomRepository.findChannelIdAndProfileListByMemberId(member.getMemberId());
+        List<ChatroomProfile> chatroomProfileList = chatroomRepository.findChannelIdAndMemberProfileListByMemberId(member.getMemberId());
 
         // then
         // 채팅방은 2개가 되어야 한다.

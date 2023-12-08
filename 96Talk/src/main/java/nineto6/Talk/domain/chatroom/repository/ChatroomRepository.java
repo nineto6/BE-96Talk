@@ -12,6 +12,6 @@ public interface ChatroomRepository {
     Optional<Chatroom> findById(Long chatroomId);
     Optional<Chatroom> findByChannelId(String chatroomChannelId);
     void deleteByChannelId(String chatroomChannelId);
-    List<ChatroomProfile> findChannelIdAndProfileListByMemberId(Long memberId);
+    List<ChatroomProfile> findChannelIdAndMemberProfileListByMemberId(Long memberId);
     List<ProfileMember> findMemberProfileByChatroomChannelId(String chatroomChannelId);
 }

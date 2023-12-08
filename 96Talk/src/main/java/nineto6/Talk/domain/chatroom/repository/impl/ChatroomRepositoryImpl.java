@@ -37,8 +37,8 @@ public class ChatroomRepositoryImpl implements ChatroomRepository {
     }
 
     @Override
-    public List<ChatroomProfile> findChannelIdAndProfileListByMemberId(Long memberId) {
-        return chatroomMapper.findChannelIdAndProfileListByMemberId(memberId);
+    public List<ChatroomProfile> findChannelIdAndMemberProfileListByMemberId(Long memberId) {
+        return chatroomMapper.findChannelIdAndMemberProfileListByMemberId(memberId);
     }
 
     @Override
