@@ -272,4 +272,31 @@ public class ChatroomRepositoryTest {
         assertThat(chatroomOptional.orElse(null)).isNotNull();
         assertThat(chatroomOptional.get().getChatroomChannelId()).isEqualTo(chatroom.getChatroomChannelId());
     }
+
+    @Test
+    void findChatroomByChannelIdAndMemberId() {
+        // given
+        chatroomRepository.save(chatroom);
+
+        Member member = Member.builder()
+                .memberEmail("test@naver.com")
+                .memberPwd("123123")
+                .memberNickname("한국")
+                .build();
+        memberRepository.save(member);
+
+        ChatroomMember chatroomMember = ChatroomMember.builder()
+                .chatroomId(chatroom.getChatroomId())
+                .memberId(member.getMemberId())
+                .build();
+        chatroomMemberRepository.save(chatroomMember);
+
+        // when
+        Optional<Chatroom> chatroomOptional = chatroomRepository.findChatroomByChannelIdAndMemberId(chatroom.getChatroomChannelId(), member.getMemberId());
+
+        // then
+        // 자신이 속한 채팅방일 경우
+        assertThat(chatroomOptional.orElse(null)).isNotNull();
+        assertThat(chatroomOptional.get().getChatroomChannelId()).isEqualTo(chatroom.getChatroomChannelId());
+    }
 }

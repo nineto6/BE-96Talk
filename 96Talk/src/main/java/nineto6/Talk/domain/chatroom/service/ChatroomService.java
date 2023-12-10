@@ -92,7 +92,7 @@ public class ChatroomService {
         chatroomMemberRepository.findByChatroomIdAndMemberId(chatroom.getChatroomId(), memberDto.getMemberId())
                 .orElseThrow(() -> new BusinessExceptionHandler(ErrorCode.BAD_REQUEST_ERROR));
 
-        // 채팅방 삭제, CASCADE 속성으로 CHATROOM_MEMBER 테이블에 있는 channelId 값으로 된 연관관계 삭제
+        // 채팅방 삭제, CASCADE 속성으로 CHATROOM_MEMBER 테이블 연관관계 삭제
         chatroomRepository.deleteByChannelId(channelId);
     }
 
@@ -109,5 +109,11 @@ public class ChatroomService {
                                         .collect(Collectors.toList()))
                                 .build()
                 ).collect(Collectors.toList());
+    }
+
+    // 자신이 속한 채팅방인지 확인
+    public boolean isMyChatroom(String channelId, Long memberId) {
+        Optional<Chatroom> chatroom = chatroomRepository.findChatroomByChannelIdAndMemberId(channelId, memberId);
+        return chatroom.isPresent();
     }
 }

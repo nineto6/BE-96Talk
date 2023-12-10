@@ -18,4 +18,5 @@ public interface ChatroomMapper {
     List<ChatroomProfile> findChannelIdAndMemberProfileListByMemberId(Long memberId);
     List<ProfileMember> findMemberProfileByChatroomChannelId(String chatroomChannelId);
     Optional<Chatroom> findChatroomByMemberIdAndFriendId(@Param("memberId") Long memberId, @Param("friendId") Long friendId);
+    Optional<Chatroom> findChatroomByChannelIdAndMemberId(@Param("chatroomChannelId") String chatroomChannelId, @Param("memberId") Long memberId);
 }

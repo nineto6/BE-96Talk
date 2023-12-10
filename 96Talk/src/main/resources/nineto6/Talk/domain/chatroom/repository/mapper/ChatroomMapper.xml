@@ -99,4 +99,13 @@
             cm1.MEMBER_ID = #{memberId}
     </select>
 
+    <!-- 채팅방 채널 ID 와 멤버 ID 값으로 채팅방 조회 -->
+    <select id="findChatroomByChannelIdAndMemberId" resultType="Chatroom">
+        SELECT
+            c.CHATROOM_ID, c.CHATROOM_CHANNEL_ID, c.CHATROOM_WRITER_NICKNAME, c.CHATROOM_TITLE, c.CHATROOM_IS_GROUP, c.CHATROOM_REGDATE
+        FROM
+            CHATROOM AS c INNER JOIN CHATROOM_MEMBER AS cm ON (cm.CHATROOM_ID = c.CHATROOM_ID AND cm.MEMBER_ID = #{memberId})
+        WHERE
+            c.CHATROOM_CHANNEL_ID = #{chatroomChannelId}
+    </select>
 </mapper>
