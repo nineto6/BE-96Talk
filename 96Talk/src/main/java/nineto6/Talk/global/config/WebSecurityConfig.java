@@ -84,7 +84,8 @@ public class WebSecurityConfig {
                                         "/swagger-ui.html",
                                         "/configuration/ui",
                                         "/configuration/security",
-                                        "/webjars/**"
+                                        "/webjars/**",
+                                        "/ws/**"
                 ).permitAll()
                 .antMatchers(HttpMethod.GET, "/members/duplicate").permitAll() // 이메일, 닉네임 중복 확인
                 .antMatchers(HttpMethod.POST, "/members").permitAll() // 회원가입
@@ -189,11 +190,12 @@ public class WebSecurityConfig {
      * 9. CORS 설정
      * @return UrlBasedCorsConfigurationSource
      */
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
+     @Bean
+     public CorsConfigurationSource corsConfigurationSource() {
+         CorsConfiguration configuration = new CorsConfiguration();
 
-        configuration.addAllowedOrigin("http://localhost:3000/");
+        configuration.addAllowedOriginPattern("https://nineto6.p-e.kr"); // dev
+        configuration.addAllowedOriginPattern("http://localhost:3000/"); // prod
         configuration.addAllowedHeader("*");
         configuration.addAllowedMethod("*");
         configuration.setAllowCredentials(true);
