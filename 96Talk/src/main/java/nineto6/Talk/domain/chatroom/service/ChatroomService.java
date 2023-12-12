@@ -5,19 +5,15 @@ import lombok.extern.slf4j.Slf4j;
 import nineto6.Talk.domain.chatroom.chatroommember.domain.ChatroomMember;
 import nineto6.Talk.domain.chatroom.chatroommember.repository.ChatroomMemberRepository;
 import nineto6.Talk.domain.chatroom.domain.Chatroom;
-import nineto6.Talk.domain.chatroom.domain.ChatroomProfile;
 import nineto6.Talk.domain.chatroom.dto.ChatroomDto;
 import nineto6.Talk.domain.chatroom.repository.ChatroomRepository;
-import nineto6.Talk.domain.friend.repository.FriendRepository;
 import nineto6.Talk.domain.member.domain.Member;
 import nineto6.Talk.domain.member.dto.MemberDto;
 import nineto6.Talk.domain.member.repository.MemberRepository;
-import nineto6.Talk.domain.profile.dto.ProfileResponse;
 import nineto6.Talk.domain.profile.service.ProfileService;
+import nineto6.Talk.global.chat.mongodb.service.ChatService;
 import nineto6.Talk.global.error.exception.BusinessExceptionHandler;
 import nineto6.Talk.global.error.exception.code.ErrorCode;
-import org.apache.ibatis.binding.BindingException;
-import org.apache.ibatis.exceptions.IbatisException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,10 +30,13 @@ public class ChatroomService {
     private final ChatroomMemberRepository chatroomMemberRepository;
     private final ProfileService profileService;
     private final MemberRepository memberRepository;
+    private final ChatService chatService;
 
-    // 채팅방 생성
+    /**
+     * 채팅방 생성
+     */
     @Transactional
-    public void create(MemberDto memberDto, String friendNickname) {
+    public String create(MemberDto memberDto, String friendNickname) {
         // 자기 자신과 채팅방을 만들 경우 Exception
         if(memberDto.getMemberNickname().equals(friendNickname)) {
             throw new BusinessExceptionHandler(ErrorCode.BAD_REQUEST_ERROR);
@@ -79,9 +78,12 @@ public class ChatroomService {
                 .build();
 
         chatroomMemberRepository.save(chatroomFriend);
+        return chatroom.getChatroomChannelId();
     }
 
-    // 채팅방 삭제
+    /**
+     * 채팅방 삭제
+     */
     @Transactional
     public void deleteChatroomByChannelId(MemberDto memberDto, String channelId) {
         // 채널 아이디로 된 채팅방이 존재하지 않을 경우 Exception
@@ -96,14 +98,16 @@ public class ChatroomService {
         chatroomRepository.deleteByChannelId(channelId);
     }
 
-    // 채팅방 목록 가져오기
+    /**
+     * 채팅방 목록 가져오기
+     */
     @Transactional(readOnly = true)
     public List<ChatroomDto> getChatroomListByMemberDto(MemberDto memberDto) {
         return chatroomRepository.findChannelIdAndMemberProfileListByMemberId(memberDto.getMemberId()).stream()
                 .map((chatroomProfile) ->
                         ChatroomDto.builder()
                                 .chatroomChannelId(chatroomProfile.getChatroomChannelId())
-                                .recentMessage(null)
+                                .recentChat(chatService.findOneByChannelId(chatroomProfile.getChatroomChannelId()))
                                 .profileResponseList(chatroomProfile.getMemberProfileList().stream()
                                         .map(profileService::getProfileResponse)
                                         .collect(Collectors.toList()))
@@ -111,7 +115,9 @@ public class ChatroomService {
                 ).collect(Collectors.toList());
     }
 
-    // 자신이 속한 채팅방인지 확인
+    /**
+     * 자신이 속한 채팅방인지 확인
+     */
     public boolean isMyChatroom(String channelId, Long memberId) {
         Optional<Chatroom> chatroom = chatroomRepository.findChatroomByChannelIdAndMemberId(channelId, memberId);
         return chatroom.isPresent();

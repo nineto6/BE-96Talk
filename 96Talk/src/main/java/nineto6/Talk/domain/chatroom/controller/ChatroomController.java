@@ -8,13 +8,17 @@ import nineto6.Talk.domain.chatroom.dto.ChatroomDto;
 import nineto6.Talk.domain.chatroom.dto.ChatroomSaveRequest;
 import nineto6.Talk.domain.chatroom.service.ChatroomService;
 import nineto6.Talk.domain.member.dto.MemberDetailsDto;
+import nineto6.Talk.global.chat.mongodb.dto.ChatResponse;
+import nineto6.Talk.global.chat.mongodb.service.ChatService;
 import nineto6.Talk.global.common.code.SuccessCode;
 import nineto6.Talk.global.common.response.ApiResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -22,15 +26,15 @@ import java.util.List;
 @RequestMapping("/chatroom")
 public class ChatroomController implements ChatroomControllerDocs {
     private final ChatroomService chatroomService;
+    private final ChatService chatService;
 
     // 채팅방 생성
     @PostMapping
     public ResponseEntity<ApiResponse> createChatroom(@RequestBody ChatroomSaveRequest chatroomSaveRequest,
                                                       @AuthenticationPrincipal MemberDetailsDto memberDetailsDto) {
-        chatroomService.create(memberDetailsDto.getMemberDto(), chatroomSaveRequest.getFriendNickname());
-
+        String channelId = chatroomService.create(memberDetailsDto.getMemberDto(), chatroomSaveRequest.getFriendNickname());
         ApiResponse apiResponse = ApiResponse.builder()
-                .result(null)
+                .result(channelId)
                 .status(SuccessCode.INSERT_SUCCESS.getStatus())
                 .message(SuccessCode.INSERT_SUCCESS.getMessage())
                 .build();
@@ -58,6 +62,19 @@ public class ChatroomController implements ChatroomControllerDocs {
 
         ApiResponse apiResponse = ApiResponse.builder()
                 .result(chatroomList)
+                .status(SuccessCode.SELECT_SUCCESS.getStatus())
+                .message(SuccessCode.SELECT_SUCCESS.getMessage())
+                .build();
+        return new ResponseEntity<ApiResponse>(apiResponse, SuccessCode.SELECT_SUCCESS.getHttpStatus());
+    }
+
+    @GetMapping("/chat")
+    public ResponseEntity<ApiResponse> getChatLog(@RequestParam("channelId") String channelId) {
+
+        List<ChatResponse> chatResponseList = chatService.findChatByChannelId(channelId);
+
+        ApiResponse apiResponse = ApiResponse.builder()
+                .result(chatResponseList)
                 .status(SuccessCode.SELECT_SUCCESS.getStatus())
                 .message(SuccessCode.SELECT_SUCCESS.getMessage())
                 .build();

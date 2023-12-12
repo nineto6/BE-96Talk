@@ -20,4 +20,6 @@ public interface ChatroomControllerDocs {
     @Operation(summary = "채팅방 삭제", description = "토큰이 필요합니다.")
     ResponseEntity<ApiResponse> deleteChatroom(ChatroomDeleteRequest chatroomDeleteRequest,
                                                @Schema(hidden = true) MemberDetailsDto memberDetailsDto);
+    @Operation(summary = "채팅방 채팅 기록 조회", description = "토큰이 필요합니다.")
+    ResponseEntity<ApiResponse> getChatLog(String channelId);
 }
