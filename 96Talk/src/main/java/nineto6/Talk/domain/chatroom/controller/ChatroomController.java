@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import nineto6.Talk.domain.chatroom.controller.swagger.ChatroomControllerDocs;
 import nineto6.Talk.domain.chatroom.dto.ChatroomDeleteRequest;
 import nineto6.Talk.domain.chatroom.dto.ChatroomDto;
+import nineto6.Talk.domain.chatroom.dto.ChatroomSaveDto;
 import nineto6.Talk.domain.chatroom.dto.ChatroomSaveRequest;
 import nineto6.Talk.domain.chatroom.service.ChatroomService;
 import nineto6.Talk.domain.member.dto.MemberDetailsDto;
@@ -16,9 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @RestController
@@ -32,13 +31,14 @@ public class ChatroomController implements ChatroomControllerDocs {
     @PostMapping
     public ResponseEntity<ApiResponse> createChatroom(@RequestBody ChatroomSaveRequest chatroomSaveRequest,
                                                       @AuthenticationPrincipal MemberDetailsDto memberDetailsDto) {
-        String channelId = chatroomService.create(memberDetailsDto.getMemberDto(), chatroomSaveRequest.getFriendNickname());
+        ChatroomSaveDto chatroomSaveDto = chatroomService.create(memberDetailsDto.getMemberDto(), chatroomSaveRequest.getFriendNickname());
+
         ApiResponse apiResponse = ApiResponse.builder()
-                .result(channelId)
-                .status(SuccessCode.INSERT_SUCCESS.getStatus())
-                .message(SuccessCode.INSERT_SUCCESS.getMessage())
+                .result(chatroomSaveDto.getChatroomChannelId())
+                .status(chatroomSaveDto.getSuccessCode().getStatus())
+                .message(chatroomSaveDto.getSuccessCode().getMessage())
                 .build();
-        return new ResponseEntity<ApiResponse>(apiResponse, SuccessCode.INSERT_SUCCESS.getHttpStatus());
+        return new ResponseEntity<ApiResponse>(apiResponse, chatroomSaveDto.getSuccessCode().getHttpStatus());
     }
 
     // 채팅방 삭제
@@ -68,13 +68,32 @@ public class ChatroomController implements ChatroomControllerDocs {
         return new ResponseEntity<ApiResponse>(apiResponse, SuccessCode.SELECT_SUCCESS.getHttpStatus());
     }
 
-    @GetMapping("/chat")
-    public ResponseEntity<ApiResponse> getChatLog(@RequestParam("channelId") String channelId) {
+    /**
+     * 채팅방 내에 채팅 메세지 조회
+     */
+    @GetMapping("/{channelId}/messages")
+    public ResponseEntity<ApiResponse> getChatLog(@PathVariable("channelId") String channelId) {
 
         List<ChatResponse> chatResponseList = chatService.findChatByChannelId(channelId);
 
         ApiResponse apiResponse = ApiResponse.builder()
                 .result(chatResponseList)
+                .status(SuccessCode.SELECT_SUCCESS.getStatus())
+                .message(SuccessCode.SELECT_SUCCESS.getMessage())
+                .build();
+        return new ResponseEntity<ApiResponse>(apiResponse, SuccessCode.SELECT_SUCCESS.getHttpStatus());
+    }
+
+    /**
+     * 채팅방에 소속된 인원 중에 친구가 아닌 사용자 닉네임 조회
+     */
+    @GetMapping("/{channelId}")
+    public ResponseEntity<ApiResponse> getNotFriendNicknameListInChatroom(@PathVariable("channelId") String channelId,
+                                                                          @AuthenticationPrincipal MemberDetailsDto memberDetailsDto) {
+        List<String> nicknameList = chatroomService.findNotFriendInChatroom(channelId, memberDetailsDto.getMemberDto());
+
+        ApiResponse apiResponse = ApiResponse.builder()
+                .result(nicknameList)
                 .status(SuccessCode.SELECT_SUCCESS.getStatus())
                 .message(SuccessCode.SELECT_SUCCESS.getMessage())
                 .build();

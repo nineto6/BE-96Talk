@@ -6,17 +6,22 @@ import nineto6.Talk.domain.chatroom.chatroommember.domain.ChatroomMember;
 import nineto6.Talk.domain.chatroom.chatroommember.repository.ChatroomMemberRepository;
 import nineto6.Talk.domain.chatroom.domain.Chatroom;
 import nineto6.Talk.domain.chatroom.dto.ChatroomDto;
+import nineto6.Talk.domain.chatroom.dto.ChatroomSaveDto;
 import nineto6.Talk.domain.chatroom.repository.ChatroomRepository;
 import nineto6.Talk.domain.member.domain.Member;
 import nineto6.Talk.domain.member.dto.MemberDto;
 import nineto6.Talk.domain.member.repository.MemberRepository;
 import nineto6.Talk.domain.profile.service.ProfileService;
 import nineto6.Talk.global.chat.mongodb.service.ChatService;
+import nineto6.Talk.global.common.code.SuccessCode;
 import nineto6.Talk.global.error.exception.BusinessExceptionHandler;
 import nineto6.Talk.global.error.exception.code.ErrorCode;
+import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ObjectUtils;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -36,7 +41,7 @@ public class ChatroomService {
      * 채팅방 생성
      */
     @Transactional
-    public String create(MemberDto memberDto, String friendNickname) {
+    public ChatroomSaveDto create(MemberDto memberDto, String friendNickname) {
         // 자기 자신과 채팅방을 만들 경우 Exception
         if(memberDto.getMemberNickname().equals(friendNickname)) {
             throw new BusinessExceptionHandler(ErrorCode.BAD_REQUEST_ERROR);
@@ -51,7 +56,11 @@ public class ChatroomService {
 
         // 단일 채팅방이 이미 있을 경우 Exception
         if(chatroomOptional.isPresent()) {
-            throw new BusinessExceptionHandler(ErrorCode.ALREADY_EXISTS);
+            // 이미 존재하는 채널 아이디 값을 반환
+            return ChatroomSaveDto.builder()
+                    .chatroomChannelId(chatroomOptional.get().getChatroomChannelId())
+                    .successCode(SuccessCode.SELECT_SUCCESS)
+                    .build();
         }
 
         // 없을 경우 생성
@@ -78,7 +87,10 @@ public class ChatroomService {
                 .build();
 
         chatroomMemberRepository.save(chatroomFriend);
-        return chatroom.getChatroomChannelId();
+        return ChatroomSaveDto.builder()
+                .chatroomChannelId(chatroom.getChatroomChannelId())
+                .successCode(SuccessCode.INSERT_SUCCESS)
+                .build();
     }
 
     /**
@@ -112,14 +124,47 @@ public class ChatroomService {
                                         .map(profileService::getProfileResponse)
                                         .collect(Collectors.toList()))
                                 .build()
-                ).collect(Collectors.toList());
+                ).sorted(this::compare)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * 최근 메세지의 시간 순으로 오름차순 정렬, NULL 값일 경우 마지막
+     */
+    private int compare(ChatroomDto o1, ChatroomDto o2) {
+        // o1 의 최근 메세지가 NULL 이면 o1 이 오른쪽 자리로 이동
+        if (ObjectUtils.isEmpty(o1.getRecentChat())) {
+            return 1;
+        }
+
+        // o2 의 최근 메세지가 NULL 이면 o1 이 왼쪽 자리로 이동
+        if(ObjectUtils.isEmpty(o2.getRecentChat())) {
+            return -1;
+        }
+
+        // o1 이 o2 보다 과거이면 o1 이 오른쪽 자리로 이동
+        if (o1.getRecentChat().getRegdate().isBefore(o2.getRecentChat().getRegdate())) {
+            return 1;
+        }
+
+        // o1 이 왼쪽으로 이동 (가장 최근 시간)
+        return -1;
     }
 
     /**
      * 자신이 속한 채팅방인지 확인
      */
+    @Transactional(readOnly = true)
     public boolean isMyChatroom(String channelId, Long memberId) {
         Optional<Chatroom> chatroom = chatroomRepository.findChatroomByChannelIdAndMemberId(channelId, memberId);
         return chatroom.isPresent();
+    }
+
+    /**
+     * 채팅방에 소속된 인원 중에 친구가 아닌 사용자 닉네임 조회
+     */
+    @Transactional(readOnly = true)
+    public List<String> findNotFriendInChatroom(String channelId, MemberDto memberDto) {
+        return chatroomRepository.findNotFriendInChatroomByChannelIdAndMemberId(channelId, memberDto.getMemberId());
     }
 }
