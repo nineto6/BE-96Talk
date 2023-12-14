@@ -108,4 +108,16 @@
         WHERE
             c.CHATROOM_CHANNEL_ID = #{chatroomChannelId}
     </select>
+
+    <!-- 채팅방에 속한 친구가 아닌 사용자 닉네임 조회 -->
+    <select id="findNotFriendInChatroomByChannelIdAndMemberId" resultType="String" parameterType="Map">
+        SELECT
+            m.MEMBER_NICKNAME
+        FROM
+            CHATROOM AS c INNER JOIN CHATROOM_MEMBER AS cm ON (cm.CHATROOM_ID = c.CHATROOM_ID AND cm.MEMBER_ID != #{memberId})
+                          LEFT OUTER JOIN FRIEND AS f ON (#{memberId} = f.MEMBER_ID AND cm.MEMBER_ID = f.FRIEND_MEMBER_ID)
+                          INNER JOIN MEMBER AS m ON (m.MEMBER_ID = cm.MEMBER_ID AND f.FRIEND_ID IS NULL)
+        WHERE
+            c.CHATROOM_CHANNEL_ID = #{chatroomChannelId}
+    </select>
 </mapper>

@@ -16,4 +16,5 @@ public interface ChatroomRepository {
     List<ProfileMember> findMemberProfileByChatroomChannelId(String chatroomChannelId);
     Optional<Chatroom> findChatroomByMemberIdAndFriendId(Long memberId, Long friendId);
     Optional<Chatroom> findChatroomByChannelIdAndMemberId(String chatroomChannelId, Long memberId);
+    List<String> findNotFriendInChatroomByChannelIdAndMemberId(String chatroomChannelId, Long memberId);
 }
