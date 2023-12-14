@@ -299,4 +299,46 @@ public class ChatroomRepositoryTest {
         assertThat(chatroomOptional.orElse(null)).isNotNull();
         assertThat(chatroomOptional.get().getChatroomChannelId()).isEqualTo(chatroom.getChatroomChannelId());
     }
+
+    @Test
+    void findNotFriendInChatroomByChannelIdAndMemberId() {
+        // given
+        chatroomRepository.save(chatroom);
+
+        Member member1 = Member.builder()
+                .memberEmail("test1@naver.com")
+                .memberPwd("123123")
+                .memberNickname("한국1")
+                .build();
+        memberRepository.save(member1);
+
+        // 채팅방멤버에 등록
+        ChatroomMember chatroomMember1 = ChatroomMember.builder()
+                .chatroomId(chatroom.getChatroomId())
+                .memberId(member1.getMemberId())
+                .build();
+        chatroomMemberRepository.save(chatroomMember1);
+
+        // 친구 등록 안함
+        Member member2 = Member.builder()
+                .memberEmail("test2@naver.com")
+                .memberPwd("123123")
+                .memberNickname("한국2")
+                .build();
+        memberRepository.save(member2);
+
+        // 채팅방멤버에 등록
+        ChatroomMember chatroomMember2 = ChatroomMember.builder()
+                .chatroomId(chatroom.getChatroomId())
+                .memberId(member2.getMemberId())
+                .build();
+        chatroomMemberRepository.save(chatroomMember2);
+
+        // when
+        List<String> nicknameList = chatroomRepository.findNotFriendInChatroomByChannelIdAndMemberId(chatroom.getChatroomChannelId(), member1.getMemberId());
+
+        // then
+        assertThat(nicknameList.size()).isEqualTo(1);
+        assertThat(nicknameList.get(0)).isEqualTo("한국2");
+    }
 }
