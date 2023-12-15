@@ -104,9 +104,10 @@ public class AuthController implements AuthControllerDocs {
                                               HttpServletResponse response) {
         // Header 에서 JWT Access Token 추출
         String token = TokenUtils.getAccessTokenFormHeader(authorization);
+        MemberDto memberDto = memberDetailsDto.getMemberDto();
 
         // Redis 에서 해당  member Email 로 저장된 Refresh Token 이 있는지 여부를 확인 (없으면 예외)
-        RefreshToken refreshTokenObject = refreshTokenRedisRepository.findByMemberEmail(memberDetailsDto.getMemberDto().getMemberEmail())
+        RefreshToken refreshTokenObject = refreshTokenRedisRepository.findByMemberEmail(memberDto.getMemberEmail())
                 .orElseThrow(() -> new BusinessExceptionHandler(ErrorCode.BAD_REQUEST_ERROR));
 
         // 재발급을 불가능하게 만든다 (redis 내에 삭제)
@@ -124,7 +125,7 @@ public class AuthController implements AuthControllerDocs {
 
         log.info("[MemberController] 로그아웃 성공");
         ApiResponse ar = ApiResponse.builder()
-                .result(null)
+                .result(memberDto.getMemberNickname())
                 .status(SuccessCode.LOGOUT_SUCCESS.getStatus())
                 .message(SuccessCode.LOGOUT_SUCCESS.getMessage())
                 .build();
