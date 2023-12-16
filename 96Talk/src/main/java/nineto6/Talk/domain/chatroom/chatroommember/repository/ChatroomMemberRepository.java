@@ -1,7 +1,10 @@
 package nineto6.Talk.domain.chatroom.chatroommember.repository;
 
 import nineto6.Talk.domain.chatroom.chatroommember.domain.ChatroomMember;
+import nineto6.Talk.domain.chatroom.chatroommember.domain.ChatroomMemberAndChannelId;
+import nineto6.Talk.domain.chatroom.chatroommember.domain.ChatroomMemberAndNickname;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface ChatroomMemberRepository {
@@ -9,4 +12,9 @@ public interface ChatroomMemberRepository {
     void deleteByChatroomIdAndMemberId(Long chatroomId, Long memberId);
     Optional<ChatroomMember> findById(Long chatroomMemberId);
     Optional<ChatroomMember> findByChatroomIdAndMemberId(Long chatroomId, Long memberId);
+    List<ChatroomMemberAndChannelId> findByMemberId(Long memberId);
+    void updateSubDateByChannelIdAndMemberId(String channelId, Long memberId);
+    void removeSubDateByChannelIdAndMemberId(String channelId, Long memberId);
+    void updateUnSubDateByChannelIdAndMemberId(String channelId, Long memberId);
+    List<ChatroomMemberAndNickname> findByChannelIdAndNickname(String channelId, String nickname);
 }

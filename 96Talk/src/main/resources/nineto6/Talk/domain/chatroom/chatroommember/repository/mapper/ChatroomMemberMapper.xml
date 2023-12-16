@@ -3,6 +3,10 @@
 
 <mapper namespace="nineto6.Talk.domain.chatroom.chatroommember.repository.mapper.ChatroomMemberMapper">
 
+    <sql id="chatroomMemberColumns">
+        CHATROOM_MEMBER_ID, CHATROOM_ID, MEMBER_ID, CHATROOM_SUB_DATE, CHATROOM_UN_SUB_DATE
+    </sql>
+
     <!-- 저장 -->
     <insert id="save" useGeneratedKeys="true" keyProperty="chatroomMemberId">
         INSERT INTO
@@ -18,11 +22,7 @@
             cm.CHATROOM_ID = #{chatroomId} AND cm.MEMBER_ID = #{memberId}
     </delete>
 
-    <sql id="chatroomMemberColumns">
-        CHATROOM_MEMBER_ID, CHATROOM_ID, MEMBER_ID
-    </sql>
-
-    <select id="findById" parameterType="Long">
+    <select id="findById" parameterType="Long" resultType="ChatroomMember">
         SELECT
             <include refid="chatroomMemberColumns"/>
         FROM
@@ -31,7 +31,7 @@
             cm.CHATROOM_MEMBER_ID = #{chatroomMemberId}
     </select>
 
-    <select id="findByChatroomIdAndMemberId">
+    <select id="findByChatroomIdAndMemberId" resultType="ChatroomMember">
         SELECT
             <include refid="chatroomMemberColumns"/>
         FROM
@@ -39,4 +39,75 @@
         WHERE
             cm.CHATROOM_ID = #{chatroomId} AND cm.MEMBER_ID = #{memberId}
     </select>
+
+    <resultMap id="chatroomMemberAndChannelIdMap" type="ChatroomMemberAndChannelId">
+        <id property="chatroomMemberId" column="chatroom_member_id"/>
+        <result property="memberId" column="member_id"/>
+        <result property="chatroomId" column="chatroom_id"/>
+        <result property="chatroomSubDate" column="chatroom_sub_date"/>
+        <result property="chatroomUnSubDate" column="chatroom_un_sub_date"/>
+        <result property="channelId" column="chatroom_channel_id"/>
+    </resultMap>
+
+    <select id="findByMemberId" parameterType="Long" resultMap="chatroomMemberAndChannelIdMap">
+        SELECT
+            cm.CHATROOM_MEMBER_ID, cm.CHATROOM_ID, cm.MEMBER_ID, cm.CHATROOM_SUB_DATE, cm.CHATROOM_UN_SUB_DATE,
+            c.CHATROOM_CHANNEL_ID
+        FROM
+            CHATROOM_MEMBER AS cm INNER JOIN CHATROOM AS c ON (c.CHATROOM_ID = cm.CHATROOM_ID)
+        WHERE
+            cm.MEMBER_ID = #{memberId}
+    </select>
+
+    <!-- 구독일을 최근 날짜로 변경 -->
+    <update id="updateSubDateByChannelIdAndMemberId" parameterType="Map">
+        UPDATE
+            CHATROOM_MEMBER AS cm INNER JOIN CHATROOM AS c ON (c.CHATROOM_ID = cm.CHATROOM_ID)
+        SET
+            cm.CHATROOM_SUB_DATE = NOW()
+        WHERE
+            cm.MEMBER_ID = #{memberId} AND c.CHATROOM_CHANNEL_ID = #{channelId}
+    </update>
+
+    <!-- 구독일을 NULL 로 변경 -->
+    <update id="removeSubDateByChannelIdAndMemberId" parameterType="Map">
+        UPDATE
+            CHATROOM_MEMBER AS cm INNER JOIN CHATROOM AS c ON (c.CHATROOM_ID = cm.CHATROOM_ID)
+        SET
+            cm.CHATROOM_SUB_DATE = NULL
+        WHERE
+            cm.MEMBER_ID = #{memberId} AND c.CHATROOM_CHANNEL_ID = #{channelId}
+    </update>
+
+    <!-- 구독 취소일을 최근 날짜로 변경 -->
+    <update id="updateUnSubDateByChannelIdAndMemberId" parameterType="Map">
+        UPDATE
+            CHATROOM_MEMBER AS cm INNER JOIN CHATROOM AS c ON (c.CHATROOM_ID = cm.CHATROOM_ID)
+        SET
+            cm.CHATROOM_UN_SUB_DATE = NOW()
+        WHERE
+            cm.MEMBER_ID = #{memberId} AND c.CHATROOM_CHANNEL_ID = #{channelId}
+    </update>
+
+    <resultMap id="chatroomMemberAndNicknameMap" type="ChatroomMemberAndNickname">
+        <id property="chatroomMemberId" column="chatroom_member_id"/>
+        <result property="memberId" column="member_id"/>
+        <result property="chatroomId" column="chatroom_id"/>
+        <result property="chatroomSubDate" column="chatroom_sub_date"/>
+        <result property="chatroomUnSubDate" column="chatroom_un_sub_date"/>
+        <result property="memberNickname" column="member_nickname"/>
+    </resultMap>
+
+    <!-- 채널 ID 값 과 사용자 닉네임 값을 가지고 채팅방 안에 존재하는 다른 사용자 리스트 조회 -->
+    <select id="findByChannelIdAndNickname" parameterType="Map" resultMap="chatroomMemberAndNicknameMap">
+        SELECT
+            cm.CHATROOM_MEMBER_ID, cm.CHATROOM_ID, cm.MEMBER_ID, cm.CHATROOM_SUB_DATE, cm.CHATROOM_UN_SUB_DATE,
+            m.MEMBER_NICKNAME
+        FROM
+            CHATROOM AS c INNER JOIN CHATROOM_MEMBER AS cm ON (cm.CHATROOM_ID = c.CHATROOM_ID)
+                          INNER JOIN MEMBER AS m ON (cm.MEMBER_ID = m.MEMBER_ID AND m.MEMBER_NICKNAME != #{nickname})
+        WHERE
+            c.CHATROOM_CHANNEL_ID = #{channelId}
+    </select>
+
 </mapper>

@@ -2,10 +2,13 @@ package nineto6.Talk.domain.chatroom.chatroommember.repository.impl;
 
 import lombok.RequiredArgsConstructor;
 import nineto6.Talk.domain.chatroom.chatroommember.domain.ChatroomMember;
+import nineto6.Talk.domain.chatroom.chatroommember.domain.ChatroomMemberAndChannelId;
+import nineto6.Talk.domain.chatroom.chatroommember.domain.ChatroomMemberAndNickname;
 import nineto6.Talk.domain.chatroom.chatroommember.repository.ChatroomMemberRepository;
 import nineto6.Talk.domain.chatroom.chatroommember.repository.mapper.ChatroomMemberMapper;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -30,5 +33,30 @@ public class ChatroomMemberRepositoryImpl implements ChatroomMemberRepository {
     @Override
     public Optional<ChatroomMember> findByChatroomIdAndMemberId(Long chatroomId, Long memberId) {
         return chatroomMemberMapper.findByChatroomIdAndMemberId(chatroomId, memberId);
+    }
+
+    @Override
+    public List<ChatroomMemberAndChannelId> findByMemberId(Long memberId) {
+        return chatroomMemberMapper.findByMemberId(memberId);
+    }
+
+    @Override
+    public void updateSubDateByChannelIdAndMemberId(String channelId, Long memberId) {
+        chatroomMemberMapper.updateSubDateByChannelIdAndMemberId(channelId, memberId);
+    }
+
+    @Override
+    public void removeSubDateByChannelIdAndMemberId(String channelId, Long memberId) {
+        chatroomMemberMapper.removeSubDateByChannelIdAndMemberId(channelId, memberId);
+    }
+
+    @Override
+    public void updateUnSubDateByChannelIdAndMemberId(String channelId, Long memberId) {
+        chatroomMemberMapper.updateUnSubDateByChannelIdAndMemberId(channelId, memberId);
+    }
+
+    @Override
+    public List<ChatroomMemberAndNickname> findByChannelIdAndNickname(String channelId, String nickname) {
+        return chatroomMemberMapper.findByChannelIdAndNickname(channelId, nickname);
     }
 }
