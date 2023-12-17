@@ -194,4 +194,12 @@ public class TokenUtils {
         Claims claims = getAccessTokenToClaimsFormToken(token);
         return Long.parseLong(claims.get("id").toString());
     }
+
+    /**
+     * 엑세스 토큰을 기반으로 닉네임 값을 반환받는 메서드
+     */
+    public static String getMemberNicknameFormAccessToken(String token) {
+        Claims claims = getAccessTokenToClaimsFormToken(token);
+        return claims.get("nickname").toString();
+    }
 }
