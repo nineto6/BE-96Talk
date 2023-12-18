@@ -6,6 +6,7 @@ import nineto6.Talk.domain.chatroom.chatroommember.domain.ChatroomMember;
 import nineto6.Talk.domain.chatroom.chatroommember.repository.ChatroomMemberRepository;
 import nineto6.Talk.domain.chatroom.domain.Chatroom;
 import nineto6.Talk.domain.chatroom.dto.ChatroomDto;
+import nineto6.Talk.domain.chatroom.dto.ChatroomMemberDto;
 import nineto6.Talk.domain.chatroom.dto.ChatroomSaveDto;
 import nineto6.Talk.domain.chatroom.repository.ChatroomRepository;
 import nineto6.Talk.domain.member.domain.Member;
@@ -16,12 +17,11 @@ import nineto6.Talk.global.chat.mongodb.service.ChatService;
 import nineto6.Talk.global.common.code.SuccessCode;
 import nineto6.Talk.global.error.exception.BusinessExceptionHandler;
 import nineto6.Talk.global.error.exception.code.ErrorCode;
-import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 
-import java.util.Arrays;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -76,6 +76,7 @@ public class ChatroomService {
         ChatroomMember chatroomMember = ChatroomMember.builder()
                 .chatroomId(chatroom.getChatroomId())
                 .memberId(memberDto.getMemberId())
+                .chatroomUnSubDate(LocalDateTime.now())
                 .build();
 
         chatroomMemberRepository.save(chatroomMember);
@@ -84,6 +85,7 @@ public class ChatroomService {
         ChatroomMember chatroomFriend = ChatroomMember.builder()
                 .chatroomId(chatroom.getChatroomId())
                 .memberId(friend.getMemberId())
+                .chatroomUnSubDate(LocalDateTime.now())
                 .build();
 
         chatroomMemberRepository.save(chatroomFriend);
@@ -167,4 +169,57 @@ public class ChatroomService {
     public List<String> findNotFriendInChatroom(String channelId, MemberDto memberDto) {
         return chatroomRepository.findNotFriendInChatroomByChannelIdAndMemberId(channelId, memberDto.getMemberId());
     }
+
+    /**
+     * 채팅방 멤버 채팅 구독일에 최근일 등록
+     */
+    @Transactional
+    public void updateChatroomSubDate(String channelId, Long memberId) {
+        chatroomMemberRepository.updateSubDateByChannelIdAndMemberId(channelId, memberId);
+    }
+
+    /**
+     * 채팅방 멤버 채팅 구독일 삭제
+     */
+    @Transactional
+    public void deleteChatroomSubDate(String channelId, Long memberId) {
+        chatroomMemberRepository.removeSubDateByChannelIdAndMemberId(channelId, memberId);
+    }
+
+    /**
+     * 채팅방 멤버 채팅 구독 취소일 등록
+     */
+    @Transactional
+    public void updateChatroomUnSubDate(String channelId, Long memberId) {
+        chatroomMemberRepository.updateUnSubDateByChannelIdAndMemberId(channelId, memberId);
+    }
+
+    /**
+     * 채팅방 멤버 channelId 값으로 조회
+     */
+    public List<ChatroomMemberDto> findChatroomMemberDtoByChannelIdAndNickname(String channelId, String nickname) {
+        return chatroomMemberRepository.findByChannelIdAndNickname(channelId, nickname).stream()
+                .map((chatroomMember) -> ChatroomMemberDto.builder()
+                        .memberNickname(chatroomMember.getMemberNickname())
+                        .channelId(channelId)
+                        .chatroomSubDate(chatroomMember.getChatroomSubDate())
+                        .chatroomUnSubDate(chatroomMember.getChatroomUnSubDate())
+                        .build())
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * 채팅방 멤버로 chatroomMemberDto 조회
+     */
+    public List<ChatroomMemberDto> findChatroomMemberDtoByMemberId(MemberDto memberDto) {
+        return chatroomMemberRepository.findByMemberId(memberDto.getMemberId()).stream()
+                .map((chatroomMember) -> ChatroomMemberDto.builder()
+                        .memberNickname(memberDto.getMemberNickname())
+                        .channelId(chatroomMember.getChannelId())
+                        .chatroomSubDate(chatroomMember.getChatroomSubDate())
+                        .chatroomUnSubDate(chatroomMember.getChatroomUnSubDate())
+                        .build())
+                .collect(Collectors.toList());
+    }
+
 }
