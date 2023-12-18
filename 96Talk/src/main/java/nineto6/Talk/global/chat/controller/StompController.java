@@ -2,12 +2,14 @@ package nineto6.Talk.global.chat.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import nineto6.Talk.domain.chatroom.service.ChatroomService;
 import nineto6.Talk.global.chat.mongodb.dto.ChatRequest;
 import nineto6.Talk.global.chat.mongodb.dto.ChatResponse;
 import nineto6.Talk.global.chat.mongodb.service.ChatService;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class StompController {
     private final SimpMessagingTemplate simpMessagingTemplate;
     private final ChatService chatService;
+    private final ChatroomService chatroomService;
 
     /**
       * MessageMapping annotation 은 메시지의 destination 이 /hello 였다면 해당 sendMessage() method 가 불리도록 해준다.
@@ -31,6 +34,15 @@ public class StompController {
         log.info("Channel : {}, getWriterNm : {}, sendMessage : {}", chatRequest.getChannelId(), chatRequest.getWriterNickname(), chatRequest.getMessage());
 
         ChatResponse chatResponse = chatService.createChat(chatRequest);
+
+        // 상대방이 구독 중이지 않을경우 알람을 전송한다.
+        chatroomService.findChatroomMemberDtoByChannelIdAndNickname(chatRequest.getChannelId(), chatRequest.getWriterNickname())
+                .forEach((chatroomMemberDto) -> {
+                    if(ObjectUtils.isEmpty(chatroomMemberDto.getChatroomSubDate())) {
+                        // 알람 전송
+                        simpMessagingTemplate.convertAndSend("/sub/alert/" + chatroomMemberDto.getMemberNickname(), chatResponse);
+                    }
+                });
 
         simpMessagingTemplate.convertAndSend("/sub/chat/" + chatResponse.getChannelId(), chatResponse);
     }

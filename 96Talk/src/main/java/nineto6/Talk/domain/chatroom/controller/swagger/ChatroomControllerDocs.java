@@ -25,4 +25,6 @@ public interface ChatroomControllerDocs {
     @Operation(summary = "채팅방에 소속된 인원 중에 친구가 아닌 사용자 닉네임 조회", description = "토큰이 필요합니다.")
     ResponseEntity<ApiResponse> getNotFriendNicknameListInChatroom(String channelId,
                                                                    @Schema(hidden = true) MemberDetailsDto memberDetailsDto);
+    @Operation(summary = "채팅 알람 조회", description = "토큰이 필요합니다.")
+    ResponseEntity<ApiResponse> getAlertMessage(@Schema(hidden = true) MemberDetailsDto memberDetailsDto);
 }

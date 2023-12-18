@@ -3,12 +3,10 @@ package nineto6.Talk.domain.chatroom.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import nineto6.Talk.domain.chatroom.controller.swagger.ChatroomControllerDocs;
-import nineto6.Talk.domain.chatroom.dto.ChatroomDeleteRequest;
-import nineto6.Talk.domain.chatroom.dto.ChatroomDto;
-import nineto6.Talk.domain.chatroom.dto.ChatroomSaveDto;
-import nineto6.Talk.domain.chatroom.dto.ChatroomSaveRequest;
+import nineto6.Talk.domain.chatroom.dto.*;
 import nineto6.Talk.domain.chatroom.service.ChatroomService;
 import nineto6.Talk.domain.member.dto.MemberDetailsDto;
+import nineto6.Talk.global.chat.mongodb.dto.AlertChat;
 import nineto6.Talk.global.chat.mongodb.dto.ChatResponse;
 import nineto6.Talk.global.chat.mongodb.service.ChatService;
 import nineto6.Talk.global.common.code.SuccessCode;
@@ -17,7 +15,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -94,6 +94,27 @@ public class ChatroomController implements ChatroomControllerDocs {
 
         ApiResponse apiResponse = ApiResponse.builder()
                 .result(nicknameList)
+                .status(SuccessCode.SELECT_SUCCESS.getStatus())
+                .message(SuccessCode.SELECT_SUCCESS.getMessage())
+                .build();
+        return new ResponseEntity<ApiResponse>(apiResponse, SuccessCode.SELECT_SUCCESS.getHttpStatus());
+    }
+
+    /**
+     * 알람 데이터 조회
+     */
+    @GetMapping("/alerts")
+    public ResponseEntity<ApiResponse> getAlertMessage(@AuthenticationPrincipal MemberDetailsDto memberDetailsDto) {
+        List<ChatroomMemberDto> chatroomMemberDtoList = chatroomService.findChatroomMemberDtoByMemberId(memberDetailsDto.getMemberDto());
+        List<AlertChat> alertChatList = chatService.findCountByChannelIdAndUnSubDate(chatroomMemberDtoList);
+
+        Map<String, Object> alertChatMap = new HashMap<>();
+
+        alertChatMap.put("alertChatList", alertChatList);
+        alertChatMap.put("alertChatListTotalCount", alertChatList.stream().mapToLong(AlertChat::getCount).sum());
+
+        ApiResponse apiResponse = ApiResponse.builder()
+                .result(alertChatMap)
                 .status(SuccessCode.SELECT_SUCCESS.getStatus())
                 .message(SuccessCode.SELECT_SUCCESS.getMessage())
                 .build();
