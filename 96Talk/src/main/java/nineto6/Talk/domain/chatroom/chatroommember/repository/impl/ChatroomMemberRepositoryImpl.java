@@ -36,6 +36,11 @@ public class ChatroomMemberRepositoryImpl implements ChatroomMemberRepository {
     }
 
     @Override
+    public Optional<ChatroomMember> findByChannelIdAndMemberId(String channelId, Long memberId) {
+        return chatroomMemberMapper.findByChannelIdAndMemberId(channelId, memberId);
+    }
+
+    @Override
     public List<ChatroomMemberAndChannelId> findByMemberId(Long memberId) {
         return chatroomMemberMapper.findByMemberId(memberId);
     }
@@ -56,7 +61,7 @@ public class ChatroomMemberRepositoryImpl implements ChatroomMemberRepository {
     }
 
     @Override
-    public List<ChatroomMemberAndNickname> findByChannelIdAndNickname(String channelId, String nickname) {
-        return chatroomMemberMapper.findByChannelIdAndNickname(channelId, nickname);
+    public List<ChatroomMemberAndNickname> findOtherUserListByChannelIdAndNickname(String channelId, String nickname) {
+        return chatroomMemberMapper.findOtherUserListByChannelIdAndNickname(channelId, nickname);
     }
 }

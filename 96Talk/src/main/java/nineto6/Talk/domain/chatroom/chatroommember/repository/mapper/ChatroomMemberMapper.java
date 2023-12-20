@@ -15,9 +15,10 @@ public interface ChatroomMemberMapper {
     void deleteByChatroomIdAndMemberId(@Param("chatroomId") Long chatroomId, @Param("memberId") Long memberId);
     Optional<ChatroomMember> findById(Long chatroomMemberId);
     Optional<ChatroomMember> findByChatroomIdAndMemberId(@Param("chatroomId") Long chatroomId, @Param("memberId") Long memberId);
+    Optional<ChatroomMember> findByChannelIdAndMemberId(@Param("channelId")String channelId, @Param("memberId") Long memberId);
     List<ChatroomMemberAndChannelId> findByMemberId(Long memberId);
     void updateSubDateByChannelIdAndMemberId(@Param("channelId") String channelId, @Param("memberId") Long memberId);
     void removeSubDateByChannelIdAndMemberId(@Param("channelId") String channelId, @Param("memberId") Long memberId);
     void updateUnSubDateByChannelIdAndMemberId(@Param("channelId") String channelId, @Param("memberId") Long memberId);
-    List<ChatroomMemberAndNickname> findByChannelIdAndNickname(@Param("channelId") String channelId, @Param("nickname") String nickname);
+    List<ChatroomMemberAndNickname> findOtherUserListByChannelIdAndNickname(@Param("channelId") String channelId, @Param("nickname") String nickname);
 }

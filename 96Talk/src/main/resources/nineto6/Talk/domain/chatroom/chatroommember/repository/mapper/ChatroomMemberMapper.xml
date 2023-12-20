@@ -40,6 +40,16 @@
             cm.CHATROOM_ID = #{chatroomId} AND cm.MEMBER_ID = #{memberId}
     </select>
 
+    <!-- 채널 아이디 값, 멤버 아이디 값으로 Chatroom 조회 -->
+    <select id="findByChannelIdAndMemberId" parameterType="Map" resultType="ChatroomMember">
+        SELECT
+            cm.CHATROOM_MEMBER_ID, cm.CHATROOM_ID, cm.MEMBER_ID, cm.CHATROOM_SUB_DATE, cm.CHATROOM_UN_SUB_DATE
+        FROM
+            CHATROOM AS c INNER JOIN CHATROOM_MEMBER AS cm ON (c.CHATROOM_ID = cm.CHATROOM_ID AND cm.MEMBER_ID = #{memberId})
+        WHERE
+            c.CHATROOM_CHANNEL_ID = #{channelId}
+    </select>
+
     <resultMap id="chatroomMemberAndChannelIdMap" type="ChatroomMemberAndChannelId">
         <id property="chatroomMemberId" column="chatroom_member_id"/>
         <result property="memberId" column="member_id"/>
@@ -99,7 +109,7 @@
     </resultMap>
 
     <!-- 채널 ID 값 과 사용자 닉네임 값을 가지고 채팅방 안에 존재하는 다른 사용자 리스트 조회 -->
-    <select id="findByChannelIdAndNickname" parameterType="Map" resultMap="chatroomMemberAndNicknameMap">
+    <select id="findOtherUserListByChannelIdAndNickname" parameterType="Map" resultMap="chatroomMemberAndNicknameMap">
         SELECT
             cm.CHATROOM_MEMBER_ID, cm.CHATROOM_ID, cm.MEMBER_ID, cm.CHATROOM_SUB_DATE, cm.CHATROOM_UN_SUB_DATE,
             m.MEMBER_NICKNAME

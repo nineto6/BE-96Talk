@@ -12,9 +12,10 @@ public interface ChatroomMemberRepository {
     void deleteByChatroomIdAndMemberId(Long chatroomId, Long memberId);
     Optional<ChatroomMember> findById(Long chatroomMemberId);
     Optional<ChatroomMember> findByChatroomIdAndMemberId(Long chatroomId, Long memberId);
+    Optional<ChatroomMember> findByChannelIdAndMemberId(String channelId, Long memberId);
     List<ChatroomMemberAndChannelId> findByMemberId(Long memberId);
     void updateSubDateByChannelIdAndMemberId(String channelId, Long memberId);
     void removeSubDateByChannelIdAndMemberId(String channelId, Long memberId);
     void updateUnSubDateByChannelIdAndMemberId(String channelId, Long memberId);
-    List<ChatroomMemberAndNickname> findByChannelIdAndNickname(String channelId, String nickname);
+    List<ChatroomMemberAndNickname> findOtherUserListByChannelIdAndNickname(String channelId, String nickname);
 }
