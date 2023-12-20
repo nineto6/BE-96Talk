@@ -100,6 +100,20 @@ public class ChatroomMemberRepositoryTest {
     }
 
     @Test
+    void findByChannelIdAndMemberId() {
+        // given
+        chatroomMemberRepository.save(chatroomMember);
+
+        // when
+        Optional<ChatroomMember> chatroomMemberOptional = chatroomMemberRepository.findByChannelIdAndMemberId(chatroom.getChatroomChannelId(), member.getMemberId());
+
+        // then
+        assertThat(chatroomMemberOptional.orElse(null)).isNotNull();
+        assertThat(chatroomMemberOptional.get().getChatroomId()).isEqualTo(chatroom.getChatroomId());
+        assertThat(chatroomMemberOptional.get().getMemberId()).isEqualTo(member.getMemberId());
+    }
+
+    @Test
     void updateSubDateByChannelIdAndMemberId() {
         // given
         chatroomMemberRepository.save(chatroomMember);
@@ -146,7 +160,7 @@ public class ChatroomMemberRepositoryTest {
     }
 
     @Test
-    void findByChannelIdAndNickname() {
+    void findOtherUserListByChannelIdAndNickname() {
         // given
         chatroomMemberRepository.save(chatroomMember);
 
@@ -165,7 +179,7 @@ public class ChatroomMemberRepositoryTest {
         chatroomMemberRepository.save(chatroomFriend);
 
         // when
-        List<ChatroomMemberAndNickname> chatroomMemberList = chatroomMemberRepository.findByChannelIdAndNickname(chatroom.getChatroomChannelId(), member.getMemberNickname());
+        List<ChatroomMemberAndNickname> chatroomMemberList = chatroomMemberRepository.findOtherUserListByChannelIdAndNickname(chatroom.getChatroomChannelId(), member.getMemberNickname());
 
         // then
         assertThat(chatroomMemberList.size()).isEqualTo(1);
