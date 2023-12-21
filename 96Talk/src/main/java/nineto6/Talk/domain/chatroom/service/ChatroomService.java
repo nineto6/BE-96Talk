@@ -163,6 +163,22 @@ public class ChatroomService {
     }
 
     /**
+     * 자신이 속한 채팅방인지 확인 후 반환
+     */
+    @Transactional(readOnly = true)
+    public ChatroomMemberDto getMyChatroomMemberDto(String channelId, MemberDto memberDto) {
+        ChatroomMember myChatroomMember = chatroomMemberRepository.findByChannelIdAndMemberId(channelId, memberDto.getMemberId())
+                .orElseThrow(() -> new BusinessExceptionHandler(ErrorCode.BAD_REQUEST_ERROR));
+
+        return ChatroomMemberDto.builder()
+                .channelId(channelId)
+                .chatroomUnSubDate(myChatroomMember.getChatroomUnSubDate())
+                .chatroomSubDate(myChatroomMember.getChatroomUnSubDate())
+                .memberNickname(memberDto.getMemberNickname())
+                .build();
+    }
+
+    /**
      * 채팅방에 소속된 인원 중에 친구가 아닌 사용자 닉네임 조회
      */
     @Transactional(readOnly = true)
@@ -198,7 +214,7 @@ public class ChatroomService {
      * 채팅방 멤버 channelId 값으로 조회
      */
     public List<ChatroomMemberDto> findChatroomMemberDtoByChannelIdAndNickname(String channelId, String nickname) {
-        return chatroomMemberRepository.findByChannelIdAndNickname(channelId, nickname).stream()
+        return chatroomMemberRepository.findOtherUserListByChannelIdAndNickname(channelId, nickname).stream()
                 .map((chatroomMember) -> ChatroomMemberDto.builder()
                         .memberNickname(chatroomMember.getMemberNickname())
                         .channelId(channelId)

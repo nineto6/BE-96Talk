@@ -21,10 +21,14 @@ public interface ChatroomControllerDocs {
     ResponseEntity<ApiResponse> deleteChatroom(ChatroomDeleteRequest chatroomDeleteRequest,
                                                @Schema(hidden = true) MemberDetailsDto memberDetailsDto);
     @Operation(summary = "채팅방 채팅 기록 조회", description = "토큰이 필요합니다.")
-    ResponseEntity<ApiResponse> getChatLog(String channelId);
+    ResponseEntity<ApiResponse> getChatLog(String channelId,
+                                           @Schema(hidden = true) MemberDetailsDto memberDetailsDto);
     @Operation(summary = "채팅방에 소속된 인원 중에 친구가 아닌 사용자 닉네임 조회", description = "토큰이 필요합니다.")
     ResponseEntity<ApiResponse> getNotFriendNicknameListInChatroom(String channelId,
                                                                    @Schema(hidden = true) MemberDetailsDto memberDetailsDto);
-    @Operation(summary = "채팅 알람 조회", description = "토큰이 필요합니다.")
-    ResponseEntity<ApiResponse> getAlertMessage(@Schema(hidden = true) MemberDetailsDto memberDetailsDto);
+    @Operation(summary = "알람 전체 개수 조회", description = "토큰이 필요합니다.")
+    ResponseEntity<ApiResponse> getAllAlertMessage(@Schema(hidden = true) MemberDetailsDto memberDetailsDto);
+    @Operation(summary = "채팅방 알람 개수 조회", description = "토큰이 필요합니다.")
+    ResponseEntity<ApiResponse> getChatroomAlertMessage(String channelId,
+                                                        @Schema(hidden = true) MemberDetailsDto memberDetailsDto);
 }

@@ -2,21 +2,17 @@ package nineto6.Talk.global.chat.mongodb.service;
 
 import lombok.RequiredArgsConstructor;
 import nineto6.Talk.domain.chatroom.dto.ChatroomMemberDto;
-import nineto6.Talk.global.chat.mongodb.dto.AlertChat;
 import nineto6.Talk.global.chat.mongodb.dto.RecentChat;
 import nineto6.Talk.global.chat.mongodb.domain.Chat;
 import nineto6.Talk.global.chat.mongodb.dto.ChatRequest;
 import nineto6.Talk.global.chat.mongodb.dto.ChatResponse;
 import nineto6.Talk.global.chat.mongodb.repository.ChatRepository;
-import nineto6.Talk.global.error.exception.BusinessExceptionHandler;
-import nineto6.Talk.global.error.exception.code.ErrorCode;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.ObjectUtils;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -91,20 +87,34 @@ public class ChatService {
                 .build();
     }
 
+
     /**
-     * 채널 아이디 값과 구독 취소 시간으로 알림 메세지 반환
+     * 채널 아이디 값이 일치해야 하며, 작성자가 아니어야 하며, 구독 취소일 이후 데이터의 개수를 더해서 전체 알람 개수로 반환
      */
-    public List<AlertChat> findCountByChannelIdAndUnSubDate(List<ChatroomMemberDto> chatroomMemberDtoList) {
+    @Transactional(readOnly = true)
+    public Long findAlertTotalCountByChatroomMemberDtoList(List<ChatroomMemberDto> chatroomMemberDtoList) {
         return chatroomMemberDtoList.stream().map((chatroomMemberDto -> {
             Query query = Query.query(Criteria
-                    .where("channel_id").is(chatroomMemberDto.getChannelId())
-                    .and("writer_nick_name").ne(chatroomMemberDto.getMemberNickname())
-                    .and("regdate").gt(chatroomMemberDto.getChatroomUnSubDate()));
+                    .where("channel_id").is(chatroomMemberDto.getChannelId()) // 채널 아이디 값이 일치해야 하며
+                    .and("writer_nick_name").ne(chatroomMemberDto.getMemberNickname()) // 작성자가 아니어야 하며
+                    .and("regdate").gt(chatroomMemberDto.getChatroomUnSubDate())); // 구독 취소일 이후 데이터를 조회
 
-            return AlertChat.builder()
-                    .channelId(chatroomMemberDto.getChannelId())
-                    .count(mongoTemplate.count(query, Chat.class))
-                    .build();
-        })).collect(Collectors.toList());
+            return mongoTemplate.count(query, Chat.class);
+        })).collect(Collectors.toList())
+                .stream()
+                .mapToLong(value -> value).sum();
+    }
+
+    /**
+     * 채널 아이디 값이 일치해야 하며, 작성자가 아니어야 하며, 구독 취소일 이후 데이터를 AlertChat 반환
+     */
+    @Transactional(readOnly = true)
+    public Long findAlertCountByChatroomMemberDto(ChatroomMemberDto chatroomMemberDto) {
+        Query query = Query.query(Criteria
+                .where("channel_id").is(chatroomMemberDto.getChannelId()) // 채널 아이디 값이 일치해야 하며
+                .and("writer_nick_name").ne(chatroomMemberDto.getMemberNickname()) // 작성자가 아니어야 하며
+                .and("regdate").gt(chatroomMemberDto.getChatroomUnSubDate())); // 구독 취소일 이후 데이터를 조회
+
+        return mongoTemplate.count(query, Chat.class);
     }
 }
