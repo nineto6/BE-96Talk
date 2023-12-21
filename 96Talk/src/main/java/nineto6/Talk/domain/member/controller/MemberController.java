@@ -13,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -23,7 +25,7 @@ public class MemberController implements MemberControllerDocs {
      * 회원가입
      */
     @PostMapping()
-    public ResponseEntity<ApiResponse> signUp(@RequestBody MemberSaveRequest memberSaveRequest) {
+    public ResponseEntity<ApiResponse> signUp(@Valid @RequestBody MemberSaveRequest memberSaveRequest) {
         memberService.signUp(memberSaveRequest);
 
         ApiResponse success = ApiResponse.builder()
