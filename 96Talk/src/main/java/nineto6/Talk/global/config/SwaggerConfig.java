@@ -4,10 +4,12 @@ import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.media.Content;
+import io.swagger.v3.oas.models.media.Schema;
 import io.swagger.v3.oas.models.responses.ApiResponse;
 import io.swagger.v3.oas.models.responses.ApiResponses;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
+import nineto6.Talk.global.common.code.SuccessCode;
 import nineto6.Talk.global.error.exception.code.ErrorCode;
 import org.springdoc.core.customizers.GlobalOpenApiCustomizer;
 import org.springframework.context.annotation.Bean;
@@ -49,14 +51,23 @@ public class SwaggerConfig {
         return openApi -> {
             // 공통으로 사용되는 response 설정
             openApi.getPaths().values().forEach(pathItem -> pathItem.readOperations().forEach(operation -> {;
+                ApiResponses apiResponses = operation.getResponses();
                 if(!ObjectUtils.isEmpty(operation.getDescription())) {
-                    ApiResponses apiResponses = operation.getResponses();
-                    apiResponses.addApiResponse("200", createApiResponse(apiResponses.get("200").getDescription(), apiResponses.get("200").getContent()));
-                    apiResponses.addApiResponse("400", createApiResponse(ErrorCode.BAD_REQUEST_ERROR.getMessage().concat(" (잘못된 요청)"), null));
+                    if(operation.getDescription().contains("생성")) {
+                        apiResponses.addApiResponse("201", createApiResponse(SuccessCode.INSERT_SUCCESS.getHttpStatus().getReasonPhrase().concat(" (생성)"), apiResponses.get("200").getContent()));
+                        apiResponses.remove("200");
+                    } else if(operation.getDescription().contains("수정")) {
+                        apiResponses.addApiResponse("204", createApiResponse(SuccessCode.UPDATE_SUCCESS.getHttpStatus().getReasonPhrase().concat(" (수정)"), null));
+                        apiResponses.remove("200");
+                    } else {
+                        apiResponses.addApiResponse("200", createApiResponse(apiResponses.get("200").getDescription().concat(" (성공)"), apiResponses.get("200").getContent()));
+                    }
+                    apiResponses.addApiResponse("400", createApiResponse(ErrorCode.BAD_REQUEST_ERROR.getHttpStatus().getReasonPhrase().concat(" (잘못된 요청)"), null));
+
                     if(operation.getDescription().contains("토큰")) {
                         // operation 설명에 '토큰'이 들어가있으면 ApiResponse 생성
-                        apiResponses.addApiResponse("401", createApiResponse(ErrorCode.UNAUTHORIZED_ERROR.getMessage().concat(" (승인되지 않은 사용자)"), null));
-                        apiResponses.addApiResponse("403", createApiResponse(ErrorCode.FORBIDDEN_ERROR.getMessage().concat(" (승인은 되었지만, 접근할 수 없는 권한)"), null));
+                        apiResponses.addApiResponse("401", createApiResponse(ErrorCode.UNAUTHORIZED_ERROR.getHttpStatus().getReasonPhrase().concat(" (승인되지 않은 사용자)"), null));
+                        apiResponses.addApiResponse("403", createApiResponse(ErrorCode.FORBIDDEN_ERROR.getHttpStatus().getReasonPhrase().concat(" (승인은 되었지만, 접근할 수 없는 권한)"), null));
                     }
                 }
             }));

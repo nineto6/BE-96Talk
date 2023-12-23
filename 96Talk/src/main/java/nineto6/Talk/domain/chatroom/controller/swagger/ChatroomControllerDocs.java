@@ -14,7 +14,7 @@ import org.springframework.http.ResponseEntity;
 public interface ChatroomControllerDocs {
     @Operation(summary = "채팅방 리스트 조회", description = "토큰이 필요합니다.")
     ResponseEntity<ApiResponse> getChatroomList(@Schema(hidden = true) MemberDetailsDto memberDetailsDto);
-    @Operation(summary = "채팅방 생성", description = "토큰이 필요합니다.")
+    @Operation(summary = "채팅방 생성", description = "생성 메서드, 토큰이 필요합니다.")
     ResponseEntity<ApiResponse> createChatroom(ChatroomSaveRequest chatroomSaveRequest,
                                                @Schema(hidden = true) MemberDetailsDto memberDetailsDto);
     @Operation(summary = "채팅방 삭제", description = "토큰이 필요합니다.")

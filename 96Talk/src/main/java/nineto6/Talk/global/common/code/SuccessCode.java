@@ -21,7 +21,7 @@ public enum SuccessCode {
     DELETE_SUCCESS(200, HttpStatus.OK,"DELETE SUCCESS"),
     // 삽입 성공 코드 (HTTP Response: 201 Created)
     INSERT_SUCCESS(201, HttpStatus.CREATED, "INSERT SUCCESS"),
-    // 수정 성공 코드 (HTTP Response: 201 Created)
+    // 수정 성공 코드 (HTTP Response: 204 NO CONTENT)
     UPDATE_SUCCESS(204, HttpStatus.NO_CONTENT, "UPDATE SUCCESS"),
 
     REISSUE_SUCCESS(200, HttpStatus.OK,"REISSUE SUCCESS"),

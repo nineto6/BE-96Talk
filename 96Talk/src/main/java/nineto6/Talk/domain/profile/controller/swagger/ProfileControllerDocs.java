@@ -24,9 +24,9 @@ public interface ProfileControllerDocs {
                                                  Integer page,
                                                  Integer recordSize,
                                                  Integer pageSize);
-    @Operation(summary = "프로필 상태 메세지 삭제", description = "토큰이 필요합니다.")
+    @Operation(summary = "프로필 상태 메세지 삭제", description = "수정 메서드, 토큰이 필요합니다.")
     ResponseEntity<ApiResponse> deleteProfileStateMessage(@Schema(hidden = true) MemberDetailsDto memberDetailsDto);
-    @Operation(summary = "프로필 이미지 및 상태메세지 수정", description = "토큰이 필요합니다.")
+    @Operation(summary = "프로필 이미지 및 상태메세지 수정", description = "수정 메서드, 토큰이 필요합니다.")
     ResponseEntity<ApiResponse> updateProfileImageFileAndStateMessage(MultipartFile imageFile,
                                                                       String profileStateMessage,
                                                        @Schema(hidden = true) MemberDetailsDto memberDetailsDto);
