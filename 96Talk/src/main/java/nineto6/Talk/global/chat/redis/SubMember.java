@@ -15,7 +15,7 @@ import org.springframework.data.redis.core.index.Indexed;
 @RedisHash(value = "subMember")
 public class SubMember {
     @Id
-    private Long id;
+    private String id;
     private String channelId;
     @Indexed
     private String sessionId;
