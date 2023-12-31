@@ -1,4 +1,4 @@
-package nineto6.Talk.global.chat.redis;
+package nineto6.Talk.global.websocket.redis;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

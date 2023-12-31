@@ -1,8 +1,8 @@
-package nineto6.Talk.global.chat.websocket.config;
+package nineto6.Talk.global.websocket.config;
 
 import lombok.RequiredArgsConstructor;
-import nineto6.Talk.global.chat.websocket.ChatErrorHandler;
-import nineto6.Talk.global.chat.websocket.ChatPreHandler;
+import nineto6.Talk.global.websocket.ChatErrorHandler;
+import nineto6.Talk.global.websocket.ChatPreHandler;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;

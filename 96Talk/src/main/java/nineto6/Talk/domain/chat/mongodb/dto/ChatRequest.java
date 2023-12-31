@@ -1,25 +1,22 @@
-package nineto6.Talk.global.chat.mongodb.dto;
+package nineto6.Talk.domain.chat.mongodb.dto;
 
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
-
-@Getter @Setter
+@Getter
+@Setter
 @NoArgsConstructor
-public class ChatResponse {
+public class ChatRequest {
     private String channelId;
     private String message;
     private String writerNickname;
-    private LocalDateTime regdate;
 
     @Builder
-    public ChatResponse(String channelId, String message, String writerNickname, LocalDateTime regdate) {
+    public ChatRequest(String channelId, String message, String writerNickname) {
         this.channelId = channelId;
         this.message = message;
         this.writerNickname = writerNickname;
-        this.regdate = regdate;
     }
 }

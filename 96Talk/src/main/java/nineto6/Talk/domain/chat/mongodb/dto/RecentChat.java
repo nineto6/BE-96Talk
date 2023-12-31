@@ -1,4 +1,4 @@
-package nineto6.Talk.global.chat.mongodb.dto;
+package nineto6.Talk.domain.chat.mongodb.dto;
 
 import lombok.Builder;
 import lombok.Getter;

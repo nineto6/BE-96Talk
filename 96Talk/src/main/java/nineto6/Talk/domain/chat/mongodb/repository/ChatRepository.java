@@ -1,6 +1,6 @@
-package nineto6.Talk.global.chat.mongodb.repository;
+package nineto6.Talk.domain.chat.mongodb.repository;
 
-import nineto6.Talk.global.chat.mongodb.domain.Chat;
+import nineto6.Talk.domain.chat.mongodb.domain.Chat;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 

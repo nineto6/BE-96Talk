@@ -1,12 +1,12 @@
-package nineto6.Talk.global.chat.mongodb.service;
+package nineto6.Talk.domain.chat.mongodb.service;
 
 import lombok.RequiredArgsConstructor;
+import nineto6.Talk.domain.chat.mongodb.domain.Chat;
+import nineto6.Talk.domain.chat.mongodb.dto.ChatRequest;
+import nineto6.Talk.domain.chat.mongodb.dto.RecentChat;
+import nineto6.Talk.domain.chat.mongodb.repository.ChatRepository;
 import nineto6.Talk.domain.chatroom.dto.ChatroomMemberDto;
-import nineto6.Talk.global.chat.mongodb.dto.RecentChat;
-import nineto6.Talk.global.chat.mongodb.domain.Chat;
-import nineto6.Talk.global.chat.mongodb.dto.ChatRequest;
-import nineto6.Talk.global.chat.mongodb.dto.ChatResponse;
-import nineto6.Talk.global.chat.mongodb.repository.ChatRepository;
+import nineto6.Talk.domain.chat.mongodb.dto.ChatResponse;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;

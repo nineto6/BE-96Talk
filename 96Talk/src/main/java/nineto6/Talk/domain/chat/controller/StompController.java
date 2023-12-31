@@ -1,11 +1,11 @@
-package nineto6.Talk.global.chat.controller;
+package nineto6.Talk.domain.chat.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import nineto6.Talk.domain.chatroom.service.ChatroomService;
-import nineto6.Talk.global.chat.mongodb.dto.ChatRequest;
-import nineto6.Talk.global.chat.mongodb.dto.ChatResponse;
-import nineto6.Talk.global.chat.mongodb.service.ChatService;
+import nineto6.Talk.domain.chat.mongodb.dto.ChatRequest;
+import nineto6.Talk.domain.chat.mongodb.dto.ChatResponse;
+import nineto6.Talk.domain.chat.mongodb.service.ChatService;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;

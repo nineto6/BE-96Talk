@@ -1,4 +1,4 @@
-package nineto6.Talk.global.chat.websocket;
+package nineto6.Talk.global.websocket;
 
 import io.jsonwebtoken.MalformedJwtException;
 import lombok.extern.slf4j.Slf4j;

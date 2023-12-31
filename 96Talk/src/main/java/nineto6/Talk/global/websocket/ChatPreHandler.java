@@ -1,4 +1,4 @@
-package nineto6.Talk.global.chat.websocket;
+package nineto6.Talk.global.websocket;
 
 import io.jsonwebtoken.MalformedJwtException;
 import lombok.RequiredArgsConstructor;
@@ -6,8 +6,8 @@ import lombok.extern.slf4j.Slf4j;
 import nineto6.Talk.domain.chatroom.service.ChatroomService;
 import nineto6.Talk.global.auth.code.AuthConstants;
 import nineto6.Talk.global.auth.utils.TokenUtils;
-import nineto6.Talk.global.chat.redis.SubMember;
-import nineto6.Talk.global.chat.redis.SubMemberRedisRepository;
+import nineto6.Talk.global.websocket.redis.SubMember;
+import nineto6.Talk.global.websocket.redis.SubMemberRedisRepository;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.MessageDeliveryException;

@@ -6,8 +6,8 @@ import nineto6.Talk.domain.chatroom.controller.swagger.ChatroomControllerDocs;
 import nineto6.Talk.domain.chatroom.dto.*;
 import nineto6.Talk.domain.chatroom.service.ChatroomService;
 import nineto6.Talk.domain.member.dto.MemberDetailsDto;
-import nineto6.Talk.global.chat.mongodb.dto.ChatResponse;
-import nineto6.Talk.global.chat.mongodb.service.ChatService;
+import nineto6.Talk.domain.chat.mongodb.dto.ChatResponse;
+import nineto6.Talk.domain.chat.mongodb.service.ChatService;
 import nineto6.Talk.global.common.code.SuccessCode;
 import nineto6.Talk.global.common.response.ApiResponse;
 import nineto6.Talk.global.error.exception.BusinessExceptionHandler;
@@ -73,6 +73,7 @@ public class ChatroomController implements ChatroomControllerDocs {
     @GetMapping("/{channelId}/messages")
     public ResponseEntity<ApiResponse> getChatLog(@PathVariable("channelId") String channelId,
                                                   @AuthenticationPrincipal MemberDetailsDto memberDetailsDto) {
+        // 자신이 소속된 채팅방인지 확인
         if(!chatroomService.isMyChatroom(channelId, memberDetailsDto.getMemberDto().getMemberId())) {
             throw new BusinessExceptionHandler(ErrorCode.BAD_REQUEST_ERROR);
         }
@@ -93,6 +94,7 @@ public class ChatroomController implements ChatroomControllerDocs {
     @GetMapping("/{channelId}")
     public ResponseEntity<ApiResponse> getNotFriendNicknameListInChatroom(@PathVariable("channelId") String channelId,
                                                                           @AuthenticationPrincipal MemberDetailsDto memberDetailsDto) {
+        // 자신이 소속된 채팅방인지 확인
         if(!chatroomService.isMyChatroom(channelId, memberDetailsDto.getMemberDto().getMemberId())) {
             throw new BusinessExceptionHandler(ErrorCode.BAD_REQUEST_ERROR);
         }

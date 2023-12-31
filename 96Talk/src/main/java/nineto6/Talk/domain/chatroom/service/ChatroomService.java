@@ -13,7 +13,7 @@ import nineto6.Talk.domain.member.domain.Member;
 import nineto6.Talk.domain.member.dto.MemberDto;
 import nineto6.Talk.domain.member.repository.MemberRepository;
 import nineto6.Talk.domain.profile.service.ProfileService;
-import nineto6.Talk.global.chat.mongodb.service.ChatService;
+import nineto6.Talk.domain.chat.mongodb.service.ChatService;
 import nineto6.Talk.global.common.code.SuccessCode;
 import nineto6.Talk.global.error.exception.BusinessExceptionHandler;
 import nineto6.Talk.global.error.exception.code.ErrorCode;
