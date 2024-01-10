@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 
 
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class ChatService {
     private final ChatRepository chatRepository;
@@ -51,7 +52,6 @@ public class ChatService {
     /**
      * 채널 아이디 값으로 채팅 메세지 전체 조회
      */
-    @Transactional(readOnly = true)
     public List<ChatResponse> findChatByChannelId(String channelId) {
         List<Chat> chatList = chatRepository.findByChannelId(channelId);
 
@@ -68,7 +68,6 @@ public class ChatService {
     /**
      * 채널 아이디 값으로 가장 최근 메세지 1개만 조회
      */
-    @Transactional(readOnly = true)
     public RecentChat findOneByChannelId(String channelId) {
         Query query = Query.query(Criteria
                         .where("channel_id").is(channelId))
@@ -91,7 +90,6 @@ public class ChatService {
     /**
      * 채널 아이디 값이 일치해야 하며, 작성자가 아니어야 하며, 구독 취소일 이후 데이터의 개수를 더해서 전체 알람 개수로 반환
      */
-    @Transactional(readOnly = true)
     public Long findAlertTotalCountByChatroomMemberDtoList(List<ChatroomMemberDto> chatroomMemberDtoList) {
         return chatroomMemberDtoList.stream().map((chatroomMemberDto -> {
             Query query = Query.query(Criteria
@@ -108,7 +106,6 @@ public class ChatService {
     /**
      * 채널 아이디 값이 일치해야 하며, 작성자가 아니어야 하며, 구독 취소일 이후 데이터를 AlertChat 반환
      */
-    @Transactional(readOnly = true)
     public Long findAlertCountByChatroomMemberDto(ChatroomMemberDto chatroomMemberDto) {
         Query query = Query.query(Criteria
                 .where("channel_id").is(chatroomMemberDto.getChannelId()) // 채널 아이디 값이 일치해야 하며

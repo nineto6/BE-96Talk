@@ -28,91 +28,11 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class ProfileService {
     private final ProfileRepository profileRepository;
     private final FileService fileService;
-
-
-    /**
-     * 프로필 검색 조회
-     */
-    @Transactional(readOnly = true)
-    public PagingResponseDto<ProfileResponse> getSearchProfile(ProfileSearchDto params) {
-        Integer count = profileRepository.getMaxCount(params);
-
-        if (count < 1) {
-            // 조건에 해달하는 데이터가 없는 경우, 응답 데이터에 비어있는 리스트와 null 을 담아 반호나
-            return new PagingResponseDto<>(Collections.emptyList(), null);
-        }
-
-        // Pagination 객체를 생성해서 페이지 정보 계산 후 SearchDto 타입의 객체인 params 에 계산된 페이지 정보 저장
-        Pagination pagination = new Pagination(count, params);
-        params.setPagination(pagination);
-
-        // 계산된 페이지 정보의 일부(limitStart, recordSize)를 기준으로 리스트 데이터 조회 후 응답 데이터 반환
-        List<ProfileMember> findProfileMember = profileRepository.findSearchProfileByKeyword(params);
-
-        List<ProfileResponse> profileResponseList = findProfileMember.stream()
-                .map((memberProfile) -> getProfileResponse(memberProfile))
-                .collect(Collectors.toList());
-
-        return new PagingResponseDto<>(profileResponseList, pagination);
-    }
-
-    /**
-     * 친구 프로필 전체 조회
-     */
-    @Transactional(readOnly = true)
-    public List<ProfileResponse> findFriendProfiles(MemberDto memberDto) {
-        List<ProfileMember> friendProfileList = profileRepository.findFriendProfileListByMemberId(memberDto.getMemberId());
-
-        // 친구 프로필 조회
-        return friendProfileList.stream()
-                .map((memberProfile) -> getProfileResponse(memberProfile))
-                .collect(Collectors.toList());
-    }
-
-    /**
-     * MemberProfile -> ProfileResponse 변환 메서드
-     */
-    public ProfileResponse getProfileResponse(ProfileMember profileMember) {
-        Profile profile = profileMember.getProfile();
-        if (ObjectUtils.isEmpty(profile.getProfileStoreFileName()) || ObjectUtils.isEmpty(profile.getProfileUploadFileName())) {
-            return ProfileResponse.builder()
-                    .memberNickname(profileMember.getMemberNickname())
-                    .profileStateMessage(profile.getProfileStateMessage())
-                    .build();
-        }
-
-        String storeName = profile.getProfileStoreFileName();
-        String[] split = storeName.split("\\.");
-        String uuid = split[0];
-        String ext = split[1];
-
-        return ProfileResponse.builder()
-                .memberNickname(profileMember.getMemberNickname())
-                .profileStateMessage(profile.getProfileStateMessage())
-                .imageName(uuid)
-                .type(fileService.getTypeByExt(ext))
-                .build();
-    }
-
-    /**
-     * 프로필 조회
-     */
-    @Transactional(readOnly = true)
-    public ProfileResponse findByNickname(String memberNm) {
-        ProfileMember profileMember = profileRepository.findByMemberNickname(memberNm)
-                .orElseThrow(() -> new BusinessExceptionHandler(ErrorCode.BUSINESS_EXCEPTION_ERROR));
-
-        // 프로필이 존재하지 않을 경우 Exception
-        if(ObjectUtils.isEmpty(profileMember.getProfile())) {
-            throw new BusinessExceptionHandler(ErrorCode.BUSINESS_EXCEPTION_ERROR);
-        }
-
-        return getProfileResponse(profileMember);
-    }
 
     /**
      * 프로필 이미지 수정
@@ -165,22 +85,9 @@ public class ProfileService {
     }
 
     /**
-     * 저장소에 저장된 이미지 파일이 프로필에 존재하는지 확인
-     */
-    @Transactional(readOnly = true)
-    public void checkByStoreFileName(String profileStoreFileName) {
-        Profile profile = profileRepository.findByStoreFileName(profileStoreFileName)
-                .orElseThrow(() -> new ResourceExceptionHandler(ErrorCode.BUSINESS_EXCEPTION_ERROR));
-
-        if(ObjectUtils.isEmpty(profile.getProfileStoreFileName()) || ObjectUtils.isEmpty(profile.getProfileUploadFileName())) {
-            throw new ResourceExceptionHandler(ErrorCode.BUSINESS_EXCEPTION_ERROR);
-        }
-    }
-
-    /**
      * 프로필 이미지의 값을 제거
      */
-
+    @Transactional
     public void updateImageToNull(MemberDto memberDto) {
         // 조회된 값이 없으면 Exception
         Profile profile = profileRepository.findByMemberId(memberDto.getMemberId())
@@ -204,6 +111,7 @@ public class ProfileService {
     /**
      * 프로필 상태 메세지 제거
      */
+    @Transactional
     public void updateStateMessageToNull(MemberDto memberDto) {
         // 조회된 값이 없으면 Exception
         Profile profile = profileRepository.findByMemberId(memberDto.getMemberId())
@@ -216,5 +124,94 @@ public class ProfileService {
 
         // 상태메세지 NULL 로 업데이트
         profileRepository.updateStateMessageToNull(memberDto.getMemberId());
+    }
+
+    /**
+     * 프로필 검색 조회
+     */
+    public PagingResponseDto<ProfileResponse> getSearchProfile(ProfileSearchDto params) {
+        Integer count = profileRepository.getMaxCount(params);
+
+        if (count < 1) {
+            // 조건에 해달하는 데이터가 없는 경우, 응답 데이터에 비어있는 리스트와 null 을 담아 반호나
+            return new PagingResponseDto<>(Collections.emptyList(), null);
+        }
+
+        // Pagination 객체를 생성해서 페이지 정보 계산 후 SearchDto 타입의 객체인 params 에 계산된 페이지 정보 저장
+        Pagination pagination = new Pagination(count, params);
+        params.setPagination(pagination);
+
+        // 계산된 페이지 정보의 일부(limitStart, recordSize)를 기준으로 리스트 데이터 조회 후 응답 데이터 반환
+        List<ProfileMember> findProfileMember = profileRepository.findSearchProfileByKeyword(params);
+
+        List<ProfileResponse> profileResponseList = findProfileMember.stream()
+                .map(this::getProfileResponse)
+                .collect(Collectors.toList());
+
+        return new PagingResponseDto<>(profileResponseList, pagination);
+    }
+
+    /**
+     * 친구 프로필 전체 조회
+     */
+    public List<ProfileResponse> findFriendProfiles(MemberDto memberDto) {
+        List<ProfileMember> friendProfileList = profileRepository.findFriendProfileListByMemberId(memberDto.getMemberId());
+
+        // 친구 프로필 조회
+        return friendProfileList.stream()
+                .map(this::getProfileResponse)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * MemberProfile -> ProfileResponse 변환 메서드
+     */
+    public ProfileResponse getProfileResponse(ProfileMember profileMember) {
+        Profile profile = profileMember.getProfile();
+        if (ObjectUtils.isEmpty(profile.getProfileStoreFileName()) || ObjectUtils.isEmpty(profile.getProfileUploadFileName())) {
+            return ProfileResponse.builder()
+                    .memberNickname(profileMember.getMemberNickname())
+                    .profileStateMessage(profile.getProfileStateMessage())
+                    .build();
+        }
+
+        String storeName = profile.getProfileStoreFileName();
+        String[] split = storeName.split("\\.");
+        String uuid = split[0];
+        String ext = split[1];
+
+        return ProfileResponse.builder()
+                .memberNickname(profileMember.getMemberNickname())
+                .profileStateMessage(profile.getProfileStateMessage())
+                .imageName(uuid)
+                .type(fileService.getTypeByExt(ext))
+                .build();
+    }
+
+    /**
+     * 프로필 조회
+     */
+    public ProfileResponse findByNickname(String memberNm) {
+        ProfileMember profileMember = profileRepository.findByMemberNickname(memberNm)
+                .orElseThrow(() -> new BusinessExceptionHandler(ErrorCode.BUSINESS_EXCEPTION_ERROR));
+
+        // 프로필이 존재하지 않을 경우 Exception
+        if(ObjectUtils.isEmpty(profileMember.getProfile())) {
+            throw new BusinessExceptionHandler(ErrorCode.BUSINESS_EXCEPTION_ERROR);
+        }
+
+        return getProfileResponse(profileMember);
+    }
+
+    /**
+     * 저장소에 저장된 이미지 파일이 프로필에 존재하는지 확인
+     */
+    public void checkByStoreFileName(String profileStoreFileName) {
+        Profile profile = profileRepository.findByStoreFileName(profileStoreFileName)
+                .orElseThrow(() -> new ResourceExceptionHandler(ErrorCode.BUSINESS_EXCEPTION_ERROR));
+
+        if(ObjectUtils.isEmpty(profile.getProfileStoreFileName()) || ObjectUtils.isEmpty(profile.getProfileUploadFileName())) {
+            throw new ResourceExceptionHandler(ErrorCode.BUSINESS_EXCEPTION_ERROR);
+        }
     }
 }

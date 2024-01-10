@@ -57,7 +57,7 @@ public class ChatroomController implements ChatroomControllerDocs {
     // 채팅방 목록 가져오기
     @GetMapping
     public ResponseEntity<ApiResponse> getChatroomList(@AuthenticationPrincipal MemberDetailsDto memberDetailsDto) {
-        List<ChatroomDto> chatroomList = chatroomService.getChatroomListByMemberDto(memberDetailsDto.getMemberDto());
+        List<ChatroomDto> chatroomList = chatroomService.findChatroomListByMemberDto(memberDetailsDto.getMemberDto());
 
         ApiResponse apiResponse = ApiResponse.builder()
                 .result(chatroomList)
@@ -131,7 +131,7 @@ public class ChatroomController implements ChatroomControllerDocs {
     @GetMapping("/{channelId}/alerts")
     public ResponseEntity<ApiResponse> getChatroomAlertMessage(@PathVariable("channelId") String channelId,
                                                                @AuthenticationPrincipal MemberDetailsDto memberDetailsDto) {
-        ChatroomMemberDto chatroomMemberDto = chatroomService.getMyChatroomMemberDto(channelId, memberDetailsDto.getMemberDto());
+        ChatroomMemberDto chatroomMemberDto = chatroomService.findMyChatroomMemberDto(channelId, memberDetailsDto.getMemberDto());
         Long alertCount = chatService.findAlertCountByChatroomMemberDto(chatroomMemberDto);
 
         ApiResponse apiResponse = ApiResponse.builder()

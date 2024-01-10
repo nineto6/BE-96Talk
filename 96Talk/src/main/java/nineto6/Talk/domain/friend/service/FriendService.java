@@ -17,11 +17,11 @@ import java.util.Optional;
 
 @Slf4j
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class FriendService {
     private final FriendRepository friendRepository;
     private final MemberRepository memberRepository;
-    @Transactional
     public void createFriend(MemberDto memberDto, FriendRequest friendRequest) {
         // 자기 자신을 친구 추가 할 경우 Exception
         if(memberDto.getMemberNickname().equals(friendRequest.getFriendNickname())) {
@@ -48,7 +48,6 @@ public class FriendService {
         friendRepository.save(friend);
     }
 
-    @Transactional
     public void removeFriend(MemberDto memberDto, FriendRequest friendRequest) {
         // 이름으로 된 친구가 등록되어 있는지 확인
         Member friendMember = memberRepository.findByMemberNickname(friendRequest.getFriendNickname())

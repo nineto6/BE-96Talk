@@ -22,6 +22,7 @@ import java.util.Optional;
 
 
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class MemberService {
     private final MemberRepository memberRepository;
@@ -29,7 +30,6 @@ public class MemberService {
     private final ProfileRepository profileRepository;
     private final PasswordEncoder passwordEncoder;
 
-    @Transactional(readOnly = true)
     public Optional<MemberDto> login(String memberEmail) {
         MemberAuthority memberAuthority = memberRepository
                 .findMemberAndAuthByEmail(memberEmail).orElse(null);

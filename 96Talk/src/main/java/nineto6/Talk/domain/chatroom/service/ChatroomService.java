@@ -29,6 +29,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class ChatroomService {
     private final ChatroomRepository chatroomRepository;
@@ -113,10 +114,33 @@ public class ChatroomService {
     }
 
     /**
+     * 채팅방 멤버 채팅 구독일에 최근일 등록
+     */
+    @Transactional
+    public void updateChatroomSubDate(String channelId, Long memberId) {
+        chatroomMemberRepository.updateSubDateByChannelIdAndMemberId(channelId, memberId);
+    }
+
+    /**
+     * 채팅방 멤버 채팅 구독일 삭제
+     */
+    @Transactional
+    public void deleteChatroomSubDate(String channelId, Long memberId) {
+        chatroomMemberRepository.removeSubDateByChannelIdAndMemberId(channelId, memberId);
+    }
+
+    /**
+     * 채팅방 멤버 채팅 구독 취소일 등록
+     */
+    @Transactional
+    public void updateChatroomUnSubDate(String channelId, Long memberId) {
+        chatroomMemberRepository.updateUnSubDateByChannelIdAndMemberId(channelId, memberId);
+    }
+
+    /**
      * 채팅방 목록 가져오기
      */
-    @Transactional(readOnly = true)
-    public List<ChatroomDto> getChatroomListByMemberDto(MemberDto memberDto) {
+    public List<ChatroomDto> findChatroomListByMemberDto(MemberDto memberDto) {
         return chatroomRepository.findChannelIdAndMemberProfileListByMemberId(memberDto.getMemberId()).stream()
                 .map((chatroomProfile) ->
                         ChatroomDto.builder()
@@ -156,7 +180,6 @@ public class ChatroomService {
     /**
      * 자신이 속한 채팅방인지 확인
      */
-    @Transactional(readOnly = true)
     public boolean isMyChatroom(String channelId, Long memberId) {
         Optional<Chatroom> chatroom = chatroomRepository.findChatroomByChannelIdAndMemberId(channelId, memberId);
         return chatroom.isPresent();
@@ -165,8 +188,7 @@ public class ChatroomService {
     /**
      * 자신이 속한 채팅방인지 확인 후 반환
      */
-    @Transactional(readOnly = true)
-    public ChatroomMemberDto getMyChatroomMemberDto(String channelId, MemberDto memberDto) {
+    public ChatroomMemberDto findMyChatroomMemberDto(String channelId, MemberDto memberDto) {
         ChatroomMember myChatroomMember = chatroomMemberRepository.findByChannelIdAndMemberId(channelId, memberDto.getMemberId())
                 .orElseThrow(() -> new BusinessExceptionHandler(ErrorCode.BAD_REQUEST_ERROR));
 
@@ -181,33 +203,8 @@ public class ChatroomService {
     /**
      * 채팅방에 소속된 인원 중에 친구가 아닌 사용자 닉네임 조회
      */
-    @Transactional(readOnly = true)
     public List<String> findNotFriendInChatroom(String channelId, MemberDto memberDto) {
         return chatroomRepository.findNotFriendInChatroomByChannelIdAndMemberId(channelId, memberDto.getMemberId());
-    }
-
-    /**
-     * 채팅방 멤버 채팅 구독일에 최근일 등록
-     */
-    @Transactional
-    public void updateChatroomSubDate(String channelId, Long memberId) {
-        chatroomMemberRepository.updateSubDateByChannelIdAndMemberId(channelId, memberId);
-    }
-
-    /**
-     * 채팅방 멤버 채팅 구독일 삭제
-     */
-    @Transactional
-    public void deleteChatroomSubDate(String channelId, Long memberId) {
-        chatroomMemberRepository.removeSubDateByChannelIdAndMemberId(channelId, memberId);
-    }
-
-    /**
-     * 채팅방 멤버 채팅 구독 취소일 등록
-     */
-    @Transactional
-    public void updateChatroomUnSubDate(String channelId, Long memberId) {
-        chatroomMemberRepository.updateUnSubDateByChannelIdAndMemberId(channelId, memberId);
     }
 
     /**
