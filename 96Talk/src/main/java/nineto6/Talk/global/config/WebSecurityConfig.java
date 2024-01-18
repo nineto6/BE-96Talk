@@ -87,7 +87,8 @@ public class WebSecurityConfig {
                                         "/webjars/**",
                                         "/ws/**"
                 ).permitAll()
-                .antMatchers(HttpMethod.GET, "/members/duplicate").permitAll() // 이메일, 닉네임 중복 확인
+                .antMatchers(HttpMethod.GET, "/members/check-email").permitAll() // 이메일 중복 확인
+                .antMatchers(HttpMethod.GET, "/members/check-nickname").permitAll() // 닉네임 중복 확인
                 .antMatchers(HttpMethod.POST, "/members").permitAll() // 회원가입
                 .antMatchers(HttpMethod.POST, "/auth").permitAll() // 재발급
 
