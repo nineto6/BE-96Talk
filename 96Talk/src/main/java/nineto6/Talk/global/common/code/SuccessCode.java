@@ -27,6 +27,8 @@ public enum SuccessCode {
     REISSUE_SUCCESS(200, HttpStatus.OK,"REISSUE SUCCESS"),
     LOGOUT_SUCCESS(200, HttpStatus.OK,"LOGOUT SUCCESS"),
     LOGIN_SUCCESS(200, HttpStatus.OK,"LOGIN SUCCESS"),
+    ALLOW_EMAIL(200, HttpStatus.OK, "ALLOW EMAIL"),
+    ALLOW_NICKNAME(200, HttpStatus.OK, "ALLOW NICKNAME"),
 
     ; // End
 

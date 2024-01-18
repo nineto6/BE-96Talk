@@ -11,7 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 public interface MemberControllerDocs {
     @Operation(summary = "회원가입", description = "생성 메서드, 회원가입용 메서드입니다.")
     ResponseEntity<ApiResponse> signUp(@RequestBody MemberSaveRequest memberSaveRequest);
-    @Operation(summary = "중복 체크", description = "중복 체크용 메서드입니다.")
-    ResponseEntity<ApiResponse> duplicateCheck(String memberEmail,
-                                               String memberNickname);
+    @Operation(summary = "이메일 중복 체크", description = "이메일 중복 체크용 메서드입니다.")
+    ResponseEntity<ApiResponse> duplicateCheckEmail(String memberEmail);
+    @Operation(summary = "닉네임 중복 체크", description = "닉네임 중복 체크용 메서드입니다.")
+    ResponseEntity<ApiResponse> duplicateCheckNickname(String memberNickname);
 }
