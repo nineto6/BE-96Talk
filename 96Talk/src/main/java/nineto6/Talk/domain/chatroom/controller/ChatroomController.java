@@ -128,7 +128,7 @@ public class ChatroomController implements ChatroomControllerDocs {
     /**
      * channelId 값으로 채팅방 알람 데이터 개수 조회
      */
-    @GetMapping("/{channelId}/alerts")
+    @GetMapping("/alerts/{channelId}")
     public ResponseEntity<ApiResponse> getChatroomAlertMessage(@PathVariable("channelId") String channelId,
                                                                @AuthenticationPrincipal MemberDetailsDto memberDetailsDto) {
         ChatroomMemberDto chatroomMemberDto = chatroomService.findMyChatroomMemberDto(channelId, memberDetailsDto.getMemberDto());

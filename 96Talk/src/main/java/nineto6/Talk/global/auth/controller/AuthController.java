@@ -42,7 +42,7 @@ public class AuthController implements AuthControllerDocs {
      *  Refresh-Token 으로 부터 토큰 재발급
      */
     @Override
-    @PutMapping()
+    @PostMapping()
     public ResponseEntity<ApiResponse> reissue(@RequestHeader(value="Cookie") String refreshToken,
                                                HttpServletRequest request,
                                                HttpServletResponse response) {
