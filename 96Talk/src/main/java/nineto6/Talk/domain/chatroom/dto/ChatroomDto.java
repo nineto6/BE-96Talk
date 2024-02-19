@@ -4,7 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import nineto6.Talk.domain.profile.dto.ProfileResponse;
-import nineto6.Talk.domain.chat.mongodb.dto.RecentChat;
+import nineto6.Talk.global.chat.mongodb.dto.RecentChat;
 
 import java.util.List;
 

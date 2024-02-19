@@ -1,8 +1,8 @@
 package nineto6.Talk.domain.chatroom.repository;
 
 import lombok.extern.slf4j.Slf4j;
-import nineto6.Talk.domain.chatroom.chatroommember.domain.ChatroomMember;
-import nineto6.Talk.domain.chatroom.chatroommember.repository.ChatroomMemberRepository;
+import nineto6.Talk.domain.chatroommember.domain.ChatroomMember;
+import nineto6.Talk.domain.chatroommember.repository.ChatroomMemberRepository;
 import nineto6.Talk.domain.chatroom.domain.Chatroom;
 import nineto6.Talk.domain.chatroom.domain.ChatroomProfile;
 import nineto6.Talk.domain.member.domain.Member;
@@ -229,9 +229,9 @@ public class ChatroomRepositoryTest {
 
         // 자신 등록
         Member member = Member.builder()
-                .memberEmail("test@naver.com")
+                .memberEmail("test1@naver.com")
                 .memberPwd("123123")
-                .memberNickname("한국")
+                .memberNickname("한국1")
                 .build();
         memberRepository.save(member);
 
@@ -248,9 +248,9 @@ public class ChatroomRepositoryTest {
 
         // 친구 등록
         Member friend = Member.builder()
-                .memberEmail("test@naver.com")
+                .memberEmail("test2@naver.com")
                 .memberPwd("123123")
-                .memberNickname("한국")
+                .memberNickname("한국2")
                 .build();
         memberRepository.save(friend);
 

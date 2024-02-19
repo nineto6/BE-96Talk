@@ -2,15 +2,15 @@ package nineto6.Talk.domain.member.service;
 
 import lombok.RequiredArgsConstructor;
 import nineto6.Talk.global.error.exception.code.ErrorCode;
-import nineto6.Talk.domain.member.authority.code.Role;
+import nineto6.Talk.domain.authority.code.Role;
 import nineto6.Talk.global.error.exception.BusinessExceptionHandler;
-import nineto6.Talk.domain.member.authority.domain.Authority;
+import nineto6.Talk.domain.authority.domain.Authority;
 import nineto6.Talk.domain.member.domain.Member;
 import nineto6.Talk.domain.member.domain.MemberAuthority;
 import nineto6.Talk.domain.profile.domain.Profile;
 import nineto6.Talk.domain.member.dto.MemberDto;
 import nineto6.Talk.domain.member.dto.MemberSaveRequest;
-import nineto6.Talk.domain.member.authority.repository.AuthorityRepository;
+import nineto6.Talk.domain.authority.repository.AuthorityRepository;
 import nineto6.Talk.domain.member.repository.MemberRepository;
 import nineto6.Talk.domain.profile.repository.ProfileRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
