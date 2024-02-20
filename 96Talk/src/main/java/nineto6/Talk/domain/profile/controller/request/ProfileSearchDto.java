@@ -1,4 +1,4 @@
-package nineto6.Talk.domain.profile.dto;
+package nineto6.Talk.domain.profile.controller.request;
 
 import lombok.Getter;
 import lombok.Setter;

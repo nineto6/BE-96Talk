@@ -2,8 +2,7 @@ package nineto6.Talk.domain.chatroommember.repository.impl;
 
 import lombok.RequiredArgsConstructor;
 import nineto6.Talk.domain.chatroommember.domain.ChatroomMember;
-import nineto6.Talk.domain.chatroommember.domain.ChatroomMemberAndChannelId;
-import nineto6.Talk.domain.chatroommember.domain.ChatroomMemberAndNickname;
+import nineto6.Talk.domain.chatroommember.dto.ChatroomMemberDto;
 import nineto6.Talk.domain.chatroommember.repository.ChatroomMemberRepository;
 import nineto6.Talk.domain.chatroommember.repository.mapper.ChatroomMemberMapper;
 import org.springframework.stereotype.Repository;
@@ -41,11 +40,6 @@ public class ChatroomMemberRepositoryImpl implements ChatroomMemberRepository {
     }
 
     @Override
-    public List<ChatroomMemberAndChannelId> findByMemberId(Long memberId) {
-        return chatroomMemberMapper.findByMemberId(memberId);
-    }
-
-    @Override
     public void updateSubDateByChannelIdAndMemberId(String channelId, Long memberId) {
         chatroomMemberMapper.updateSubDateByChannelIdAndMemberId(channelId, memberId);
     }
@@ -61,7 +55,12 @@ public class ChatroomMemberRepositoryImpl implements ChatroomMemberRepository {
     }
 
     @Override
-    public List<ChatroomMemberAndNickname> findOtherUserListByChannelIdAndNickname(String channelId, String nickname) {
-        return chatroomMemberMapper.findOtherUserListByChannelIdAndNickname(channelId, nickname);
+    public List<ChatroomMemberDto> findChatroomMemberDtoByMemberId(Long memberId) {
+        return chatroomMemberMapper.findChatroomMemberDtoByMemberId(memberId);
+    }
+
+    @Override
+    public List<ChatroomMemberDto> findOtherChatroomMemberDtoByChannelIdAndNickname(String channelId, String nickname) {
+        return chatroomMemberMapper.findOtherChatroomMemberDtoByChannelIdAndNickname(channelId, nickname);
     }
 }

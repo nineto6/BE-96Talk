@@ -1,12 +1,11 @@
-package nineto6.Talk.domain.chatroom.dto;
+package nineto6.Talk.domain.chatroommember.dto;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Getter @Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ChatroomMemberDto {
     private String channelId;
     private String memberNickname;

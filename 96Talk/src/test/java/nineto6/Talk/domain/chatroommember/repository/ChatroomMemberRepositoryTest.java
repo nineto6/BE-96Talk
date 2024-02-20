@@ -2,11 +2,9 @@ package nineto6.Talk.domain.chatroommember.repository;
 
 import lombok.extern.slf4j.Slf4j;
 import nineto6.Talk.domain.chatroommember.domain.ChatroomMember;
-import nineto6.Talk.domain.chatroommember.domain.ChatroomMemberAndChannelId;
-import nineto6.Talk.domain.chatroommember.domain.ChatroomMemberAndNickname;
 import nineto6.Talk.domain.chatroom.domain.Chatroom;
 import nineto6.Talk.domain.chatroom.repository.ChatroomRepository;
-import nineto6.Talk.domain.chatroommember.repository.ChatroomMemberRepository;
+import nineto6.Talk.domain.chatroommember.dto.ChatroomMemberDto;
 import nineto6.Talk.domain.member.domain.Member;
 import nineto6.Talk.domain.member.repository.MemberRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -161,7 +159,7 @@ public class ChatroomMemberRepositoryTest {
     }
 
     @Test
-    void findOtherUserListByChannelIdAndNickname() {
+    void findOtherChatroomMemberDtoByChannelIdAndNickname() {
         // given
         chatroomMemberRepository.save(chatroomMember);
 
@@ -180,25 +178,23 @@ public class ChatroomMemberRepositoryTest {
         chatroomMemberRepository.save(chatroomFriend);
 
         // when
-        List<ChatroomMemberAndNickname> chatroomMemberList = chatroomMemberRepository.findOtherUserListByChannelIdAndNickname(chatroom.getChatroomChannelId(), member.getMemberNickname());
+        List<ChatroomMemberDto> chatroomMemberList = chatroomMemberRepository.findOtherChatroomMemberDtoByChannelIdAndNickname(chatroom.getChatroomChannelId(), member.getMemberNickname());
 
         // then
         assertThat(chatroomMemberList.size()).isEqualTo(1);
-        assertThat(chatroomMemberList.get(0).getMemberId()).isEqualTo(friend.getMemberId());
         assertThat(chatroomMemberList.get(0).getMemberNickname()).isEqualTo(friend.getMemberNickname());
     }
 
     @Test
-    void findByMemberId() {
+    void findChatroomMemberDtoByMemberId() {
         // given
         chatroomMemberRepository.save(chatroomMember);
 
         // when
-        List<ChatroomMemberAndChannelId> chatroomMemberList = chatroomMemberRepository.findByMemberId(member.getMemberId());
+        List<ChatroomMemberDto> chatroomMemberList = chatroomMemberRepository.findChatroomMemberDtoByMemberId(member.getMemberId());
 
         // then
         assertThat(chatroomMemberList.size()).isEqualTo(1);
-        assertThat(chatroomMemberList.get(0).getChatroomId()).isEqualTo(chatroom.getChatroomId());
         assertThat(chatroomMemberList.get(0).getChannelId()).isEqualTo(chatroom.getChatroomChannelId());
     }
 }

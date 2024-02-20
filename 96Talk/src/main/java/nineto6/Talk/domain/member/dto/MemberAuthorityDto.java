@@ -1,4 +1,4 @@
-package nineto6.Talk.domain.member.domain;
+package nineto6.Talk.domain.member.dto;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -11,7 +11,7 @@ import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class MemberAuthority {
+public class MemberAuthorityDto {
     private Long memberId;
     private String memberEmail;
     private String memberPwd;
@@ -19,7 +19,7 @@ public class MemberAuthority {
     private LocalDateTime memberRegdate;
     private List<String> roleList;
     @Builder
-    public MemberAuthority(Long memberId, String memberEmail, String memberPwd, String memberNickname, LocalDateTime memberRegdate, List<String> roleList) {
+    public MemberAuthorityDto(Long memberId, String memberEmail, String memberPwd, String memberNickname, LocalDateTime memberRegdate, List<String> roleList) {
         this.memberId = memberId;
         this.memberEmail = memberEmail;
         this.memberPwd = memberPwd;

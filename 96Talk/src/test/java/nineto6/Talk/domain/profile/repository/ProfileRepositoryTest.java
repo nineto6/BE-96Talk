@@ -3,13 +3,12 @@ package nineto6.Talk.domain.profile.repository;
 import lombok.extern.slf4j.Slf4j;
 import nineto6.Talk.domain.friend.repository.FriendRepository;
 import nineto6.Talk.domain.member.repository.MemberRepository;
-import nineto6.Talk.domain.profile.repository.ProfileRepository;
 import nineto6.Talk.domain.friend.domain.Friend;
 import nineto6.Talk.domain.member.domain.Member;
-import nineto6.Talk.domain.profile.domain.ProfileMember;
+import nineto6.Talk.domain.profile.dto.ProfileMemberDto;
 import nineto6.Talk.domain.profile.domain.Profile;
 import nineto6.Talk.global.common.pagination.Pagination;
-import nineto6.Talk.domain.profile.dto.ProfileSearchDto;
+import nineto6.Talk.domain.profile.controller.request.ProfileSearchDto;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -111,13 +110,13 @@ public class ProfileRepositoryTest {
         profileRepository.saveDefault(profile);
 
         // when
-        Optional<ProfileMember> memberProfileOptional = profileRepository.findByMemberNickname(member.getMemberNickname());
+        Optional<ProfileMemberDto> memberProfileOptional = profileRepository.findProfileMemberDtoByMemberNickname(member.getMemberNickname());
 
         // then
-        ProfileMember findProfileMember = memberProfileOptional.orElse(null);
-        Assertions.assertThat(findProfileMember).isNotNull();
-        Assertions.assertThat(findProfileMember.getProfile().getMemberId()).isEqualTo(member.getMemberId());
-        Assertions.assertThat(findProfileMember.getMemberNickname()).isEqualTo("한국");
+        ProfileMemberDto findProfileMemberDto = memberProfileOptional.orElse(null);
+        Assertions.assertThat(findProfileMemberDto).isNotNull();
+        Assertions.assertThat(findProfileMemberDto.getProfile().getMemberId()).isEqualTo(member.getMemberId());
+        Assertions.assertThat(findProfileMemberDto.getMemberNickname()).isEqualTo("한국");
     }
 
     @Test
@@ -202,11 +201,11 @@ public class ProfileRepositoryTest {
         friendRepository.save(friend);
 
         // when
-        List<ProfileMember> profileList = profileRepository.findFriendProfileListByMemberId(member1.getMemberId());
+        List<ProfileMemberDto> profileList = profileRepository.findProfileMemberDtoByMemberId(member1.getMemberId());
 
         // then
-        ProfileMember profileMember = profileList.get(0);
-        Assertions.assertThat(profileMember.getMemberNickname()).isEqualTo("친구");
+        ProfileMemberDto profileMemberDto = profileList.get(0);
+        Assertions.assertThat(profileMemberDto.getMemberNickname()).isEqualTo("친구");
         Assertions.assertThat(profileList.size()).isEqualTo(1);
     }
 
@@ -233,7 +232,7 @@ public class ProfileRepositoryTest {
         search.setPagination(pagination);
 
         // when
-        List<ProfileMember> searchProfile = profileRepository.findSearchProfileByKeyword(search);
+        List<ProfileMemberDto> searchProfile = profileRepository.findProfileMemberDtoByProfileSearchDto(search);
 
         // then
         Assertions.assertThat(searchProfile.size()).isEqualTo(4);

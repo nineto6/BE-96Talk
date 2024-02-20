@@ -1,9 +1,9 @@
 package nineto6.Talk.domain.profile.repository.impl;
 
 import lombok.RequiredArgsConstructor;
-import nineto6.Talk.domain.profile.domain.ProfileMember;
+import nineto6.Talk.domain.profile.dto.ProfileMemberDto;
 import nineto6.Talk.domain.profile.domain.Profile;
-import nineto6.Talk.domain.profile.dto.ProfileSearchDto;
+import nineto6.Talk.domain.profile.controller.request.ProfileSearchDto;
 import nineto6.Talk.domain.profile.repository.ProfileRepository;
 import nineto6.Talk.domain.profile.repository.mapper.ProfileMapper;
 import org.springframework.stereotype.Repository;
@@ -37,8 +37,8 @@ public class ProfileRepositoryImpl implements ProfileRepository {
     }
 
     @Override
-    public Optional<ProfileMember> findByMemberNickname(String memberNickname) {
-        return profileMapper.findByMemberNickname(memberNickname);
+    public Optional<ProfileMemberDto> findProfileMemberDtoByMemberNickname(String memberNickname) {
+        return profileMapper.findProfileMemberDtoByMemberNickname(memberNickname);
     }
 
     @Override
@@ -57,13 +57,13 @@ public class ProfileRepositoryImpl implements ProfileRepository {
     }
 
     @Override
-    public List<ProfileMember> findFriendProfileListByMemberId(Long memberId) {
-        return profileMapper.findFriendProfileListByMemberId(memberId);
+    public List<ProfileMemberDto> findProfileMemberDtoByMemberId(Long memberId) {
+        return profileMapper.findProfileMemberDtoByMemberId(memberId);
     }
 
     @Override
-    public List<ProfileMember> findSearchProfileByKeyword(ProfileSearchDto search) {
-        return profileMapper.findSearchProfileByKeyword(search);
+    public List<ProfileMemberDto> findProfileMemberDtoByProfileSearchDto(ProfileSearchDto search) {
+        return profileMapper.findProfileMemberDtoByProfileSearchDto(search);
     }
 
     @Override

@@ -1,8 +1,8 @@
 package nineto6.Talk.domain.profile.repository.mapper;
 
-import nineto6.Talk.domain.profile.domain.ProfileMember;
+import nineto6.Talk.domain.profile.dto.ProfileMemberDto;
 import nineto6.Talk.domain.profile.domain.Profile;
-import nineto6.Talk.domain.profile.dto.ProfileSearchDto;
+import nineto6.Talk.domain.profile.controller.request.ProfileSearchDto;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -18,12 +18,11 @@ public interface ProfileMapper {
     void updateStateMessageByMemberId(@Param("memberId") Long memberId,
                                       @Param("profileStateMessage") String profileStateMessage);
     Optional<Profile> findByMemberId(Long memberId);
-    Optional<ProfileMember> findByMemberNickname(String memberNickname);
-
     Optional<Profile> findByStoreFileName(String profileStoreFileName);
     void updateFileToNull(Long memberId);
     void updateStateMessageToNull(Long memberId);
-    List<ProfileMember> findFriendProfileListByMemberId(Long memberId);
-    List<ProfileMember> findSearchProfileByKeyword(ProfileSearchDto search);
     Integer getMaxCount(ProfileSearchDto search);
+    Optional<ProfileMemberDto> findProfileMemberDtoByMemberNickname(String memberNickname);
+    List<ProfileMemberDto> findProfileMemberDtoByMemberId(Long memberId);
+    List<ProfileMemberDto> findProfileMemberDtoByProfileSearchDto(ProfileSearchDto search);
 }

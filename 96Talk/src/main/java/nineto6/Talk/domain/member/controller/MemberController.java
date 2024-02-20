@@ -6,7 +6,7 @@ import nineto6.Talk.global.error.exception.code.ErrorCode;
 import nineto6.Talk.global.common.code.SuccessCode;
 import nineto6.Talk.global.error.exception.BusinessExceptionHandler;
 import nineto6.Talk.domain.member.controller.swagger.MemberControllerDocs;
-import nineto6.Talk.domain.member.dto.MemberSaveRequest;
+import nineto6.Talk.domain.member.controller.request.MemberSaveRequest;
 import nineto6.Talk.global.common.response.ApiResponse;
 import nineto6.Talk.domain.member.service.MemberService;
 import org.springframework.http.ResponseEntity;

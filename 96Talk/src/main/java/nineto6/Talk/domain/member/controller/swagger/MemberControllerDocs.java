@@ -2,7 +2,7 @@ package nineto6.Talk.domain.member.controller.swagger;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import nineto6.Talk.domain.member.dto.MemberSaveRequest;
+import nineto6.Talk.domain.member.controller.request.MemberSaveRequest;
 import nineto6.Talk.global.common.response.ApiResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;

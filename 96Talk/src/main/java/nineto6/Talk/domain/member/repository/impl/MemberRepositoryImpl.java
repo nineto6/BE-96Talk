@@ -2,7 +2,7 @@ package nineto6.Talk.domain.member.repository.impl;
 
 import lombok.RequiredArgsConstructor;
 import nineto6.Talk.domain.member.domain.Member;
-import nineto6.Talk.domain.member.domain.MemberAuthority;
+import nineto6.Talk.domain.member.dto.MemberAuthorityDto;
 import nineto6.Talk.domain.member.repository.MemberRepository;
 import nineto6.Talk.domain.member.repository.mapper.MemberMapper;
 import org.springframework.stereotype.Repository;
@@ -19,7 +19,7 @@ public class MemberRepositoryImpl implements MemberRepository {
     }
 
     @Override
-    public Optional<MemberAuthority> findMemberAndAuthByEmail(String memberId) {
+    public Optional<MemberAuthorityDto> findMemberAndAuthByEmail(String memberId) {
         return memberMapper.findMemberAndAuthByEmail(memberId);
     }
 

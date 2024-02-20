@@ -5,7 +5,7 @@ import nineto6.Talk.domain.authority.code.Role;
 import nineto6.Talk.domain.authority.repository.AuthorityRepository;
 import nineto6.Talk.domain.authority.domain.Authority;
 import nineto6.Talk.domain.member.domain.Member;
-import nineto6.Talk.domain.member.domain.MemberAuthority;
+import nineto6.Talk.domain.member.dto.MemberAuthorityDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -97,7 +97,7 @@ public class MemberRepositoryTest {
         authorityRepository.saveAuthorityList(authorityList);
 
         // when
-        MemberAuthority findMember = memberRepository.findMemberAndAuthByEmail(member.getMemberEmail()).orElse(null);
+        MemberAuthorityDto findMember = memberRepository.findMemberAndAuthByEmail(member.getMemberEmail()).orElse(null);
 
         // then
         assertThat(findMember).isNotNull();

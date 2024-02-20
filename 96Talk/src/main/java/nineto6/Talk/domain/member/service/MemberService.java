@@ -6,10 +6,10 @@ import nineto6.Talk.domain.authority.code.Role;
 import nineto6.Talk.global.error.exception.BusinessExceptionHandler;
 import nineto6.Talk.domain.authority.domain.Authority;
 import nineto6.Talk.domain.member.domain.Member;
-import nineto6.Talk.domain.member.domain.MemberAuthority;
+import nineto6.Talk.domain.member.dto.MemberAuthorityDto;
 import nineto6.Talk.domain.profile.domain.Profile;
 import nineto6.Talk.domain.member.dto.MemberDto;
-import nineto6.Talk.domain.member.dto.MemberSaveRequest;
+import nineto6.Talk.domain.member.controller.request.MemberSaveRequest;
 import nineto6.Talk.domain.authority.repository.AuthorityRepository;
 import nineto6.Talk.domain.member.repository.MemberRepository;
 import nineto6.Talk.domain.profile.repository.ProfileRepository;
@@ -31,14 +31,14 @@ public class MemberService {
     private final PasswordEncoder passwordEncoder;
 
     public Optional<MemberDto> login(String memberEmail) {
-        MemberAuthority memberAuthority = memberRepository
+        MemberAuthorityDto memberAuthorityDto = memberRepository
                 .findMemberAndAuthByEmail(memberEmail).orElse(null);
 
-        if(ObjectUtils.isEmpty(memberAuthority)) {
+        if(ObjectUtils.isEmpty(memberAuthorityDto)) {
             return Optional.empty();
         }
 
-        return Optional.of(memberAuthority.toDto());
+        return Optional.of(memberAuthorityDto.toDto());
     }
 
     /**

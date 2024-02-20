@@ -3,7 +3,7 @@ package nineto6.Talk.domain.chatroom.dto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-import nineto6.Talk.domain.profile.dto.ProfileResponse;
+import nineto6.Talk.domain.profile.controller.response.ProfileResponse;
 import nineto6.Talk.global.chat.mongodb.dto.RecentChat;
 
 import java.util.List;

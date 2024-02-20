@@ -7,13 +7,13 @@ import nineto6.Talk.global.common.file.UploadFile;
 import nineto6.Talk.global.error.exception.code.ErrorCode;
 import nineto6.Talk.global.error.exception.BusinessExceptionHandler;
 import nineto6.Talk.global.error.exception.ResourceExceptionHandler;
-import nineto6.Talk.domain.profile.domain.ProfileMember;
+import nineto6.Talk.domain.profile.dto.ProfileMemberDto;
 import nineto6.Talk.domain.profile.domain.Profile;
 import nineto6.Talk.global.common.pagination.Pagination;
 import nineto6.Talk.global.common.pagination.PagingResponseDto;
 import nineto6.Talk.domain.member.dto.MemberDto;
-import nineto6.Talk.domain.profile.dto.ProfileResponse;
-import nineto6.Talk.domain.profile.dto.ProfileSearchDto;
+import nineto6.Talk.domain.profile.controller.response.ProfileResponse;
+import nineto6.Talk.domain.profile.controller.request.ProfileSearchDto;
 import nineto6.Talk.domain.profile.repository.ProfileRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -142,9 +142,9 @@ public class ProfileService {
         params.setPagination(pagination);
 
         // 계산된 페이지 정보의 일부(limitStart, recordSize)를 기준으로 리스트 데이터 조회 후 응답 데이터 반환
-        List<ProfileMember> findProfileMember = profileRepository.findSearchProfileByKeyword(params);
+        List<ProfileMemberDto> findProfileMemberDto = profileRepository.findProfileMemberDtoByProfileSearchDto(params);
 
-        List<ProfileResponse> profileResponseList = findProfileMember.stream()
+        List<ProfileResponse> profileResponseList = findProfileMemberDto.stream()
                 .map(this::getProfileResponse)
                 .collect(Collectors.toList());
 
@@ -155,7 +155,7 @@ public class ProfileService {
      * 친구 프로필 전체 조회
      */
     public List<ProfileResponse> findFriendProfiles(MemberDto memberDto) {
-        List<ProfileMember> friendProfileList = profileRepository.findFriendProfileListByMemberId(memberDto.getMemberId());
+        List<ProfileMemberDto> friendProfileList = profileRepository.findProfileMemberDtoByMemberId(memberDto.getMemberId());
 
         // 친구 프로필 조회
         return friendProfileList.stream()
@@ -166,11 +166,11 @@ public class ProfileService {
     /**
      * MemberProfile -> ProfileResponse 변환 메서드
      */
-    public ProfileResponse getProfileResponse(ProfileMember profileMember) {
-        Profile profile = profileMember.getProfile();
+    public ProfileResponse getProfileResponse(ProfileMemberDto profileMemberDto) {
+        Profile profile = profileMemberDto.getProfile();
         if (ObjectUtils.isEmpty(profile.getProfileStoreFileName()) || ObjectUtils.isEmpty(profile.getProfileUploadFileName())) {
             return ProfileResponse.builder()
-                    .memberNickname(profileMember.getMemberNickname())
+                    .memberNickname(profileMemberDto.getMemberNickname())
                     .profileStateMessage(profile.getProfileStateMessage())
                     .build();
         }
@@ -181,7 +181,7 @@ public class ProfileService {
         String ext = split[1];
 
         return ProfileResponse.builder()
-                .memberNickname(profileMember.getMemberNickname())
+                .memberNickname(profileMemberDto.getMemberNickname())
                 .profileStateMessage(profile.getProfileStateMessage())
                 .imageName(uuid)
                 .type(fileService.getTypeByExt(ext))
@@ -192,15 +192,15 @@ public class ProfileService {
      * 프로필 조회
      */
     public ProfileResponse findByNickname(String memberNm) {
-        ProfileMember profileMember = profileRepository.findByMemberNickname(memberNm)
+        ProfileMemberDto profileMemberDto = profileRepository.findProfileMemberDtoByMemberNickname(memberNm)
                 .orElseThrow(() -> new BusinessExceptionHandler(ErrorCode.BUSINESS_EXCEPTION_ERROR));
 
         // 프로필이 존재하지 않을 경우 Exception
-        if(ObjectUtils.isEmpty(profileMember.getProfile())) {
+        if(ObjectUtils.isEmpty(profileMemberDto.getProfile())) {
             throw new BusinessExceptionHandler(ErrorCode.BUSINESS_EXCEPTION_ERROR);
         }
 
-        return getProfileResponse(profileMember);
+        return getProfileResponse(profileMemberDto);
     }
 
     /**

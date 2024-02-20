@@ -2,11 +2,10 @@ package nineto6.Talk.domain.authority.repository;
 
 import lombok.extern.slf4j.Slf4j;
 import nineto6.Talk.domain.authority.code.Role;
-import nineto6.Talk.domain.authority.repository.AuthorityRepository;
 import nineto6.Talk.domain.member.repository.MemberRepository;
 import nineto6.Talk.domain.authority.domain.Authority;
 import nineto6.Talk.domain.member.domain.Member;
-import nineto6.Talk.domain.member.domain.MemberAuthority;
+import nineto6.Talk.domain.member.dto.MemberAuthorityDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -55,7 +54,7 @@ public class AuthorityRepositoryTest {
         authorityRepository.saveAuthority(authority);
 
         // then
-        MemberAuthority findMember = memberRepository.findMemberAndAuthByEmail(member.getMemberEmail()).orElse(null);
+        MemberAuthorityDto findMember = memberRepository.findMemberAndAuthByEmail(member.getMemberEmail()).orElse(null);
         assertThat(findMember).isNotNull();
         assertThat(findMember.getRoleList().size()).isEqualTo(1);
     }
@@ -78,7 +77,7 @@ public class AuthorityRepositoryTest {
         authorityRepository.saveAuthorityList(authorityList);
 
         // then
-        MemberAuthority findMember = memberRepository.findMemberAndAuthByEmail(member.getMemberEmail()).orElse(null);
+        MemberAuthorityDto findMember = memberRepository.findMemberAndAuthByEmail(member.getMemberEmail()).orElse(null);
         assertThat(findMember).isNotNull();
         assertThat(findMember.getRoleList().size()).isEqualTo(2);
     }

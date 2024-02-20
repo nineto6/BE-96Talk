@@ -6,7 +6,7 @@ import nineto6.Talk.global.error.exception.code.ErrorCode;
 import nineto6.Talk.global.error.exception.BusinessExceptionHandler;
 import nineto6.Talk.domain.friend.domain.Friend;
 import nineto6.Talk.domain.member.domain.Member;
-import nineto6.Talk.domain.friend.dto.FriendRequest;
+import nineto6.Talk.domain.friend.controller.request.FriendRequest;
 import nineto6.Talk.domain.member.dto.MemberDto;
 import nineto6.Talk.domain.friend.repository.FriendRepository;
 import nineto6.Talk.domain.member.repository.MemberRepository;

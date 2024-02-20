@@ -2,9 +2,13 @@ package nineto6.Talk.domain.chatroom.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import nineto6.Talk.domain.chatroom.controller.request.ChatroomDeleteRequest;
+import nineto6.Talk.domain.chatroom.controller.request.ChatroomSaveRequest;
+import nineto6.Talk.domain.chatroom.controller.response.ChatroomSaveResponse;
 import nineto6.Talk.domain.chatroom.controller.swagger.ChatroomControllerDocs;
 import nineto6.Talk.domain.chatroom.dto.*;
 import nineto6.Talk.domain.chatroom.service.ChatroomService;
+import nineto6.Talk.domain.chatroommember.dto.ChatroomMemberDto;
 import nineto6.Talk.domain.member.dto.MemberDetailsDto;
 import nineto6.Talk.global.chat.mongodb.dto.ChatResponse;
 import nineto6.Talk.global.chat.mongodb.service.ChatService;
@@ -30,14 +34,14 @@ public class ChatroomController implements ChatroomControllerDocs {
     @PostMapping
     public ResponseEntity<ApiResponse> createChatroom(@RequestBody ChatroomSaveRequest chatroomSaveRequest,
                                                       @AuthenticationPrincipal MemberDetailsDto memberDetailsDto) {
-        ChatroomSaveDto chatroomSaveDto = chatroomService.create(memberDetailsDto.getMemberDto(), chatroomSaveRequest.getFriendNickname());
+        ChatroomSaveResponse chatroomSaveResponse = chatroomService.create(memberDetailsDto.getMemberDto(), chatroomSaveRequest.getFriendNickname());
 
         ApiResponse apiResponse = ApiResponse.builder()
-                .result(chatroomSaveDto.getChatroomChannelId())
-                .status(chatroomSaveDto.getSuccessCode().getStatus())
-                .message(chatroomSaveDto.getSuccessCode().getMessage())
+                .result(chatroomSaveResponse.getChatroomChannelId())
+                .status(chatroomSaveResponse.getSuccessCode().getStatus())
+                .message(chatroomSaveResponse.getSuccessCode().getMessage())
                 .build();
-        return new ResponseEntity<ApiResponse>(apiResponse, chatroomSaveDto.getSuccessCode().getHttpStatus());
+        return new ResponseEntity<ApiResponse>(apiResponse, chatroomSaveResponse.getSuccessCode().getHttpStatus());
     }
 
     // 채팅방 삭제

@@ -13,7 +13,7 @@ import nineto6.Talk.global.auth.redis.RefreshToken;
 import nineto6.Talk.global.auth.controller.swagger.AuthControllerDocs;
 import nineto6.Talk.domain.member.dto.MemberDetailsDto;
 import nineto6.Talk.domain.member.dto.MemberDto;
-import nineto6.Talk.domain.member.dto.MemberLoginRequest;
+import nineto6.Talk.domain.member.controller.request.MemberLoginRequest;
 import nineto6.Talk.global.common.response.ApiResponse;
 import nineto6.Talk.domain.member.service.MemberService;
 import org.springframework.http.ResponseCookie;

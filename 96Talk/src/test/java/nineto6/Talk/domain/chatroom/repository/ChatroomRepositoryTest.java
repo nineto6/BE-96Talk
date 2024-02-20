@@ -4,11 +4,11 @@ import lombok.extern.slf4j.Slf4j;
 import nineto6.Talk.domain.chatroommember.domain.ChatroomMember;
 import nineto6.Talk.domain.chatroommember.repository.ChatroomMemberRepository;
 import nineto6.Talk.domain.chatroom.domain.Chatroom;
-import nineto6.Talk.domain.chatroom.domain.ChatroomProfile;
+import nineto6.Talk.domain.chatroom.dto.ChatroomProfileDto;
 import nineto6.Talk.domain.member.domain.Member;
 import nineto6.Talk.domain.member.repository.MemberRepository;
 import nineto6.Talk.domain.profile.domain.Profile;
-import nineto6.Talk.domain.profile.domain.ProfileMember;
+import nineto6.Talk.domain.profile.dto.ProfileMemberDto;
 import nineto6.Talk.domain.profile.repository.ProfileRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -179,14 +179,14 @@ public class ChatroomRepositoryTest {
         }
 
         // when
-        List<ChatroomProfile> chatroomProfileList = chatroomRepository.findChannelIdAndMemberProfileListByMemberId(member.getMemberId());
+        List<ChatroomProfileDto> chatroomProfileDtoList = chatroomRepository.findChannelIdAndMemberProfileListByMemberId(member.getMemberId());
 
         // then
         // 채팅방은 2개가 되어야 한다.
-        assertThat(chatroomProfileList.size()).isEqualTo(2);
+        assertThat(chatroomProfileDtoList.size()).isEqualTo(2);
         // 각각 채팅방안에 프로필은 자신을 뺀 나머지 2명 조회가 되어야 한다.
-        assertThat(chatroomProfileList.get(0).getMemberProfileList().size()).isEqualTo(2);
-        assertThat(chatroomProfileList.get(1).getMemberProfileList().size()).isEqualTo(2);
+        assertThat(chatroomProfileDtoList.get(0).getMemberProfileList().size()).isEqualTo(2);
+        assertThat(chatroomProfileDtoList.get(1).getMemberProfileList().size()).isEqualTo(2);
     }
 
     @Test
@@ -214,12 +214,12 @@ public class ChatroomRepositoryTest {
         chatroomMemberRepository.save(chatroomMember);
 
         // when
-        List<ProfileMember> profileMemberList = chatroomRepository.findMemberProfileByChatroomChannelId(chatroom.getChatroomChannelId());
+        List<ProfileMemberDto> profileMemberDtoList = chatroomRepository.findMemberProfileByChatroomChannelId(chatroom.getChatroomChannelId());
 
         // then
-        assertThat(profileMemberList.size()).isEqualTo(1);
-        assertThat(profileMemberList.get(0).getMemberNickname()).isEqualTo("한국");
-        assertThat(profileMemberList.get(0).getProfile().getProfileStateMessage()).isEqualTo("상태메세지");
+        assertThat(profileMemberDtoList.size()).isEqualTo(1);
+        assertThat(profileMemberDtoList.get(0).getMemberNickname()).isEqualTo("한국");
+        assertThat(profileMemberDtoList.get(0).getProfile().getProfileStateMessage()).isEqualTo("상태메세지");
     }
 
     @Test

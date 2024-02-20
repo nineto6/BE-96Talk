@@ -1,4 +1,4 @@
-package nineto6.Talk.domain.member.dto;
+package nineto6.Talk.domain.member.controller.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;

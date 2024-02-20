@@ -38,7 +38,7 @@
     </resultMap>
 
     <!-- member And Authority Map -->
-    <resultMap id="memberAndAuthorityMap" type="MemberAuthority">
+    <resultMap id="memberAuthorityDtoMap" type="MemberAuthorityDto">
         <id column="member_id" property="memberId"/>
         <result column="member_email" property="memberEmail"/>
         <result column="member_pwd" property="memberPwd"/>
@@ -48,7 +48,7 @@
     </resultMap>
 
     <!-- Member, Authority Join 조회 -->
-    <select id="findMemberAndAuthByEmail" parameterType="String" resultMap="memberAndAuthorityMap">
+    <select id="findMemberAndAuthByEmail" parameterType="String" resultMap="memberAuthorityDtoMap">
         SELECT
             m.MEMBER_ID, m.MEMBER_EMAIL, m.MEMBER_PWD, m.MEMBER_NICKNAME, m.MEMBER_REGDATE,
             a.AUTHORITY_ROLE

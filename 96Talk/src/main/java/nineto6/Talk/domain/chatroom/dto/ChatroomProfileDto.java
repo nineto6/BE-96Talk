@@ -1,21 +1,21 @@
-package nineto6.Talk.domain.chatroom.domain;
+package nineto6.Talk.domain.chatroom.dto;
 
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import nineto6.Talk.domain.profile.domain.ProfileMember;
+import nineto6.Talk.domain.profile.dto.ProfileMemberDto;
 
 import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ChatroomProfile {
+public class ChatroomProfileDto {
     private String chatroomChannelId;
-    private List<ProfileMember> memberProfileList;
+    private List<ProfileMemberDto> memberProfileList;
 
     @Builder
-    public ChatroomProfile(String chatroomChannelId, List<ProfileMember> memberProfileList) {
+    public ChatroomProfileDto(String chatroomChannelId, List<ProfileMemberDto> memberProfileList) {
         this.chatroomChannelId = chatroomChannelId;
         this.memberProfileList = memberProfileList;
     }

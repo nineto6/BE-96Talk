@@ -6,8 +6,8 @@ import nineto6.Talk.domain.chatroommember.domain.ChatroomMember;
 import nineto6.Talk.domain.chatroommember.repository.ChatroomMemberRepository;
 import nineto6.Talk.domain.chatroom.domain.Chatroom;
 import nineto6.Talk.domain.chatroom.dto.ChatroomDto;
-import nineto6.Talk.domain.chatroom.dto.ChatroomMemberDto;
-import nineto6.Talk.domain.chatroom.dto.ChatroomSaveDto;
+import nineto6.Talk.domain.chatroommember.dto.ChatroomMemberDto;
+import nineto6.Talk.domain.chatroom.controller.response.ChatroomSaveResponse;
 import nineto6.Talk.domain.chatroom.repository.ChatroomRepository;
 import nineto6.Talk.domain.member.domain.Member;
 import nineto6.Talk.domain.member.dto.MemberDto;
@@ -42,7 +42,7 @@ public class ChatroomService {
      * 채팅방 생성
      */
     @Transactional
-    public ChatroomSaveDto create(MemberDto memberDto, String friendNickname) {
+    public ChatroomSaveResponse create(MemberDto memberDto, String friendNickname) {
         // 자기 자신과 채팅방을 만들 경우 Exception
         if(memberDto.getMemberNickname().equals(friendNickname)) {
             throw new BusinessExceptionHandler(ErrorCode.BAD_REQUEST_ERROR);
@@ -58,7 +58,7 @@ public class ChatroomService {
         // 단일 채팅방이 이미 있을 경우 Exception
         if(chatroomOptional.isPresent()) {
             // 이미 존재하는 채널 아이디 값을 반환
-            return ChatroomSaveDto.builder()
+            return ChatroomSaveResponse.builder()
                     .chatroomChannelId(chatroomOptional.get().getChatroomChannelId())
                     .successCode(SuccessCode.SELECT_SUCCESS)
                     .build();
@@ -90,7 +90,7 @@ public class ChatroomService {
                 .build();
 
         chatroomMemberRepository.save(chatroomFriend);
-        return ChatroomSaveDto.builder()
+        return ChatroomSaveResponse.builder()
                 .chatroomChannelId(chatroom.getChatroomChannelId())
                 .successCode(SuccessCode.INSERT_SUCCESS)
                 .build();
@@ -211,28 +211,14 @@ public class ChatroomService {
      * 채팅방 멤버 channelId 값으로 조회
      */
     public List<ChatroomMemberDto> findChatroomMemberDtoByChannelIdAndNickname(String channelId, String nickname) {
-        return chatroomMemberRepository.findOtherUserListByChannelIdAndNickname(channelId, nickname).stream()
-                .map((chatroomMember) -> ChatroomMemberDto.builder()
-                        .memberNickname(chatroomMember.getMemberNickname())
-                        .channelId(channelId)
-                        .chatroomSubDate(chatroomMember.getChatroomSubDate())
-                        .chatroomUnSubDate(chatroomMember.getChatroomUnSubDate())
-                        .build())
-                .collect(Collectors.toList());
+        return chatroomMemberRepository.findOtherChatroomMemberDtoByChannelIdAndNickname(channelId, nickname);
     }
 
     /**
      * 채팅방 멤버로 chatroomMemberDto 조회
      */
     public List<ChatroomMemberDto> findChatroomMemberDtoByMemberId(MemberDto memberDto) {
-        return chatroomMemberRepository.findByMemberId(memberDto.getMemberId()).stream()
-                .map((chatroomMember) -> ChatroomMemberDto.builder()
-                        .memberNickname(memberDto.getMemberNickname())
-                        .channelId(chatroomMember.getChannelId())
-                        .chatroomSubDate(chatroomMember.getChatroomSubDate())
-                        .chatroomUnSubDate(chatroomMember.getChatroomUnSubDate())
-                        .build())
-                .collect(Collectors.toList());
+        return chatroomMemberRepository.findChatroomMemberDtoByMemberId(memberDto.getMemberId());
     }
 
 }

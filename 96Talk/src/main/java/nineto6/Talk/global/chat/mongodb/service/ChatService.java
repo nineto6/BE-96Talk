@@ -5,7 +5,7 @@ import nineto6.Talk.global.chat.mongodb.domain.Chat;
 import nineto6.Talk.global.chat.mongodb.dto.ChatRequest;
 import nineto6.Talk.global.chat.mongodb.dto.RecentChat;
 import nineto6.Talk.global.chat.mongodb.repository.ChatRepository;
-import nineto6.Talk.domain.chatroom.dto.ChatroomMemberDto;
+import nineto6.Talk.domain.chatroommember.dto.ChatroomMemberDto;
 import nineto6.Talk.global.chat.mongodb.dto.ChatResponse;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;

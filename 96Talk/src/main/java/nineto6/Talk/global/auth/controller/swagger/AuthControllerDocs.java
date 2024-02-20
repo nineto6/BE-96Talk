@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import nineto6.Talk.domain.member.dto.MemberDetailsDto;
-import nineto6.Talk.domain.member.dto.MemberLoginRequest;
+import nineto6.Talk.domain.member.controller.request.MemberLoginRequest;
 import nineto6.Talk.global.common.response.ApiResponse;
 import org.springframework.http.ResponseEntity;
 

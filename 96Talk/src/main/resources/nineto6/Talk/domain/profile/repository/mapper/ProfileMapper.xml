@@ -70,9 +70,14 @@
             MEMBER_ID = #{memberId}
     </update>
 
-    <resultMap id="memberNicknameMap" type="String">
-        <result column="member_nickname"/>
-    </resultMap>
+    <select id="getMaxCount" parameterType="nineto6.Talk.domain.profile.controller.request.ProfileSearchDto" resultType="Integer">
+        SELECT
+        COUNT(m.MEMBER_ID)
+        FROM
+        MEMBER AS m
+        WHERE
+        m.MEMBER_NICKNAME LIKE CONCAT('%', #{keyword}, '%')
+    </select>
 
     <resultMap id="profileMap" type="Profile">
         <id property="profileId" column="profile_id"/>
@@ -82,12 +87,12 @@
         <result property="profileStoreFileName" column="profile_store_file_name"/>
     </resultMap>
 
-    <resultMap id="memberProfileMap" type="ProfileMember">
-        <association property="memberNickname" resultMap="memberNicknameMap"/>
+    <resultMap id="memberProfileDtoMap" type="ProfileMemberDto">
+        <id property="memberNickname" column="member_nickname"/>
         <association property="profile" resultMap="profileMap"/>
     </resultMap>
 
-    <select id="findByMemberNickname" parameterType="String" resultMap="memberProfileMap">
+    <select id="findProfileMemberDtoByMemberNickname" parameterType="String" resultMap="memberProfileDtoMap">
         SELECT
             m.MEMBER_NICKNAME,
             p.PROFILE_ID, p.MEMBER_ID, p.PROFILE_STATE_MESSAGE, p.PROFILE_UPLOAD_FILE_NAME, p.PROFILE_STORE_FILE_NAME
@@ -97,7 +102,7 @@
             m.MEMBER_NICKNAME = #{memberNickname}
     </select>
 
-    <select id="findFriendProfileListByMemberId" parameterType="Long" resultType="List" resultMap="memberProfileMap">
+    <select id="findProfileMemberDtoByMemberId" parameterType="Long" resultType="List" resultMap="memberProfileDtoMap">
         SELECT
             m.MEMBER_NICKNAME,
             p.PROFILE_ID, p.MEMBER_ID, p.PROFILE_STATE_MESSAGE, p.PROFILE_UPLOAD_FILE_NAME, p.PROFILE_STORE_FILE_NAME
@@ -110,7 +115,7 @@
 
     <!-- 페이지네이션 -->
     <!-- 키워드로 검색하기, 닉네임 정렬 -->
-    <select id="findSearchProfileByKeyword" parameterType="nineto6.Talk.domain.profile.dto.ProfileSearchDto" resultType="List" resultMap="memberProfileMap">
+    <select id="findProfileMemberDtoByProfileSearchDto" parameterType="nineto6.Talk.domain.profile.controller.request.ProfileSearchDto" resultType="List" resultMap="memberProfileDtoMap">
         SELECT
             m.MEMBER_NICKNAME,
             p.PROFILE_ID, p.MEMBER_ID, p.PROFILE_STATE_MESSAGE, p.PROFILE_UPLOAD_FILE_NAME, p.PROFILE_STORE_FILE_NAME
@@ -120,14 +125,5 @@
             m.MEMBER_NICKNAME LIKE CONCAT('%', #{keyword}, '%')
         ORDER BY
             m.MEMBER_NICKNAME ASC LIMIT #{pagination.limitStart}, #{recordSize}
-    </select>
-
-    <select id="getMaxCount" parameterType="nineto6.Talk.domain.profile.dto.ProfileSearchDto" resultType="Integer">
-        SELECT
-            COUNT(m.MEMBER_ID)
-        FROM
-            MEMBER AS m
-        WHERE
-            m.MEMBER_NICKNAME LIKE CONCAT('%', #{keyword}, '%')
     </select>
 </mapper>

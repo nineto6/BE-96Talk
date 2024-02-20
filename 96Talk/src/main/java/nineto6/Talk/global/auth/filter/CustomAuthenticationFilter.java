@@ -3,7 +3,7 @@ package nineto6.Talk.global.auth.filter;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
-import nineto6.Talk.domain.member.dto.MemberLoginRequest;
+import nineto6.Talk.domain.member.controller.request.MemberLoginRequest;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;

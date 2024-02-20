@@ -1,11 +1,11 @@
 package nineto6.Talk.domain.chatroom.repository.impl;
 
 import lombok.RequiredArgsConstructor;
-import nineto6.Talk.domain.chatroom.domain.ChatroomProfile;
+import nineto6.Talk.domain.chatroom.dto.ChatroomProfileDto;
 import nineto6.Talk.domain.chatroom.repository.ChatroomRepository;
 import nineto6.Talk.domain.chatroom.domain.Chatroom;
 import nineto6.Talk.domain.chatroom.repository.mapper.ChatroomMapper;
-import nineto6.Talk.domain.profile.domain.ProfileMember;
+import nineto6.Talk.domain.profile.dto.ProfileMemberDto;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -36,12 +36,12 @@ public class ChatroomRepositoryImpl implements ChatroomRepository {
     }
 
     @Override
-    public List<ChatroomProfile> findChannelIdAndMemberProfileListByMemberId(Long memberId) {
+    public List<ChatroomProfileDto> findChannelIdAndMemberProfileListByMemberId(Long memberId) {
         return chatroomMapper.findChannelIdAndMemberProfileListByMemberId(memberId);
     }
 
     @Override
-    public List<ProfileMember> findMemberProfileByChatroomChannelId(String chatroomChannelId){
+    public List<ProfileMemberDto> findMemberProfileByChatroomChannelId(String chatroomChannelId){
         return chatroomMapper.findMemberProfileByChatroomChannelId(chatroomChannelId);
     }
 
