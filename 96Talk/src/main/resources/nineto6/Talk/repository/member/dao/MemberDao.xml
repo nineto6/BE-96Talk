@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="nineto6.Talk.repository.member.dao.MemberDao">
+
+    <sql id="memberColumns">
+        MEMBER_ID, MEMBER_EMAIL, MEMBER_PWD, MEMBER_NICKNAME, MEMBER_REGDATE
+    </sql>
+
+    <!-- 멤버 등록 -->
+    <insert id="save" useGeneratedKeys="true" keyProperty="memberId">
+        INSERT INTO
+        MEMBER (MEMBER_EMAIL, MEMBER_PWD, MEMBER_NICKNAME, MEMBER_REGDATE)
+        VALUES (#{memberEmail}, #{memberPwd}, #{memberNickname}, now())
+    </insert>
+
+    <select id="findByMemberEmail" parameterType="String" resultType="MemberVo">
+        SELECT
+            <include refid="memberColumns"/>
+        FROM
+            MEMBER as m
+        WHERE
+            m.MEMBER_EMAIL = #{memberEmail}
+    </select>
+
+    <select id="findByMemberNickname" parameterType="String" resultType="MemberVo">
+        SELECT
+            <include refid="memberColumns"/>
+        FROM
+            MEMBER as m
+        WHERE
+            m.MEMBER_NICKNAME = #{memberNickname}
+    </select>
+
+    <!-- Authority Map -->
+    <resultMap id="authorityMap" type="String">
+        <result column="authority_role"/>
+    </resultMap>
+
+    <!-- memberVo And Authority Map -->
+    <resultMap id="memberAuthorityDtoMap" type="MemberAuthorityDto">
+        <id column="member_id" property="memberId"/>
+        <result column="member_email" property="memberEmail"/>
+        <result column="member_pwd" property="memberPwd"/>
+        <result column="member_nickname" property="memberNickname"/>
+        <result column="member_regdate" property="memberRegdate"/>
+        <collection property="roleList" resultMap="authorityMap"/>
+    </resultMap>
+
+    <!-- Member, Authority Join 조회 -->
+    <select id="findMemberAndAuthByEmail" parameterType="String" resultMap="memberAuthorityDtoMap">
+        SELECT
+            m.MEMBER_ID, m.MEMBER_EMAIL, m.MEMBER_PWD, m.MEMBER_NICKNAME, m.MEMBER_REGDATE,
+            a.AUTHORITY_ROLE
+        FROM
+            MEMBER AS m
+            INNER JOIN
+                MEMBER_AUTHORITY AS a
+                    ON m.MEMBER_ID = a.MEMBER_ID
+        WHERE
+            m.MEMBER_EMAIL = #{memberEmail}
+    </select>
+
+</mapper>

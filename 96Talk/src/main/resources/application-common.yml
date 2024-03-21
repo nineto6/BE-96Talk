@@ -17,7 +17,7 @@ server:
 
 #MyBatis
 mybatis:
-  type-aliases-package: nineto6.Talk.domain
+  type-aliases-package: nineto6.Talk.vo, nineto6.Talk.dto
   configuration:
     map-underscore-to-camel-case: true
 

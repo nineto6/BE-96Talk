@@ -1,9 +1,8 @@
 package nineto6.Talk.global.common.file;
 
 import lombok.extern.slf4j.Slf4j;
+import nineto6.Talk.vo.ProfileVo;
 import nineto6.Talk.global.common.file.code.ImageCode;
-import nineto6.Talk.domain.profile.domain.Profile;
-import nineto6.Talk.global.common.file.UploadFile;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
@@ -51,14 +50,14 @@ public class FileService {
      * 파일 삭제를 성공할 때 true
      * 파일 삭제를 성공하지 못할 때 false
      */
-    public boolean removeFile(Profile profile) {
-        if(ObjectUtils.isEmpty(profile.getProfileStoreFileName()) || ObjectUtils.isEmpty(profile.getProfileUploadFileName())) {
+    public boolean removeFile(ProfileVo profileVo) {
+        if(ObjectUtils.isEmpty(profileVo.getProfileStoreFileName()) || ObjectUtils.isEmpty(profileVo.getProfileUploadFileName())) {
             return false;
         }
 
-        File removeFile = new File(getFullPath(profile.getProfileStoreFileName()));
+        File removeFile = new File(getFullPath(profileVo.getProfileStoreFileName()));
 
-        log.info("파일삭제 : {}, {}", profile.getProfileId(), profile.getProfileStoreFileName());
+        log.info("파일삭제 : {}, {}", profileVo.getProfileId(), profileVo.getProfileStoreFileName());
         return removeFile.delete();
     }
 

@@ -3,7 +3,7 @@ package nineto6.Talk.global.auth.handler;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import nineto6.Talk.domain.member.dto.MemberDetailsDto;
+import nineto6.Talk.dto.member.MemberDetailsDto;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

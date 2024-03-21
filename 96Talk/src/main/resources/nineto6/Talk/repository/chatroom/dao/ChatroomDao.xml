@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="nineto6.Talk.repository.chatroom.dao.ChatroomDao">
+    <sql id="chatroomColumns">
+        CHATROOM_ID, CHATROOM_CHANNEL_ID, CHATROOM_WRITER_NICKNAME, CHATROOM_TITLE, CHATROOM_IS_GROUP, CHATROOM_REGDATE
+    </sql>
+
+    <!-- 저장 -->
+    <insert id="save" useGeneratedKeys="true" keyProperty="chatroomId">
+        INSERT INTO
+        CHATROOM (CHATROOM_CHANNEL_ID, CHATROOM_WRITER_NICKNAME, CHATROOM_IS_GROUP, CHATROOM_REGDATE)
+        VALUES (#{chatroomChannelId}, #{chatroomWriterNickname}, #{chatroomIsGroup}, NOW())
+    </insert>
+
+    <!-- 채널 아이디로 삭제 -->
+    <delete id="deleteByChannelId">
+        DELETE FROM
+            CHATROOM AS c
+        WHERE
+            c.CHATROOM_CHANNEL_ID = #{chatroomChannelId}
+    </delete>
+
+    <!-- ID 로 조회 -->
+    <select id="findById">
+        SELECT
+            <include refid="chatroomColumns"/>
+        FROM
+            CHATROOM AS c
+        WHERE
+            c.CHATROOM_ID = #{chatroomId}
+    </select>
+
+    <!-- 채널 아이디로 조회-->
+    <select id="findByChannelId">
+        SELECT
+            <include refid="chatroomColumns"/>
+        FROM
+            CHATROOM AS c
+        WHERE
+            c.CHATROOM_CHANNEL_ID = #{chatroomChannelId}
+    </select>
+
+    <!-- 자신과 친구의 단일 채팅방 조회-->
+    <select id="findChatroomByMemberIdAndFriendId" resultType="ChatroomVo" parameterType="Map">
+        SELECT
+            c.CHATROOM_ID, c.CHATROOM_CHANNEL_ID, c.CHATROOM_WRITER_NICKNAME, c.CHATROOM_TITLE, c.CHATROOM_IS_GROUP, c.CHATROOM_REGDATE
+        FROM
+            CHATROOM_MEMBER AS cm1 INNER JOIN CHATROOM_MEMBER AS cm2 ON (cm1.CHATROOM_ID = cm2.CHATROOM_ID AND cm2.MEMBER_ID = #{friendId})
+                                   INNER JOIN CHATROOM AS c ON (cm2.CHATROOM_ID = c.CHATROOM_ID AND c.CHATROOM_IS_GROUP = FALSE)
+        WHERE
+            cm1.MEMBER_ID = #{memberId}
+    </select>
+
+    <!-- 채팅방 채널 ID 와 멤버 ID 값으로 채팅방 조회 -->
+    <select id="findChatroomByChannelIdAndMemberId" resultType="ChatroomVo">
+        SELECT
+            c.CHATROOM_ID, c.CHATROOM_CHANNEL_ID, c.CHATROOM_WRITER_NICKNAME, c.CHATROOM_TITLE, c.CHATROOM_IS_GROUP, c.CHATROOM_REGDATE
+        FROM
+            CHATROOM AS c INNER JOIN CHATROOM_MEMBER AS cm ON (cm.CHATROOM_ID = c.CHATROOM_ID AND cm.MEMBER_ID = #{memberId})
+        WHERE
+            c.CHATROOM_CHANNEL_ID = #{chatroomChannelId}
+    </select>
+
+    <!-- 채팅방에 속한 친구가 아닌 사용자 닉네임 조회 -->
+    <select id="findNotFriendInChatroomByChannelIdAndMemberId" resultType="String" parameterType="Map">
+        SELECT
+            m.MEMBER_NICKNAME
+        FROM
+            CHATROOM AS c INNER JOIN CHATROOM_MEMBER AS cm ON (cm.CHATROOM_ID = c.CHATROOM_ID AND cm.MEMBER_ID != #{memberId})
+                          LEFT OUTER JOIN FRIEND AS f ON (#{memberId} = f.MEMBER_ID AND cm.MEMBER_ID = f.FRIEND_MEMBER_ID)
+                          INNER JOIN MEMBER AS m ON (m.MEMBER_ID = cm.MEMBER_ID AND f.FRIEND_ID IS NULL)
+        WHERE
+            c.CHATROOM_CHANNEL_ID = #{chatroomChannelId}
+    </select>
+
+
+    <resultMap id="profileVoMap" type="ProfileVo">
+        <id property="profileId" column="profile_id"/>
+        <result property="memberId" column="member_id"/>
+        <result property="profileStateMessage" column="profile_state_message"/>
+        <result property="profileUploadFileName" column="profile_upload_file_name"/>
+        <result property="profileStoreFileName" column="profile_store_file_name"/>
+    </resultMap>
+
+    <resultMap id="memberProfileDtoMap" type="ProfileMemberDto">
+        <id property="memberNickname" column="member_nickname"/>
+        <association property="profileVo" resultMap="profileVoMap"/>
+    </resultMap>
+
+    <resultMap id="ChatroomProfileDtoMap" type="ChatroomProfileDto">
+        <id property="chatroomChannelId" column="chatroom_channel_id"/>
+        <collection property="memberProfileList" resultMap="memberProfileDtoMap"/>
+    </resultMap>
+
+
+    <!-- 자신이 속한 채팅방 리스트의 채널 ID 값과 각 채팅방에 속한 자신 빼고 다른 사용자 프로필 리스트 조회 -->
+    <select id="findChannelIdAndMemberProfileListByMemberId" parameterType="Long" resultType="List" resultMap="ChatroomProfileDtoMap">
+        SELECT
+            c.CHATROOM_CHANNEL_ID,
+            m.MEMBER_NICKNAME,
+            p.PROFILE_ID, p.MEMBER_ID, p.PROFILE_STATE_MESSAGE, p.PROFILE_UPLOAD_FILE_NAME, p.PROFILE_STORE_FILE_NAME
+        FROM
+            CHATROOM_MEMBER AS cm1 INNER JOIN CHATROOM_MEMBER AS cm2 ON (cm1.CHATROOM_ID = cm2.CHATROOM_ID AND cm1.MEMBER_ID != cm2.MEMBER_ID)
+                INNER JOIN CHATROOM AS c ON (cm2.CHATROOM_ID = c.CHATROOM_ID)
+                INNER JOIN MEMBER AS m ON (cm2.MEMBER_ID = m.MEMBER_ID)
+                INNER JOIN PROFILE AS p ON (cm2.MEMBER_ID = p.MEMBER_ID)
+        WHERE
+            cm1.MEMBER_ID = #{memberId}
+    </select>
+
+    <!-- 채팅방에 속한 사용자 프로필 조회 -->
+    <select id="findMemberProfileByChatroomChannelId" parameterType="String" resultMap="memberProfileDtoMap">
+        SELECT
+            m.MEMBER_NICKNAME,
+            p.PROFILE_ID, p.MEMBER_ID, p.PROFILE_STATE_MESSAGE, p.PROFILE_UPLOAD_FILE_NAME, p.PROFILE_STORE_FILE_NAME
+        FROM
+            CHATROOM AS c INNER JOIN CHATROOM_MEMBER as cm ON (c.CHATROOM_ID = cm.CHATROOM_ID)
+                INNER JOIN MEMBER AS m ON (cm.MEMBER_ID = m.MEMBER_ID)
+                INNER JOIN PROFILE AS p ON (m.MEMBER_ID = p.MEMBER_ID)
+        WHERE
+            c.CHATROOM_CHANNEL_ID = #{chatroomChannelId}
+    </select>
+</mapper>
