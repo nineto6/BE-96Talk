@@ -2,7 +2,6 @@ package nineto6.Talk.repository.authority;
 
 import lombok.extern.slf4j.Slf4j;
 import nineto6.Talk.dto.authority.code.Role;
-import nineto6.Talk.repository.authority.AuthorityRepository;
 import nineto6.Talk.vo.AuthorityVo;
 import nineto6.Talk.repository.member.MemberRepository;
 import nineto6.Talk.vo.MemberVo;
@@ -22,7 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Slf4j
 @SpringBootTest
 @Transactional
-public class AuthorityVoRepositoryTest {
+public class AuthorityRepositoryTest {
     @Autowired
     private MemberRepository memberRepository;
     @Autowired

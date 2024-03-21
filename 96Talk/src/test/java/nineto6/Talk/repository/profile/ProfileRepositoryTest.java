@@ -1,7 +1,6 @@
 package nineto6.Talk.repository.profile;
 
 import lombok.extern.slf4j.Slf4j;
-import nineto6.Talk.repository.profile.ProfileRepository;
 import nineto6.Talk.vo.ProfileVo;
 import nineto6.Talk.vo.MemberVo;
 import nineto6.Talk.vo.FriendVo;
@@ -23,7 +22,7 @@ import java.util.Optional;
 @Slf4j
 @SpringBootTest
 @Transactional
-public class ProfileVoRepositoryTest {
+public class ProfileRepositoryTest {
     @Autowired
     private ProfileRepository profileRepository;
     @Autowired

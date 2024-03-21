@@ -1,7 +1,6 @@
 package nineto6.Talk.repository.chatroommember;
 
 import lombok.extern.slf4j.Slf4j;
-import nineto6.Talk.repository.chatroommember.ChatroomMemberRepository;
 import nineto6.Talk.vo.MemberVo;
 import nineto6.Talk.vo.ChatroomVo;
 import nineto6.Talk.vo.ChatroomMemberVo;
@@ -23,7 +22,7 @@ import static org.assertj.core.api.Assertions.*;
 @Slf4j
 @SpringBootTest
 @Transactional
-public class ChatroomVoMemberRepositoryTestVo {
+public class ChatroomMemberRepositoryTest {
     @Autowired
     private ChatroomMemberRepository chatroomMemberRepository;
     @Autowired

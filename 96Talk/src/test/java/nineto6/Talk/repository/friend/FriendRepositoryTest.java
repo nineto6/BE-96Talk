@@ -1,7 +1,6 @@
 package nineto6.Talk.repository.friend;
 
 import lombok.extern.slf4j.Slf4j;
-import nineto6.Talk.repository.friend.FriendRepository;
 import nineto6.Talk.vo.FriendVo;
 import nineto6.Talk.repository.member.MemberRepository;
 import nineto6.Talk.vo.MemberVo;
@@ -18,7 +17,7 @@ import java.util.Optional;
 @Slf4j
 @SpringBootTest
 @Transactional
-public class FriendVoRepositoryTest {
+public class FriendRepositoryTest {
     @Autowired
     private MemberRepository memberRepository;
     @Autowired
