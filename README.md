@@ -89,7 +89,7 @@
 <img src="https://img.shields.io/badge/mysql-4479A1?style=flat-square&logo=mysql&logoColor=FFFFFF"/>
 <img src="https://img.shields.io/badge/redis-DC382D?style=flat-square&logo=redis&logoColor=FFFFFF"/>
 <img src="https://img.shields.io/badge/mongodb-47A248?style=flat-square&logo=mongodb&logoColor=FFFFFF"/>
-
+<img src="https://img.shields.io/badge/swagger-85EA2D?style=flat-square&logo=swagger&logoColor=FFFFFF"/>
 </div>
 
 #### Tool
@@ -98,7 +98,6 @@
 <img src="https://img.shields.io/badge/visualstudiocode-007ACC?style=flat-square&logo=visualstudiocode&logoColor=FFFFFF"/>
 <img src="https://img.shields.io/badge/intellij-000000?style=flat-square&logo=intellijidea&logoColor=FFFFFF"/>
 <img src="https://img.shields.io/badge/github-181717?style=flat-square&logo=github&logoColor=FFFFFF"/>
-<img src="https://img.shields.io/badge/swagger-85EA2D?style=flat-square&logo=swagger&logoColor=FFFFFF"/>
 </div>
 
 <br/>
@@ -135,18 +134,6 @@
 <hr/>
 
 ## 🔍 프로젝트 상세
-문제점...
-
-해결방안...
-
-어려웠던 점...
-
-해결...
-1. 조회를 자주하는 컬럼에 인덱스를 추가하여 조회 성능 올린다.
-2. 멀티쓰레드로 인하여 동시에 예를 들어 회원가입이 이루어질 경우 유니크 제약조건 설정하여 DB 단에서도 막을 수 있게 변경
-3. MongoDB를 왜 썼는지
-채팅 메세지는 보통 읽기와 쓰기가 빈번하게 이루어진다. 심지어 사용자는 단답으로 끊어서 채팅을 치는 사용자도 많다. 이런 읽기 쓰기를 빠르게 조회하여 데이터를 가져올 수 있게 하는 NoSQL인 MongoDB를 선택했다.
-
 #### Swagger
 
 [Swagger API 명세서](https://nineto6.p-e.kr/api/swagger-ui/index.html#/)
