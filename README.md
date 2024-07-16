@@ -199,18 +199,19 @@
 - JDK: 17.0.6
 
 #### 순서
-1. 가상 OS VMWare 프로그램 설치
+1. 가상 OS VM Ware 프로그램 설치
 2. 운영체제 CentOS Stream 9 설치
-3. 접속은 외부 서버에 있다 가정하여 Putty로 SSH 접속 및 파일은 FileZilla를 통해 파일 옮기기
-4. Java Development Kit(JDK) 설치
-5. nginx 설치, 접속 테스트
-6. HostOS 공유기에 포트포워딩 설정(80, 443), VMWare 포트포워딩 설정(80, 443 외부 접속 허용)
-7. Firewall(방화벽) 80, 443 포트 열기
-8. '내도메인.한국' 무료 DNS 사용 및 Host 외부 IP 연결
-9. MySQL, Redis, MongoDB 설치 및 계정 생성, 데이터베이스 생성 및 테이블 추가
-10. Spring Boot 이용하여 빌드(BootJar) 후 파일 systemctl(서비스) 등록
-11. Certbot 이용하여 무료 lets' encrypt SSL/TLS 설치 및 nginx.conf 파일 설정
-12. 서비스 실행 및 외부 사용자 접속 테스트
+3. Putty로 접속할 관리자 계정 생성
+4. 접속은 외부 서버가 있다고 가정하여 Putty로 SSH 접속 및 파일은 FileZilla를 통해 파일 옮기기
+5. Java Development Kit(JDK) 설치
+6. nginx 설치, 접속 테스트
+7. Host OS 공유기에 포트 포워딩 설정(80, 443), VMWare 포트 포워딩 설정(80, 443 외부 접속 허용)
+8. Firewall(방화벽) 80, 443 포트 열기
+9. '내도메인.한국' 무료 DNS 사용 및 Host 외부 IP 연결
+10. MySQL, Redis, MongoDB 설치 및 계정 생성, 데이터베이스 생성 및 테이블 추가
+11. Spring Boot 이용하여 빌드(BootJar) 후 파일 systemctl(서비스) 등록
+12. Certbot 이용하여 무료 lets' encrypt SSL/TLS 설치 및 nginx.conf 파일 설정
+13. 서비스 실행 및 외부 사용자 접속 테스트
 
 #### nginx.conf
 ```nginx
