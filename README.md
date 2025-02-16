@@ -107,26 +107,29 @@
 
 #### Ver 1.0
 
-- [x] DB 및 ERD-CLOUD 설계
-- [x] Token Hiding
-- [x] Refreash Token 구현
+- [x] ERD 설계 및 DB 테이블 생성
+- [x] Spring Security 설정
+- [x] Access Token 구현 및 인증 방식 추가 (JWT, 토큰 만료 30분, Authorization 헤더에 Bearer 타입, 휘발성)
+- [x] Refreash Token 구현 (Session 방식, 쿠키 만료 3일, Redis 사용) 
+- [x] Refresh Token으로 Access Token, Refresh Token 재발급 구현
+- [x] VMWare 리눅스 설치 및 설정 
+- [x] nginx 설치 및 설정
 - [x] SSL, TLS 인증서 등록 (HTTPS)
-- [x] Security 추가
-- [x] JWT 인증 방식 추가
-- [x] Web Server Engine X 설정
-- [x] Swagger 로 관리
+- [x] Swagger로 API 관리
+- [x] Refresh Token 보안 설정 (httpOnly, secure)
+- [x] 로그인, 회원가입 구현 
 - [x] 프로필 수정, 프로필 상세 메세지
 - [x] 친구추가 및 채팅방 개설 구현
-- [x] 친구목록 조회
-- [x] 채팅리스트 조회
+- [x] 친구목록 조회 구현
+- [x] 채팅리스트 조회 구현
 - [x] 실시간 채팅 구현
 - [x] 채팅 버블 및 안읽은 채팅 표시 구현
-- [x] 알람기능 구현
-- [x] 각 요청 Validation
+- [x] 채팅 기능을 응용하여 알람 기능 구현
+- [x] 각 요청 예외 처리 및 버그 수정
 
 #### Ver 2.0
 
-- [ ] 채팅 메세지 Lazy-Loading 구현
+- [ ] 채팅 메세지 Lazy-Loading 구현 (성능 최적화)
 - [ ] 단체 채팅방
 - [ ] 이미지 업로드 ( 30일 뒤 제거 배치 후순위 )
 
