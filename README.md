@@ -179,15 +179,10 @@
 
 ### 🔍 프로젝트 상세
 #### Swagger
-
 [Swagger API 명세서](https://nineto6.p-e.kr/api/swagger-ui/index.html#/)
 ![image-swagger](./assets/image-swagger.jpg)
 
-<br/>
-<hr/>
-
 #### ERD-Cloud
-
 ![image-erd](./assets/image-erd.png)
 
 <br/>
