@@ -66,38 +66,38 @@
 #### Frontend
 
 <div>
-<img src="https://img.shields.io/badge/javascript-F7DF1E?style=flat-square&logo=javascript&logoColor=000000"/>
-<img src="https://img.shields.io/badge/typescript-3178C6?style=flat-square&logo=typescript&logoColor=FFFFFF"/>
-<img src="https://img.shields.io/badge/react-61DAFB?style=flat-square&logo=react&logoColor=FFFFFF"/>
-<img src="https://img.shields.io/badge/html5-E34F26?style=flat-square&logo=html5&logoColor=FFFFFF"/>
-<img src="https://img.shields.io/badge/css3-1572B6?style=flat-square&logo=css3&logoColor=FFFFFF"/>
-<img src="https://img.shields.io/badge/tailwindcss-06B6D4?style=flat-square&logo=tailwindcss&logoColor=FFFFFF"/>
-<img src="https://img.shields.io/badge/vite-646CFF?style=flat-square&logo=vite&logoColor=FEC111"/>
+<img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=000000"/>
+<img src="https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=FFFFFF"/>
+<img src="https://img.shields.io/badge/React-61DAFB?style=flat-square&logo=react&logoColor=FFFFFF"/>
+<img src="https://img.shields.io/badge/HTML5-E34F26?style=flat-square&logo=html5&logoColor=FFFFFF"/>
+<img src="https://img.shields.io/badge/CSS3-1572B6?style=flat-square&logo=css3&logoColor=FFFFFF"/>
+<img src="https://img.shields.io/badge/TailWindcss-06B6D4?style=flat-square&logo=tailwindcss&logoColor=FFFFFF"/>
+<img src="https://img.shields.io/badge/Vite-646CFF?style=flat-square&logo=vite&logoColor=FEC111"/>
 </div>
 
 #### Backend
 
 <div>
-<img src="https://img.shields.io/badge/java-007396?style=flat-square&logo=java&logoColor=FFFFFF"/>
-<img src="https://img.shields.io/badge/spring-6DB33F?style=flat-square&logo=spring&logoColor=FFFFFF"/>
-<img src="https://img.shields.io/badge/springboot-6DB33F?style=flat-square&logo=springboot&logoColor=FFFFFF"/>
-<img src="https://img.shields.io/badge/springsecurity-6DB33F?style=flat-square&logo=springsecurity&logoColor=FFFFFF"/>
-<img src="https://img.shields.io/badge/JWT-007396?style=flat-square&logo=jWT&logoColor=FFFFFF"/>
+<img src="https://img.shields.io/badge/Java-007396?style=flat-square&logo=java&logoColor=FFFFFF"/>
+<img src="https://img.shields.io/badge/Spring-6DB33F?style=flat-square&logo=spring&logoColor=FFFFFF"/>
+<img src="https://img.shields.io/badge/Spring%20Boot-6DB33F?style=flat-square&logo=springboot&logoColor=FFFFFF"/>
+<img src="https://img.shields.io/badge/Spring%20Security-6DB33F?style=flat-square&logo=springsecurity&logoColor=FFFFFF"/>
+<img src="https://img.shields.io/badge/JSON%20Web%20Token-007396?style=flat-square&logo=jWT&logoColor=FFFFFF"/>
 <img src="https://img.shields.io/badge/STOMP-007396?style=flat-square&logo=STOMP&logoColor=FFFFFF"/>
-<img src="https://img.shields.io/badge/mybatis-001202?style=flat-square&logo=mybatis&logoColor=FFFFFF"/>
+<img src="https://img.shields.io/badge/MyBatis-001202?style=flat-square&logo=mybatis&logoColor=FFFFFF"/>
 
-<img src="https://img.shields.io/badge/mysql-4479A1?style=flat-square&logo=mysql&logoColor=FFFFFF"/>
-<img src="https://img.shields.io/badge/redis-DC382D?style=flat-square&logo=redis&logoColor=FFFFFF"/>
-<img src="https://img.shields.io/badge/mongodb-47A248?style=flat-square&logo=mongodb&logoColor=FFFFFF"/>
-<img src="https://img.shields.io/badge/swagger-85EA2D?style=flat-square&logo=swagger&logoColor=FFFFFF"/>
+<img src="https://img.shields.io/badge/MySQL-4479A1?style=flat-square&logo=mysql&logoColor=FFFFFF"/>
+<img src="https://img.shields.io/badge/Redis-DC382D?style=flat-square&logo=redis&logoColor=FFFFFF"/>
+<img src="https://img.shields.io/badge/MongoDB-47A248?style=flat-square&logo=mongodb&logoColor=FFFFFF"/>
+<img src="https://img.shields.io/badge/Swagger-85EA2D?style=flat-square&logo=swagger&logoColor=FFFFFF"/>
 </div>
 
 #### Tool
 
 <div>
-<img src="https://img.shields.io/badge/visualstudiocode-007ACC?style=flat-square&logo=visualstudiocode&logoColor=FFFFFF"/>
-<img src="https://img.shields.io/badge/intellij-000000?style=flat-square&logo=intellijidea&logoColor=FFFFFF"/>
-<img src="https://img.shields.io/badge/github-181717?style=flat-square&logo=github&logoColor=FFFFFF"/>
+<img src="https://img.shields.io/badge/Visual%20Studio%20Code-007ACC?style=flat-square&logo=visualstudiocode&logoColor=FFFFFF"/>
+<img src="https://img.shields.io/badge/IntelliJ-000000?style=flat-square&logo=intellijidea&logoColor=FFFFFF"/>
+<img src="https://img.shields.io/badge/GitHub-181717?style=flat-square&logo=github&logoColor=FFFFFF"/>
 </div>
 
 <br/>
